@@ -441,6 +441,101 @@ double TopTagSF( string workingPoint, string year, double pt ) {
   return result;
 };
 
+class miniIsoEleScaleFactors
+{
+    public: 
+        TFile *file_sf;       
+        TH2F *miniIsoSF;
+
+        miniIsoEleScaleFactors(string year)
+        {
+	  TString fname = "data/scale_factor/ElectronScaleFactors_Run"+year+".root";
+	  file_sf = new  TFile(fname);
+	  TString hname = "Run"+year+"_Mini2";
+	  miniIsoSF =   (TH2F*)file_sf->Get(hname);
+          
+       
+        }
+        ~miniIsoEleScaleFactors()
+        {
+	  delete miniIsoSF;
+	  file_sf->Close();                                                                                                                                                                               
+	  
+        }
+        //get the trigger eff per AK8 jet
+        float getminiIsoScaleFactors(float pt, float eta) 
+        {
+	  if( pt > miniIsoSF->GetYaxis()->GetXmax() * 0.999 ) {
+                    pt = miniIsoSF->GetYaxis()->GetXmax() * 0.999;
+            }
+           
+            float result = 1.0;
+
+            int bin_index_x = miniIsoSF->GetXaxis()->FindFixBin(eta);
+            int bin_index_y = miniIsoSF->GetYaxis()->FindFixBin(pt);
+            
+            int nbin_x = miniIsoSF->GetNbinsX();
+            int nbin_y = miniIsoSF->GetNbinsY();
+            
+            if ( (bin_index_x>0) && (bin_index_y>0) && (bin_index_x<=nbin_x) && (bin_index_y<=nbin_y) ){
+	      result = miniIsoSF->GetBinContent(bin_index_x, bin_index_y);
+	    }  
+ 
+            return result;
+        }
+};
+class miniIsoMuScaleFactors
+{
+    public: 
+        TFile *file_sf;       
+        TH2F *miniIsoSF;
+
+        miniIsoMuScaleFactors(string year)
+        {
+	  TString fname;
+	  TString hname;
+	  if(year =="2016"){
+	    fname = "data/scale_factor/TnP_NUM_MiniIsoTight_DENOM_LooseID_VAR_map_pt_eta_16.root";
+	    hname = "SF";
+	  }
+	  else{
+	    fname = "data/scale_factor/SFmuon_17.root";
+	    hname = "TnP_MC_NUM_MiniIso02Cut_DEN_MediumID_PAR_pt_eta";
+	  }
+	  file_sf = new  TFile(fname);
+	  miniIsoSF =   (TH2F*)file_sf->Get(hname);
+          
+       
+        }
+        ~miniIsoMuScaleFactors()
+        {
+	  delete miniIsoSF;
+	  file_sf->Close();                                                                                                                                                                               
+	  
+        }
+        //get the trigger eff per AK8 jet
+        float getminiIsoScaleFactors(float pt, float eta) 
+        {
+	  if( pt > miniIsoSF->GetXaxis()->GetXmax() * 0.999 ) {
+                    pt = miniIsoSF->GetXaxis()->GetXmax() * 0.999;
+            }
+           
+            float result = 1.0;
+
+            int bin_index_x = miniIsoSF->GetYaxis()->FindFixBin(fabs(eta));
+            int bin_index_y = miniIsoSF->GetXaxis()->FindFixBin(pt);
+            
+            int nbin_x = miniIsoSF->GetNbinsX();
+            int nbin_y = miniIsoSF->GetNbinsY();
+            
+            if ( (bin_index_x>0) && (bin_index_y>0) && (bin_index_x<=nbin_x) && (bin_index_y<=nbin_y) ){
+	      result = miniIsoSF->GetBinContent(bin_index_x, bin_index_y);
+	    }  
+ 
+            return result;
+        }
+};
+
 //#ifndef __CINT__
 //// Scale factors tools
 //extern TTJetsScaleFactors toptag_sf; 

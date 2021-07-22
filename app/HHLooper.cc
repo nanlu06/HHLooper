@@ -133,7 +133,7 @@ bool doSystematics = false;
 bool dotrigsys = false;
 bool doPNetSFsys = false;
 std::string syst_name = "";
-    
+
 if(argc > 5)
 {
   std::string s_syst = argv[5];
@@ -176,6 +176,8 @@ system(("mkdir -p hists/"+label+"/"+year_).c_str());
 
 //trigger efficiency scale factors
 TrigEffScaleFactors trig_sf(year_);
+miniIsoEleScaleFactors miniIsoEle_sf(year_);
+miniIsoMuScaleFactors miniIsoMu_sf(year_);
 vector<TString> trig_unc_names_up;
 vector<TString> trig_unc_names_dn;
 vector<int> trig_index;
@@ -263,6 +265,8 @@ if(doSystematics)
 {
 histograms.addHistogram("fatJet2MassSD",   "; j_{2} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet2MassSD();} );
 histograms.addHistogram("fatJet1MassSD",   "; j_{1} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet1MassSD();} );
+histograms.addHistogram("fatJet2MassRegressed",   "; j_{2} regressed mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet2MassRegressed();} );
+histograms.addHistogram("fatJet1MassRegressed",   "; j_{1} regressed mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet1MassRegressed();} );
 histograms.addHistogram("fatJet1PNetXbb",   "; j_{1} PNet Xbb tagger; Events",           200,   0.95, 1.0,   [&]() { return  hh.fatJet1PNetXbb(); } );
 histograms.addHistogram("fatJet2PNetXbb",   "; j_{2} PNet Xbb tagger; Events",           200,   0.95, 1.0,   [&]() { return  hh.fatJet2PNetXbb(); } );
 histograms.addHistogram("EventBDTv8p2",   "; Event BDT; Events",           200, 0.0, 1.0,   [&]() { return  hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(); } );
@@ -282,23 +286,48 @@ histograms.addHistogram("fatJet2MassSD",   "; j_{2} soft drop mass (GeV); Events
  else if(syst_name.find("JMR_Down") != std::string::npos) return hh.fatJet2MassSD_JMR_Down();
  else if(syst_name.find("JMR_Up") != std::string::npos) return hh.fatJet2MassSD_JMR_Up();
  else return hh.fatJet2MassSD();
-} );
+} 
+  );
+histograms.addHistogram("fatJet2MassRegressed",   "; j_{2} regressed mass (GeV); Events", 46,   40.,    500.,  [&]() {
+ if(syst_name.find("JMS_Down") != std::string::npos) return hh.fatJet2MassRegressed_JMS_Down();
+ else if(syst_name.find("JMS_Up") != std::string::npos) return hh.fatJet2MassRegressed_JMS_Up();
+ else if(syst_name.find("JMR_Down") != std::string::npos) return hh.fatJet2MassRegressed_JMR_Down();
+ else if(syst_name.find("JMR_Up") != std::string::npos) return hh.fatJet2MassRegressed_JMR_Up();
+ else return hh.fatJet2MassRegressed();
+} 
+);
 histograms.addHistogram("fatJet1MassSD",   "; j_{1} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() {
  if(syst_name.find("JMS_Down") != std::string::npos) return hh.fatJet1MassSD_JMS_Down();
  else if(syst_name.find("JMS_Up") != std::string::npos) return hh.fatJet1MassSD_JMS_Up();
  else if(syst_name.find("JMR_Down") != std::string::npos) return hh.fatJet1MassSD_JMR_Down();
  else if(syst_name.find("JMR_Up") != std::string::npos) return hh.fatJet1MassSD_JMR_Up();
  else return hh.fatJet1MassSD();
-} );
+  });
+histograms.addHistogram("fatJet1MassRegressed",   "; j_{1} regressed mass (GeV); Events", 46,   40.,    500.,  [&]() {
+ if(syst_name.find("JMS_Down") != std::string::npos) return hh.fatJet1MassRegressed_JMS_Down();
+ else if(syst_name.find("JMS_Up") != std::string::npos) return hh.fatJet1MassRegressed_JMS_Up();
+ else if(syst_name.find("JMR_Down") != std::string::npos) return hh.fatJet1MassRegressed_JMR_Down();
+ else if(syst_name.find("JMR_Up") != std::string::npos) return hh.fatJet1MassRegressed_JMR_Up();
+ else return hh.fatJet1MassRegressed();
+}
+
+ );
+
+ 
 //other variables does not have correct JMS/JMR variations    
 histograms.add2DHistogram("fat Jet2 MassSD vs pT", "mj2", 30,   50.,   200., "ptj2",  25,   250.,   750.,  [&]() { return  hh.fatJet2MassSD(); }, [&]() { return hh.fatJet2Pt();} );
 histograms.add2DHistogram("fat Jet1 MassSD vs pT", "mj1", 30,   50.,   200., "ptj1",  25,   250.,   750.,  [&]() { return  hh.fatJet1MassSD(); }, [&]() { return hh.fatJet1Pt();} );
+histograms.add2DHistogram("fat Jet2 Mass regressed vs pT", "mregj2", 30,   50.,   200., "ptj2",  25,   250.,   750.,  [&]() { return  hh.fatJet2MassRegressed(); }, [&]() { return hh.fatJet2Pt();} );
+histograms.add2DHistogram("fat Jet1 Mass regressed vs pT", "mregj1", 30,   50.,   200., "ptj1",  25,   250.,   750.,  [&]() { return  hh.fatJet1MassRegressed(); }, [&]() { return hh.fatJet1Pt();} );
 histograms.add2DHistogram("fat Jet1 pT vs Jet2 pT", "ptj1", 72,   200.,   2000., "ptj2",  72,   200.,   2000.,  [&]() { return  hh.fatJet1Pt(); }, [&]() { return hh.fatJet2Pt();} );
 
 histograms.addHistogram("fatJet1MassSDLR",   "; j_{1} soft drop mass (GeV); Events", 300,   0.,   300.,  [&]() { return  hh.fatJet1MassSD(); } );
+ histograms.addHistogram("fatJet1MassRegressedLR",   "; j_{1} regressed mass (GeV); Events", 300,   0.,   300.,  [&]() { return  hh.fatJet1MassRegressed(); } );
 //histograms.addHistogram("fatJet2MassSD",   "; j_{2} soft drop mass (GeV); Events", 300,   0.,   300.,  [&]() { return  hh.fatJet2MassSD(); } );
 histograms.addHistogram("fatJet1MassSD_raw",   "; j_{1} soft drop mass (GeV); Events", 300,   0.,   300.,  [&]() { return  hh.fatJet1MassSD_UnCorrected(); } );
-histograms.addHistogram("fatJet2MassSD_raw",   "; j_{1} soft drop mass (GeV); Events", 300,   0.,   300.,  [&]() { return  hh.fatJet2MassSD_UnCorrected(); } );
+histograms.addHistogram("fatJet2MassSD_raw",   "; j_{2} soft drop mass (GeV); Events", 300,   0.,   300.,  [&]() { return  hh.fatJet2MassSD_UnCorrected(); } );
+histograms.addHistogram("fatJet1MassRegressed_raw",   "; j_{1} regressed mass raw (GeV); Events", 300,   0.,   300.,  [&]() { return  hh.fatJet1MassRegressed_UnCorrected(); } );
+histograms.addHistogram("fatJet2MassRegressed_raw",   "; j_{2} regressed mass raw(GeV); Events", 300,   0.,   300.,  [&]() { return  hh.fatJet2MassRegressed_UnCorrected(); } );
 histograms.addHistogram("MET",           "; p_{T}^{miss} (GeV); Events",         200,   0.,   500.,  [&]() { return hh.met(); } );
 histograms.addHistogram("hh_pt",               "; p_{T}^{jj} (GeV); Events",           {0.,50., 100., 150., 200., 250., 300., 400., 500., 600., 800., 1000.},  [&]() { return hh.hh_pt(); } );
 //histograms.addHistogram("hh_pt",               "; p_{T}^{jj} (GeV); Events",           {0.,50., 100., 150., 300., 1000.},  [&]() { return hh.hh_pt(); } );
@@ -325,11 +354,13 @@ histograms.addHistogram("ptj1_over_mhh",       "; p_{T}^{j1}/m_{HH}; Events",   
 histograms.addHistogram("ptj2_over_mhh",       "; p_{T}^{j2}/m_{HH}; Events",         200,   0.,   1.,    [&]() { return  hh.fatJet2PtOverMHH(); } );
 histograms.addHistogram("ptj1_over_mj1",       "; p_{T}^{j1}/m_{j1}; Events",         200,   0.,   10.,   [&]() { return  hh.fatJet1PtOverMSD(); } );
 histograms.addHistogram("ptj2_over_mj2",       "; p_{T}^{j2}/m_{j2}; Events",         200,   0.,   10.,   [&]() { return  hh.fatJet2PtOverMSD(); } );
+histograms.addHistogram("ptj1_over_mregj1",       "; p_{T}^{j1}/Mreg_{j1}; Events",         200,   0.,   10.,   [&]() { return  hh.fatJet1PtOverMRegressed(); } );
+histograms.addHistogram("ptj2_over_mregj2",       "; p_{T}^{j2}/Mreg_{j2}; Events",         200,   0.,   10.,   [&]() { return  hh.fatJet2PtOverMRegressed(); } );
 histograms.addHistogram("ptj2_over_ptj1",      "; p_{T}^{j2}/p_{T}^{j1}; Events",     200,   0.5,  1.,    [&]() { return  hh.fatJet2Pt() / hh.fatJet1Pt(); } );
 histograms.addHistogram("mj2_over_mj1",      "; m^{j2}/m^{j1}; Events",               200,   0.0,  1.5,   [&]() { return  hh.fatJet2MassSD() / hh.fatJet1MassSD(); } );
+histograms.addHistogram("mregj2_over_mregj1",      "; Mreg^{j2}/Mreg^{j1}; Events",               200,   0.0,  1.5,   [&]() { return  hh.fatJet2MassRegressed() / hh.fatJet1MassRegressed(); } );
 histograms.addHistogram("fatJet1Tau3OverTau2",   "; j_{1} Tau3/2; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet1Tau3OverTau2(); } );
 histograms.addHistogram("fatJet2Tau3OverTau2",   "; j_{2} Tau3/2; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet2Tau3OverTau2(); } );
- 
 if(input.find("1LTopSkim") != std::string::npos) histograms.addHistogram("abs_dR_l1j1",       "; #DeltaR(l_{1}, j_{1}); Events",        200,   0.,   5.0,    [&]() { return  sqrt(pow(hh.lep1Eta() - hh.fatJet1Eta(), 2) + pow(fabs(hh.lep1Phi()-hh.fatJet1Phi()) > pi ? fabs(hh.lep1Phi()-hh.fatJet1Phi()) - 2*pi : hh.lep1Phi()-hh.fatJet1Phi(), 2)); } );
 else
 {
@@ -340,19 +371,20 @@ else
     histograms.addHistogram("EventBDTv8p2v2",   "; Event BDT; Events",           {0.000, 0.00008, 0.0002, 0.0004, 0.0005, 0.01},   [&]() { return  hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(); } );
     histograms.addHistogram("EventBDTv8p2v1",   "; Event BDT; Events",           {0.000, 0.00008, 0.0002, 0.0004, 1.0},   [&]() { return  hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(); } );
     histograms.addHistogram("EventBDTv8p2",   "; Event BDT; Events",           {0.000, 0.00008, 0.0002, 0.0004, 0.01},   [&]() { return  hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(); } );
-}
-}
+ }
+ 
+ }
     
 //************define cuts**********//
 
 cutflow.setTFile(outfile);
 
 if(input.find("1LTopSkim") != std::string::npos) // this is 1LTopSkim input
-{
+{ 
 //Pre-selection cuts
-cutflow.addCut("CutWeight", [&](){ return 1; },   [&](){ return isData ?  lumi : lumi * hh.weight() * hh.l1PreFiringWeight() * hh.xsecWeight() * hh.puWeight() ; }); //before correction
-//cutflow.addCut("CutWeight", [&](){ return 1; },   [&](){ return isData ?  lumi : lumi * hh.weight() * hh.l1PreFiringWeight() * hh.xsecWeight() * hh.puWeight() * (isTTJets  ? ttjets_sf.getPNetXbbShapeScaleFactors(year_, hh.fatJet1PNetXbb(), 0) : 1.0); });//after correction
-if(input.find("HHc1") == std::string::npos) cutflow.addCutToLastActiveCut("CutHLT",       [&](){ return abs(hh.lep1Id()) == 11 ? (hh.HLT_Ele27_WPTight_Gsf() || hh.HLT_Ele28_WPTight_Gsf() ||  hh.HLT_Ele30_WPTight_Gsf()  || hh.HLT_Ele32_WPTight_Gsf()  || hh.HLT_Ele35_WPTight_Gsf()  || hh.HLT_Ele38_WPTight_Gsf()  || hh.HLT_Ele40_WPTight_Gsf() ) : (hh.HLT_IsoMu20()  || hh.HLT_IsoMu24()  || hh.HLT_IsoMu24_eta2p1()  || hh.HLT_IsoMu27()  || hh.HLT_IsoMu30()  || hh.HLT_Mu50()  || hh.HLT_Mu55()); },   UNITY);
+  cutflow.addCut("CutWeight", [&](){ return 1; },   [&](){ return isData ?  lumi : lumi * hh.weight() *hh.l1PreFiringWeight()*hh.xsecWeight()* hh.puWeight() * hh.genWeight() * (abs(hh.lep1Id()) == 11 ? miniIsoEle_sf.getminiIsoScaleFactors(hh.lep1Pt(),hh.lep1Eta()) : miniIsoMu_sf.getminiIsoScaleFactors(hh.lep1Pt(),hh.lep1Eta()))  ;}); //before correction
+//cutflow.addCut("CutWeight", [&](){ return 1; },   [&](){ return isData ?  lumi : lumi * hh.weight() * hh.puWeight() * (isTTJets  ? ttjets_sf.getPNetXbbShapeScaleFactors(year_, hh.fatJet1PNetXbb(), 0) : 1.0); });//after correction
+  if(input.find("HHc1") == std::string::npos) cutflow.addCutToLastActiveCut("CutHLT",       [&](){ return abs(hh.lep1Id()) == 11 ? (hh.HLT_Ele27_WPTight_Gsf() || hh.HLT_Ele28_WPTight_Gsf() ||  hh.HLT_Ele30_WPTight_Gsf()  || hh.HLT_Ele32_WPTight_Gsf()  || hh.HLT_Ele35_WPTight_Gsf()  || hh.HLT_Ele38_WPTight_Gsf()  || hh.HLT_Ele40_WPTight_Gsf() || hh.HLT_Photon175()) : (hh.HLT_IsoMu20()  || hh.HLT_IsoMu24()  || hh.HLT_IsoMu24_eta2p1()  || hh.HLT_IsoMu27()  || hh.HLT_IsoMu30()  || hh.HLT_Mu50()  || hh.HLT_Mu55()); },   UNITY);
 cutflow.addCutToLastActiveCut("CutLepJetPt",       [&](){ return hh.fatJet1Pt() > 250.0 && hh.lep1Pt() > 50.0 && hh.lep2Pt() <=0 ; },   UNITY);
 cutflow.addCutToLastActiveCut("CutfatJetMassSD",       [&](){ return hh.fatJet1MassSD() > 50.0; },   UNITY);
 //ttbar 1L+jet control region
@@ -376,11 +408,12 @@ else
 //cutflow.addCut("CutWeight", [&](){ return 1; },   [&](){ return isData ?  lumi : lumi*hh.weight()*hh.xsecWeight()*hh.l1PreFiringWeight()*hh.triggerEff3DWeight()*hh.puWeight(); }); //before correction
 
 //Pre-selection cuts
+  
 cutflow.addCut("CutWeight", [&](){ return 1; },  [&](){
     //after ttbar recoil correction
-    float total_weight = isData ?  lumi :lumi * hh.weight() * hh.l1PreFiringWeight() * hh.xsecWeight() * hh.puWeight() * (isTTJets  ? ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
+    float total_weight = isData ?  lumi :lumi * hh.weight() *hh.l1PreFiringWeight()*hh.xsecWeight()* hh.puWeight() * hh.genWeight()* (isTTJets  ? ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
     //before ttbar recoil correction
-    //float total_weight = isData ?  lumi :lumi * hh.weight() * hh.l1PreFiringWeight() * hh.xsecWeight() * hh.puWeight();    
+    //float total_weight = isData ?  lumi :lumi * hh.weight() *hh.l1PreFiringWeight()*hh.xsecWeight()* hh.puWeight()* hh.genWeight();    
     
     if(!isData){
     //apply trigger SF
@@ -2773,6 +2806,8 @@ TTree *tree_out;
 float weight;
 float fatJet1MassSD;
 float fatJet2MassSD;
+ float fatJet1MassRegressed;
+ float fatJet2MassRegressed;
 float fatJet1PNetXbb;
 float fatJet2PNetXbb;
 float fatJet1Pt;
@@ -2785,11 +2820,14 @@ float fatJet1PtOverMHH;
 float fatJet2PtOverMHH;
 float fatJet1PtOverMSD;
 float fatJet2PtOverMSD;
+ float fatJet1PtOverMRegressed;
+ float fatJet2PtOverMRegressed;
 float abs_dEta_j1j2;
 float abs_dPhi_j1j2;
 float abs_dR_j1j2;
 float ptj2_over_ptj1;
-float mj2_over_mj1;
+ float mj2_over_mj1;
+ float mregj2_over_mregj1;
 float hh_pt;
 float hh_eta;
 float hh_phi;
@@ -2800,24 +2838,29 @@ if(saveSkim)
 tree_out = new TTree("hh", "output skim tree");
 tree_out->Branch("weight", &weight, "weight/F");
 tree_out->Branch("fatJet1MassSD", &fatJet1MassSD, "fatJet1MassSD/F");
+ tree_out->Branch("fatJet1MassRegressed", &fatJet1MassRegressed, "fatJet1MassRegressed/F");
 tree_out->Branch("fatJet1PNetXbb", &fatJet1PNetXbb, "fatJet1PNetXbb/F");
 tree_out->Branch("fatJet1Pt", &fatJet1Pt, "fatJet1Pt/F");
 tree_out->Branch("fatJet1Eta", &fatJet1Eta, "fatJet1Eta/F");
 tree_out->Branch("fatJet1Phi", &fatJet1Phi, "fatJet1Phi/F");
 tree_out->Branch("fatJet1PtOverMHH", &fatJet1PtOverMHH, "fatJet1PtOverMHH/F");
 tree_out->Branch("fatJet1PtOverMSD", &fatJet1PtOverMSD, "fatJet1PtOverMSD/F");
+ tree_out->Branch("fatJet1PtOverMRegressed", &fatJet1PtOverMRegressed, "fatJet1PtOverMRegressed/F");
 tree_out->Branch("fatJet2MassSD", &fatJet2MassSD, "fatJet2MassSD/F");
+tree_out->Branch("fatJet2MassRegressed", &fatJet2MassRegressed, "fatJet2MassRegressed/F");
 tree_out->Branch("fatJet2PNetXbb", &fatJet2PNetXbb, "fatJet2PNetXbb/F");
 tree_out->Branch("fatJet2Pt", &fatJet2Pt, "fatJet2Pt/F");
 tree_out->Branch("fatJet2Eta", &fatJet2Eta, "fatJet2Eta/F");
 tree_out->Branch("fatJet2Phi", &fatJet2Phi, "fatJet2Phi/F");
 tree_out->Branch("fatJet2PtOverMHH", &fatJet2PtOverMHH, "fatJet2PtOverMHH/F");
 tree_out->Branch("fatJet2PtOverMSD", &fatJet2PtOverMSD, "fatJet2PtOverMSD/F");
+ tree_out->Branch("fatJet2PtOverMRegressed", &fatJet2PtOverMRegressed, "fatJet2PtOverMRegressed/F");
 tree_out->Branch("abs_dEta_j1j2", &abs_dEta_j1j2, "abs_dEta_j1j2/F");
 tree_out->Branch("abs_dPhi_j1j2", &abs_dPhi_j1j2, "abs_dPhi_j1j2/F");
 tree_out->Branch("abs_dR_j1j2", &abs_dR_j1j2, "abs_dR_j1j2/F");
 tree_out->Branch("ptj2_over_ptj1", &ptj2_over_ptj1, "ptj2_over_ptj1/F");
 tree_out->Branch("mj2_over_mj1", &mj2_over_mj1, "mj2_over_mj1/F");
+ tree_out->Branch("mregj2_over_mregj1", &mregj2_over_mregj1, "mj2_over_mregj1/F");
 tree_out->Branch("hh_pt", &hh_pt, "hh_pt/F");
 tree_out->Branch("hh_eta", &hh_eta, "hh_eta/F");
 tree_out->Branch("hh_phi", &hh_phi, "hh_phi/F");
@@ -2841,27 +2884,32 @@ for(int idx = 0; idx < list_chain.size(); idx++)
 	if(saveSkim && cutflow.getCut("BDTTrainPreSelection").pass)
 	{
 	  outfile_skim->cd();	
-	  weight = isData ?  1.0 : lumi*hh.weight()*hh.l1PreFiringWeight()*hh.xsecWeight()*hh.triggerEff3DWeight()*hh.puWeight();
+	  weight = isData ?  1.0 : lumi*hh.weight()*hh.triggerEff3DWeight()*hh.puWeight()* hh.l1PreFiringWeight() * hh.xsecWeight()*hh.genWeight();
 	  fatJet1MassSD = hh.fatJet1MassSD();
+	  fatJet1MassRegressed = hh.fatJet1MassRegressed();
 	  fatJet1PNetXbb = hh.fatJet1PNetXbb();
 	  fatJet1Pt = hh.fatJet1Pt();
 	  fatJet1Eta = hh.fatJet1Eta();
 	  fatJet1Phi = hh.fatJet1Phi();
 	  fatJet1PtOverMHH = hh.fatJet1PtOverMHH();
 	  fatJet1PtOverMSD = hh.fatJet1PtOverMSD();
+	  fatJet1PtOverMRegressed = hh.fatJet1PtOverMRegressed();
 	  fatJet2MassSD = hh.fatJet2MassSD();
+	  fatJet2MassRegressed = hh.fatJet2MassRegressed();
 	  fatJet2PNetXbb = hh.fatJet2PNetXbb();
 	  fatJet2Pt = hh.fatJet2Pt();
 	  fatJet2Eta = hh.fatJet2Eta();
 	  fatJet2Phi = hh.fatJet2Phi();
 	  fatJet2PtOverMHH = hh.fatJet2PtOverMHH();
 	  fatJet2PtOverMSD = hh.fatJet2PtOverMSD();
+	  fatJet2PtOverMRegressed = hh.fatJet2PtOverMRegressed();
 
 	  abs_dEta_j1j2 = fabs(hh.fatJet1Eta() - hh.fatJet2Eta());
 	  abs_dPhi_j1j2 = fabs(hh.fatJet1Phi() - hh.fatJet2Phi());
 	  abs_dR_j1j2 = sqrt((hh.fatJet1Eta() - hh.fatJet2Eta())*(hh.fatJet1Eta() - hh.fatJet2Eta())  + (hh.fatJet1Phi() - hh.fatJet2Phi())*(hh.fatJet1Phi() - hh.fatJet2Phi()));
 	  ptj2_over_ptj1 = hh.fatJet2Pt() / hh.fatJet1Pt();
 	  mj2_over_mj1 = fatJet2MassSD/fatJet1MassSD;
+	  mregj2_over_mregj1 = fatJet2MassRegressed/fatJet1MassRegressed;
 	  hh_pt = hh.hh_pt();
 	  hh_eta = hh.hh_eta();
 	  hh_phi = hh.hh_phi();
