@@ -1,5 +1,5 @@
 #outputname no/yesforsyst systname no/yestrigsys no/yesPNetSFsys
-source process.sh yield_AN_sr_sys_0624_nominal_nosys no nominal no no
+#source process.sh yield_AN_sr_sys_0624_nominal_nosys no nominal no no
 source process.sh yield_AN_sr_sys_0624_JES_Up no JES_Up no no
 source process.sh yield_AN_sr_sys_0624_JES_Down no JES_Down no no
 source process.sh yield_AN_sr_sys_0624_JMR_Up no JMR_Up no no

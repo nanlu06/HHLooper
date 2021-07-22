@@ -4,8 +4,10 @@ TAG=$1
 mkdir -p hists/${TAG}/
 rm -rf hists/${TAG}/*
 
+#from Si's ntuple /eos/cms/store/group/phys_susy/razor/Run2Analysis/HH/HHTo4BNtupler/20210510_regression/option5/combined/BDT/
+inputBase=/storage/af/user/nlu/work/HH/ntuples/20210510_regression/option5/combined/BDT/
 #from Si's ntuple /storage/user/sixie/data/HH/HHTo4BNtupler/20210310/option5/combined/BDT/
-inputBase=/storage/af/user/nlu/work/HH/ntuples/20210403/option5/combined/BDT/
+#inputBase=/storage/af/user/nlu/work/HH/ntuples/20210403/option5/combined/BDT/
 #inputBase=/storage/user/nlu/work/HH/ntuples/20210318/option5/combined/BDT/
 #inputBase=/storage/user/nlu/work/HH/ntuples/20210211/option5/combined/
 #inputBase=/eos/cms/store/group/phys_susy/razor/Run2Analysis/HHBoost/Option5NonSkim/
@@ -41,10 +43,10 @@ do
 
  (set -x ;./HHLooper ${inputBase}/${year}/data/ data.root ${TAG} 1 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
  (set -x ;./HHLooper ${inputBase}/${year}/qcd/  qcd.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
- #(set -x ;./HHLooper ${inputBase}/${year}/ttbar/ ttbar.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
+ (set -x ;./HHLooper ${inputBase}/${year}/ttbar/ ttbar.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
 
 #this is for signal region only
- (set -x ;./HHLooper ${inputBase}/${year}/ttbar/skim/ ttbar.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
+ #(set -x ;./HHLooper ${inputBase}/${year}/ttbar/skim/ ttbar.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
  (set -x ;./HHLooper ${inputBase}/${year}/HHSM/ HHSM.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
  (set -x ;./HHLooper ${inputBase}/${year}/HHc0/ HHc0.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
  (set -x ;./HHLooper ${inputBase}/${year}/HHc1/ HHc1.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
@@ -60,7 +62,8 @@ do
  (set -x ;./HHLooper ${inputBase}/${year}/VH/ VH.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
  (set -x ;./HHLooper ${inputBase}/${year}/Higgs/ Higgs.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
  (set -x ;./HHLooper ${inputBase}/${year}/ttH/ ttH.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
- (set -x ;./HHLooper ${inputBase}/${year}/others/skim/ others.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
+ (set -x ;./HHLooper ${inputBase}/${year}/others/ others.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
+ #(set -x ;./HHLooper ${inputBase}/${year}/others/skim/ others.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
 
 done
 
