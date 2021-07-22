@@ -1049,13 +1049,15 @@ const bool &hhtree::HLT_AK8PFJet360_TrimMass30()
 {
  if(not HLT_AK8PFJet360_TrimMass30_isLoaded)
  {
-   if(HLT_AK8PFJet360_TrimMass30_branch != 0) HLT_AK8PFJet360_TrimMass30_branch->GetEntry(index);
-   else
-   {
-     printf("branch HLT_AK8PFJet360_TrimMass30_branch does not exist!\n");
-exit(1);
+   if(HLT_AK8PFJet360_TrimMass30_branch != 0){
+      HLT_AK8PFJet360_TrimMass30_branch->GetEntry(index);
+   //else
+   //{
+   //  printf("branch HLT_AK8PFJet360_TrimMass30_branch does not exist!\n");
+   //exit(1);
+   //}
+      HLT_AK8PFJet360_TrimMass30_isLoaded = true;
    }
-   HLT_AK8PFJet360_TrimMass30_isLoaded = true;
  }
  return HLT_AK8PFJet360_TrimMass30_;
 }
@@ -1064,13 +1066,15 @@ const bool &hhtree::HLT_AK8PFJet380_TrimMass30()
 {
  if(not HLT_AK8PFJet380_TrimMass30_isLoaded)
  {
-   if(HLT_AK8PFJet380_TrimMass30_branch != 0) HLT_AK8PFJet380_TrimMass30_branch->GetEntry(index);
-   else
-   {
-     printf("branch HLT_AK8PFJet380_TrimMass30_branch does not exist!\n");
-exit(1);
-   }
+   if(HLT_AK8PFJet380_TrimMass30_branch != 0){
+    HLT_AK8PFJet380_TrimMass30_branch->GetEntry(index);
+   //else
+   //{
+   //  printf("branch HLT_AK8PFJet380_TrimMass30_branch does not exist!\n");
+//exit(1);
+   //}
    HLT_AK8PFJet380_TrimMass30_isLoaded = true;
+   }
  }
  return HLT_AK8PFJet380_TrimMass30_;
 }
@@ -1079,13 +1083,15 @@ const bool &hhtree::HLT_AK8PFJet400_TrimMass30()
 {
  if(not HLT_AK8PFJet400_TrimMass30_isLoaded)
  {
-   if(HLT_AK8PFJet400_TrimMass30_branch != 0) HLT_AK8PFJet400_TrimMass30_branch->GetEntry(index);
-   else
-   {
-     printf("branch HLT_AK8PFJet400_TrimMass30_branch does not exist!\n");
-exit(1);
-   }
+   if(HLT_AK8PFJet400_TrimMass30_branch != 0){
+    HLT_AK8PFJet400_TrimMass30_branch->GetEntry(index);
+   //else
+   //{
+   //  printf("branch HLT_AK8PFJet400_TrimMass30_branch does not exist!\n");
+//exit(1);
+   //}
    HLT_AK8PFJet400_TrimMass30_isLoaded = true;
+   }
  }
  return HLT_AK8PFJet400_TrimMass30_;
 }
@@ -1109,13 +1115,15 @@ const bool &hhtree::HLT_AK8PFHT750_TrimMass50()
 {
  if(not HLT_AK8PFHT750_TrimMass50_isLoaded)
  {
-   if(HLT_AK8PFHT750_TrimMass50_branch != 0) HLT_AK8PFHT750_TrimMass50_branch->GetEntry(index);
-   else
-   {
-     printf("branch HLT_AK8PFHT750_TrimMass50_branch does not exist!\n");
-exit(1);
-   }
+   if(HLT_AK8PFHT750_TrimMass50_branch != 0) {
+   HLT_AK8PFHT750_TrimMass50_branch->GetEntry(index);
+   //else
+   //{
+   //  printf("branch HLT_AK8PFHT750_TrimMass50_branch does not exist!\n");
+//exit(1);
+   //}
    HLT_AK8PFHT750_TrimMass50_isLoaded = true;
+   }
  }
  return HLT_AK8PFHT750_TrimMass50_;
 }
@@ -1124,13 +1132,15 @@ const bool &hhtree::HLT_AK8PFHT800_TrimMass50()
 {
  if(not HLT_AK8PFHT800_TrimMass50_isLoaded)
  {
-   if(HLT_AK8PFHT800_TrimMass50_branch != 0) HLT_AK8PFHT800_TrimMass50_branch->GetEntry(index);
-   else
-   {
-     printf("branch HLT_AK8PFHT800_TrimMass50_branch does not exist!\n");
-exit(1);
-   }
+   if(HLT_AK8PFHT800_TrimMass50_branch != 0){
+     HLT_AK8PFHT800_TrimMass50_branch->GetEntry(index);
+   //else
+   //{
+   //  printf("branch HLT_AK8PFHT800_TrimMass50_branch does not exist!\n");
+//exit(1);
+   //}
    HLT_AK8PFHT800_TrimMass50_isLoaded = true;
+   }
  }
  return HLT_AK8PFHT800_TrimMass50_;
 }
@@ -1351,13 +1361,15 @@ const bool &hhtree::HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4()
 {
  if(not HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_isLoaded)
  {
-   if(HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_branch != 0) HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_branch->GetEntry(index);
-   else
-   {
-     printf("branch HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_branch does not exist!\n");
-exit(1);
-   }
+   if(HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_branch != 0){
+      HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_branch->GetEntry(index);
+   //else
+   //{
+     //printf("branch HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_branch does not exist!\n");
+//exit(1);
+   //}
    HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_isLoaded = true;
+  }
  }
  return HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_;
 }
