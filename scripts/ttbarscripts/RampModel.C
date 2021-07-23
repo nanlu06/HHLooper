@@ -105,7 +105,7 @@ void RampModel() {
     func->SetParameters(0,0);
     func->SetParNames("Constant","Slope");
     
-    TFile *f = new TFile("../../hists/yield_AN_ttbar_0329pileupweight/"+year+"/TTBarCR__hh_pt.root");
+    TFile *f = new TFile("../../python/plots/yield_AN_ttbar_reg//"+year+"/TTBarCR__hh_pt.root");
     
     TH1F *h_data = (TH1F*)f->Get("TTBarCR__hh_pt_data");
     TH1F *h_bkg1 = (TH1F*)f->Get("TTBarCR__hh_pt_bkg_0_stack_1_stack_1");
