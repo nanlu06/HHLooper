@@ -178,6 +178,7 @@ system(("mkdir -p hists/"+label+"/"+year_).c_str());
 TrigEffScaleFactors trig_sf(year_);
 miniIsoEleScaleFactors miniIsoEle_sf(year_);
 miniIsoMuScaleFactors miniIsoMu_sf(year_);
+MuTrigScaleFactors muTrig_sf(year_);
 vector<TString> trig_unc_names_up;
 vector<TString> trig_unc_names_dn;
 vector<int> trig_index;
@@ -382,9 +383,9 @@ cutflow.setTFile(outfile);
 if(input.find("1LTopSkim") != std::string::npos) // this is 1LTopSkim input
 { 
 //Pre-selection cuts
-  cutflow.addCut("CutWeight", [&](){ return 1; },   [&](){ return isData ?  lumi : lumi * hh.weight() *hh.l1PreFiringWeight()*hh.xsecWeight()* hh.puWeight() * hh.genWeight() * (abs(hh.lep1Id()) == 11 ? miniIsoEle_sf.getminiIsoScaleFactors(hh.lep1Pt(),hh.lep1Eta()) : miniIsoMu_sf.getminiIsoScaleFactors(hh.lep1Pt(),hh.lep1Eta()))  ;}); //before correction
+  cutflow.addCut("CutWeight", [&](){ return 1; },   [&](){ return isData ?  lumi : lumi * hh.weight() *hh.l1PreFiringWeight()*hh.xsecWeight()* hh.puWeight() * hh.genWeight() * (abs(hh.lep1Id()) == 11 ? miniIsoEle_sf.getminiIsoScaleFactors(hh.lep1Pt(),hh.lep1Eta()) : miniIsoMu_sf.getminiIsoScaleFactors(hh.lep1Pt(),hh.lep1Eta())) * (abs(hh.lep1Id()) == 11 ? 1.0 : muTrig_sf.getTrigScaleFactors(hh.lep1Pt(),hh.lep1Eta(), year_, ((hh.HLT_IsoMu24()  ||  hh.HLT_IsoMu27()) ? 1 : (hh.HLT_Mu50())? 2:0))) ;}); //before correction
 //cutflow.addCut("CutWeight", [&](){ return 1; },   [&](){ return isData ?  lumi : lumi * hh.weight() * hh.puWeight() * (isTTJets  ? ttjets_sf.getPNetXbbShapeScaleFactors(year_, hh.fatJet1PNetXbb(), 0) : 1.0); });//after correction
-  if(input.find("HHc1") == std::string::npos) cutflow.addCutToLastActiveCut("CutHLT",       [&](){ return abs(hh.lep1Id()) == 11 ? (hh.HLT_Ele27_WPTight_Gsf() || hh.HLT_Ele28_WPTight_Gsf() ||  hh.HLT_Ele30_WPTight_Gsf()  || hh.HLT_Ele32_WPTight_Gsf()  || hh.HLT_Ele35_WPTight_Gsf()  || hh.HLT_Ele38_WPTight_Gsf()  || hh.HLT_Ele40_WPTight_Gsf() || hh.HLT_Photon175()) : (hh.HLT_IsoMu20()  || hh.HLT_IsoMu24()  || hh.HLT_IsoMu24_eta2p1()  || hh.HLT_IsoMu27()  || hh.HLT_IsoMu30()  || hh.HLT_Mu50()  || hh.HLT_Mu55()); },   UNITY);
+  if(input.find("HHc1") == std::string::npos) cutflow.addCutToLastActiveCut("CutHLT",       [&](){ return abs(hh.lep1Id()) == 11 ? (hh.HLT_Ele27_WPTight_Gsf() || hh.HLT_Ele28_WPTight_Gsf() ||  hh.HLT_Ele30_WPTight_Gsf()  || hh.HLT_Ele32_WPTight_Gsf()  || hh.HLT_Ele35_WPTight_Gsf()  || hh.HLT_Ele38_WPTight_Gsf()  || hh.HLT_Ele40_WPTight_Gsf() || hh.HLT_Photon175()) : (hh.HLT_IsoMu24()  ||  hh.HLT_IsoMu27()  || hh.HLT_Mu50() ); },   UNITY);
 cutflow.addCutToLastActiveCut("CutLepJetPt",       [&](){ return hh.fatJet1Pt() > 250.0 && hh.lep1Pt() > 50.0 && hh.lep2Pt() <=0 ; },   UNITY);
 cutflow.addCutToLastActiveCut("CutfatJetMassSD",       [&](){ return hh.fatJet1MassSD() > 50.0; },   UNITY);
 //ttbar 1L+jet control region

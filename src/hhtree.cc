@@ -1060,47 +1060,53 @@ const bool &hhtree::HLT_PFHT1050()
 
 const bool &hhtree::HLT_AK8PFJet360_TrimMass30() 
 {
-  if(not HLT_AK8PFJet360_TrimMass30_isLoaded)
-    {
-      if(HLT_AK8PFJet360_TrimMass30_branch != 0) HLT_AK8PFJet360_TrimMass30_branch->GetEntry(index);
-      else
-	{
-	  //printf("branch HLT_AK8PFJet360_TrimMass30_branch does not exist!\n");
-	  //exit(1);
-	}
+ if(not HLT_AK8PFJet360_TrimMass30_isLoaded)
+ {
+   if(HLT_AK8PFJet360_TrimMass30_branch != 0){
+      HLT_AK8PFJet360_TrimMass30_branch->GetEntry(index);
+   //else
+   //{
+   //  printf("branch HLT_AK8PFJet360_TrimMass30_branch does not exist!\n");
+   //exit(1);
+   //}
       HLT_AK8PFJet360_TrimMass30_isLoaded = true;
-    }
-  return HLT_AK8PFJet360_TrimMass30_;
+   }
+ }
+ return HLT_AK8PFJet360_TrimMass30_;
 }
 
 const bool &hhtree::HLT_AK8PFJet380_TrimMass30() 
 {
-  if(not HLT_AK8PFJet380_TrimMass30_isLoaded)
-    {
-      if(HLT_AK8PFJet380_TrimMass30_branch != 0) HLT_AK8PFJet380_TrimMass30_branch->GetEntry(index);
-      else
-	{
-	  //printf("branch HLT_AK8PFJet380_TrimMass30_branch does not exist!\n");
-	  //exit(1);
-	}
-      HLT_AK8PFJet380_TrimMass30_isLoaded = true;
-    }
-  return HLT_AK8PFJet380_TrimMass30_;
+ if(not HLT_AK8PFJet380_TrimMass30_isLoaded)
+ {
+   if(HLT_AK8PFJet380_TrimMass30_branch != 0){
+    HLT_AK8PFJet380_TrimMass30_branch->GetEntry(index);
+   //else
+   //{
+   //  printf("branch HLT_AK8PFJet380_TrimMass30_branch does not exist!\n");
+//exit(1);
+   //}
+   HLT_AK8PFJet380_TrimMass30_isLoaded = true;
+   }
+ }
+ return HLT_AK8PFJet380_TrimMass30_;
 }
 
 const bool &hhtree::HLT_AK8PFJet400_TrimMass30() 
 {
-  if(not HLT_AK8PFJet400_TrimMass30_isLoaded)
-    {
-      if(HLT_AK8PFJet400_TrimMass30_branch != 0) HLT_AK8PFJet400_TrimMass30_branch->GetEntry(index);
-      else
-	{
-	  //printf("branch HLT_AK8PFJet400_TrimMass30_branch does not exist!\n");
-	  //exit(1);
-	}
-      HLT_AK8PFJet400_TrimMass30_isLoaded = true;
-    }
-  return HLT_AK8PFJet400_TrimMass30_;
+ if(not HLT_AK8PFJet400_TrimMass30_isLoaded)
+ {
+   if(HLT_AK8PFJet400_TrimMass30_branch != 0){
+    HLT_AK8PFJet400_TrimMass30_branch->GetEntry(index);
+   //else
+   //{
+   //  printf("branch HLT_AK8PFJet400_TrimMass30_branch does not exist!\n");
+//exit(1);
+   //}
+   HLT_AK8PFJet400_TrimMass30_isLoaded = true;
+   }
+ }
+ return HLT_AK8PFJet400_TrimMass30_;
 }
 
 const bool &hhtree::HLT_AK8PFJet420_TrimMass30() 
@@ -1120,32 +1126,36 @@ const bool &hhtree::HLT_AK8PFJet420_TrimMass30()
 
 const bool &hhtree::HLT_AK8PFHT750_TrimMass50() 
 {
-  if(not HLT_AK8PFHT750_TrimMass50_isLoaded)
-    {
-      if(HLT_AK8PFHT750_TrimMass50_branch != 0) HLT_AK8PFHT750_TrimMass50_branch->GetEntry(index);
-      else
-	{
-	  //printf("branch HLT_AK8PFHT750_TrimMass50_branch does not exist!\n");
-	  //exit(1);
-	}
-      HLT_AK8PFHT750_TrimMass50_isLoaded = true;
-    }
-  return HLT_AK8PFHT750_TrimMass50_;
+ if(not HLT_AK8PFHT750_TrimMass50_isLoaded)
+ {
+   if(HLT_AK8PFHT750_TrimMass50_branch != 0) {
+   HLT_AK8PFHT750_TrimMass50_branch->GetEntry(index);
+   //else
+   //{
+   //  printf("branch HLT_AK8PFHT750_TrimMass50_branch does not exist!\n");
+//exit(1);
+   //}
+   HLT_AK8PFHT750_TrimMass50_isLoaded = true;
+   }
+ }
+ return HLT_AK8PFHT750_TrimMass50_;
 }
 
 const bool &hhtree::HLT_AK8PFHT800_TrimMass50() 
 {
-  if(not HLT_AK8PFHT800_TrimMass50_isLoaded)
-    {
-      if(HLT_AK8PFHT800_TrimMass50_branch != 0) HLT_AK8PFHT800_TrimMass50_branch->GetEntry(index);
-      else
-	{
-	  //printf("branch HLT_AK8PFHT800_TrimMass50_branch does not exist!\n");
-	  //exit(1);
-	}
-      HLT_AK8PFHT800_TrimMass50_isLoaded = true;
-    }
-  return HLT_AK8PFHT800_TrimMass50_;
+ if(not HLT_AK8PFHT800_TrimMass50_isLoaded)
+ {
+   if(HLT_AK8PFHT800_TrimMass50_branch != 0){
+     HLT_AK8PFHT800_TrimMass50_branch->GetEntry(index);
+   //else
+   //{
+   //  printf("branch HLT_AK8PFHT800_TrimMass50_branch does not exist!\n");
+//exit(1);
+   //}
+   HLT_AK8PFHT800_TrimMass50_isLoaded = true;
+   }
+ }
+ return HLT_AK8PFHT800_TrimMass50_;
 }
 
 const bool &hhtree::HLT_AK8PFHT850_TrimMass50() 
@@ -1362,17 +1372,19 @@ const bool &hhtree::HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np2()
 
 const bool &hhtree::HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4() 
 {
-  if(not HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_isLoaded)
-    {
-      if(HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_branch != 0) HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_branch->GetEntry(index);
-      else
-	{
-	  //printf("branch HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_branch does not exist!\n");
-	  //exit(1);
-	}
-      HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_isLoaded = true;
-    }
-  return HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_;
+ if(not HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_isLoaded)
+ {
+   if(HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_branch != 0){
+      HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_branch->GetEntry(index);
+   //else
+   //{
+     //printf("branch HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_branch does not exist!\n");
+//exit(1);
+   //}
+   HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_isLoaded = true;
+  }
+ }
+ return HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4_;
 }
 
 const bool &hhtree::HLT_AK8DiPFJet300_200_TrimMass30_BTagCSV_p20() 

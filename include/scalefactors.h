@@ -522,8 +522,8 @@ class miniIsoMuScaleFactors
            
             float result = 1.0;
 
-            int bin_index_x = miniIsoSF->GetYaxis()->FindFixBin(fabs(eta));
-            int bin_index_y = miniIsoSF->GetXaxis()->FindFixBin(pt);
+            int bin_index_y = miniIsoSF->GetYaxis()->FindFixBin(fabs(eta));
+            int bin_index_x = miniIsoSF->GetXaxis()->FindFixBin(pt);
             
             int nbin_x = miniIsoSF->GetNbinsX();
             int nbin_y = miniIsoSF->GetNbinsY();
@@ -535,7 +535,116 @@ class miniIsoMuScaleFactors
             return result;
         }
 };
+class MuTrigScaleFactors
+{
+    public: 
+        TFile *file_sf1;       
+        TH2F *trigSF1; //hname1 for f1
+	TH2F *trigSF2;//hname2 for f1
 
+	TFile *file_sf2;
+        TH2F *trigSF3; ////hname1 for f2
+	TH2F *trigSF4;//hname2 for f2 
+
+	TString fname1;
+	TString fname2;
+	TString hname1;
+	TString hname2;
+        MuTrigScaleFactors(string year)
+        {
+	  
+	  if(year =="2016"){
+	    fname1 = "data/scale_factor/MuonTrigEfficienciesAndSF_Period4_2016.root";
+	    fname2 = "data/scale_factor/MuonTrigEfficienciesAndSF_RunBtoF_2016.root";
+            
+	    hname1 = "IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio";
+	    hname2 = "Mu50_OR_TkMu50_PtEtaBins/pt_abseta_ratio";
+	  }
+	  else{
+	    if(year =="2017"){
+	      fname1 = "data/scale_factor/MuonTrigEfficienciesAndSF_RunBtoF_Nov17.root";
+	      fname2="";
+
+	      hname1 = "IsoMu27_PtEtaBins/pt_abseta_ratio";
+	      hname2="Mu50_PtEtaBins/pt_abseta_ratio";
+	    }
+	    else{
+	      fname1 = "data/scale_factor/EfficienciesAndSF_2018Data_AfterMuonHLTUpdate.root";
+	      fname2 = "data/scale_factor/EfficienciesAndSF_2018Data_BeforeMuonHLTUpdate.root";
+
+	      hname1 = "IsoMu24_PtEtaBins/pt_abseta_ratio";
+	      hname2 = "Mu50_OR_OldMu100_OR_TkMu100_PtEtaBins/pt_abseta_ratio";
+	    }
+	  }
+	  file_sf1 = new  TFile(fname1);
+	  trigSF1 =   (TH2F*)file_sf1->Get(hname1);
+	  trigSF2 =   (TH2F*)file_sf1->Get(hname2);
+          if(fname2!=""){
+	    file_sf2 = new  TFile(fname2);
+	    trigSF3 =   (TH2F*)file_sf2->Get(hname1);
+	    trigSF4 =   (TH2F*)file_sf2->Get(hname2);
+	  }
+       
+        }
+        ~MuTrigScaleFactors()
+        {
+	  delete trigSF1;
+	  delete trigSF2;
+	  delete trigSF3;
+	  delete trigSF4;
+	  file_sf1->Close();
+	  if(fname2!="") file_sf2->Close();
+        }
+	float getBinValue(TH2F *h2f, float pt, float eta){
+	  
+	  if( pt > h2f->GetXaxis()->GetXmax() * 0.999 ) {
+                    pt = h2f->GetXaxis()->GetXmax() * 0.999;
+            }
+           
+            float result = 1.0;
+
+            int bin_index_y = h2f->GetYaxis()->FindFixBin(fabs(eta));
+            int bin_index_x = h2f->GetXaxis()->FindFixBin(pt);
+            
+            int nbin_x = h2f->GetNbinsX();
+            int nbin_y = h2f->GetNbinsY();
+            
+            if ( (bin_index_x>0) && (bin_index_y>0) && (bin_index_x<=nbin_x) && (bin_index_y<=nbin_y) ){
+	      result = h2f->GetBinContent(bin_index_x, bin_index_y);
+	    }  
+ 
+            return result;
+	}
+        //get the trigger eff per AK8 jet
+        float getTrigScaleFactors(float pt, float eta, TString year, int whichHLT) 
+        {
+	  float result =1.0;
+	  float sf_f1 =1.0; // sf from f1
+	  float sf_f2 =1.0; //sf from f2
+	  if(whichHLT==0)return result;
+
+	  if(whichHLT ==1){ //1: IsoMu24/27 ; 2: Mu50
+	    sf_f1 = getBinValue(trigSF1, pt, eta);}
+	  else {sf_f1 = getBinValue(trigSF2, pt, eta);}
+	  if(fname2!=""){
+	    if(whichHLT ==1){
+	      sf_f2 = getBinValue(trigSF3,pt, eta);}
+	    else{ sf_f2 = getBinValue(trigSF4, pt, eta);}
+	  }
+	  if(year =="2016"){
+	    result = (16578.*sf_f1+20232.*sf_f2)/(16578.+20232.);// lumi weighted
+	  }
+	  else{
+	    if(year =="2017"){result = sf_f1;}
+	    else{
+	      result = (50789.75*sf_f1+8950.82*sf_f2)/(50789.75+8950.82); // lumi weighted
+	    }
+	  }
+	  //cout<<pt<<", "<<eta<<", "<<whichHLT<<", "<<year<<", "<<result<<", "<<sf_f1<<", "<<sf_f2<<"\n";
+
+	  return result;
+        }
+};
 //#ifndef __CINT__
 //// Scale factors tools
 //extern TTJetsScaleFactors toptag_sf; 

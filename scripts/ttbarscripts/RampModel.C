@@ -95,7 +95,7 @@ Double_t fitf(Double_t *x,Double_t *par) {
 }
 
 void RampModel() {
-    TString year="2016";
+    TString year="2017";
     
     gStyle->SetOptFit(0111);
     SetPlotStyle();
@@ -105,6 +105,7 @@ void RampModel() {
     func->SetParameters(0,0);
     func->SetParNames("Constant","Slope");
     
+
     TFile *f = new TFile("../../python/plots/yield_AN_ttbar_reg//"+year+"/TTBarCR__hh_pt.root");
     
     TH1F *h_data = (TH1F*)f->Get("TTBarCR__hh_pt_data");
