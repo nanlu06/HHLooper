@@ -645,6 +645,51 @@ class MuTrigScaleFactors
 	  return result;
         }
 };
+
+class EleTrigScaleFactors
+{
+    public: 
+        TFile *file_sf;       
+        TH2F *SF;
+
+        EleTrigScaleFactors(string year)
+        {
+	  TString fname = "data/scale_factor/sf_ele_"+year+"_trig_v5.root";
+	  file_sf = new  TFile(fname);
+	  TString hname = "EGamma_SF2D";
+	  SF =   (TH2F*)file_sf->Get(hname);
+          
+       
+        }
+        ~EleTrigScaleFactors()
+        {
+	  delete SF;
+	  file_sf->Close();                                                                                                                                                                               
+	  
+        }
+        //get the trigger eff per AK8 jet
+        float getScaleFactors(float pt, float eta) 
+        {
+	  if( pt > SF->GetYaxis()->GetXmax() * 0.999 ) {
+                    pt = SF->GetYaxis()->GetXmax() * 0.999;
+            }
+           
+            float result = 1.0;
+
+            int bin_index_x = SF->GetXaxis()->FindFixBin(eta);
+            int bin_index_y = SF->GetYaxis()->FindFixBin(pt);
+            
+            int nbin_x = SF->GetNbinsX();
+            int nbin_y = SF->GetNbinsY();
+            
+            if ( (bin_index_x>0) && (bin_index_y>0) && (bin_index_x<=nbin_x) && (bin_index_y<=nbin_y) ){
+	      result = SF->GetBinContent(bin_index_x, bin_index_y);
+	    }  
+	    //cout<<pt<<", "<<eta<<", "<<result<<"\n";
+            return result;
+        }
+};
+
 //#ifndef __CINT__
 //// Scale factors tools
 //extern TTJetsScaleFactors toptag_sf; 
