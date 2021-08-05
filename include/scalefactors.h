@@ -451,7 +451,9 @@ class miniIsoEleScaleFactors
         {
 	  TString fname = "data/scale_factor/ElectronScaleFactors_Run"+year+".root";
 	  file_sf = new  TFile(fname);
-	  TString hname = "Run"+year+"_Mini2";
+	  TString hname;
+	  if(year == "2017")hname = "Run"+year+"_MVAVLooseTightIP2DMini2";
+	  else hname = "Run"+year+"_Mini2";
 	  miniIsoSF =   (TH2F*)file_sf->Get(hname);
           
        
@@ -480,7 +482,7 @@ class miniIsoEleScaleFactors
             if ( (bin_index_x>0) && (bin_index_y>0) && (bin_index_x<=nbin_x) && (bin_index_y<=nbin_y) ){
 	      result = miniIsoSF->GetBinContent(bin_index_x, bin_index_y);
 	    }  
- 
+	    //cout<<pt<<", "<<eta<<", "<<result<<"\n";
             return result;
         }
 };
