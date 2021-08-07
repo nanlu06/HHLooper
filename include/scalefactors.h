@@ -280,38 +280,69 @@ class TTJetsScaleFactors
             if(result >3.0) result = 1.0;
             return result;
         }
+        //Ramp model 
+        float getScaleFactorsFitv0(string year, float pt, int type=0)
+        {
+            //type: 0, 1, -1 for norminal Up, Down
+            float result = 1.0;
+            if (pt<0.1)  pt= 0.1;
+            if(pt>999.9) pt =999.9;
+            //default values are for 2018
+            float slope = 0.00148792, constant = 1.12203; //par1, par0
+            float cov00 = 0.00203, cov01 = 9.163e-06, cov11 = 4.938e-08;
+            if(year == "2016")
+            {
+                slope = 0.000291232, constant = 1.10197; //par1, par0
+                cov00 = 0.004345, cov01 = 1.969e-05, cov11 = 1.079e-07;
+            }
+            if(year == "2017")
+            {
+                slope = 0.00177981, constant = 1.31793; //par1, par0
+                cov00 = 0.003392, cov01 = 1.519e-05, cov11 = 8.042e-08;
+            }
+            if(year == "2018")
+            {
+                slope = 0.00148792, constant = 1.12203; //par1, par0
+                cov00 = 0.00203, cov01 = 9.163e-06, cov11 = 4.938e-08;
+            }
+            if(pt<300) result = slope*(pt-300.) + constant + type*sqrt((pt-300.)*(pt-300.)*cov11 + cov00 + 2*(pt-300)*cov01);
+            else result = constant + type*sqrt(cov00);
+            //if(result <0.01) result = 1.0;
+            //if(result >3.0) result = 1.0;
+            return result;
+        }
+        //two linear functions
         float getScaleFactorsFit(string year, float pt, int type=0)
         {
             //type: 0, 1, -1 for norminal Up, Down
             float result = 1.0;
             if (pt<0.1)  pt= 0.1;
             if(pt>999.9) pt =999.9;
+            //default values are for 2018
+            float slope2 = -8.90051e-04, slope1 = 8.93903e-04, constant1 = 9.66787e-01; //par2, par1, par0  of the fit function
+            float cov00 = 0.002517, cov01 = -1.618e-05, cov02 = 5.18e-06; //elements of the covariance matrix
+            float cov11 = 1.521e-07, cov12 = -6.53e-08, cov22 = 9.643e-08; //elements of the covariance matrix
             if(year == "2016")
             {
-                //float slope = 3.39715e-04, slope_err = 2.72340e-04, constant = 1.06357e+00, constant_err = 5.52116e-02;
-                //float slope = 1.86172e-04, slope_err = 2.75413e-04, constant = 1.07197e+00, constant_err = 5.54311e-02;
-                float slope = 0.000291232, slope_err = 0.000328419, constant = 1.10197, constant_err = 0.065916;
-                if(pt<300) result = (slope + type*slope_err)*(pt-300.) + constant + type*constant_err;
-                else result = constant + type*constant_err;
+                slope2 = -8.90051e-04, slope1 = 8.93903e-04, constant1 = 9.66787e-01; //par2, par1, par0
+                cov00 = 0.002517, cov01 = -1.618e-05, cov02 = 5.18e-06;
+                cov11 = 1.521e-07, cov12 = -6.53e-08, cov22 = 9.643e-08;
             }
             if(year == "2017")
             {
-                //float slope = 1.52909e-03, slope_err = 2.36132e-04, constant = 1.20558e+00, constant_err = 5.00417e-02;
-                //float slope = 1.60289e-03, slope_err = 2.51147e-04, constant = 1.28418e+00, constant_err = 5.31669e-02;
-                float slope = 0.00177981, slope_err = 0.000283582, constant = 1.31793, constant_err = 0.0582431;
-                if(pt<300) result = (slope + type*slope_err)*(pt-300.) + constant + type*constant_err;
-                else result = constant + type*constant_err;
+                slope2 = -4.27981e-04, slope1 = 1.99119e-03, constant1 = 7.67781e-01; //par2, par1, par0
+                cov00 = 0.001671, cov01 = -1.096e-05, cov02 = 4.099e-06;
+                cov11 = 1.068e-07, cov12 = -5.345e-08, cov22 = 1.082e-07;
             }
             if(year == "2018")
             {
-                //float slope = 1.33382e-03, slope_err = 1.92282e-04, constant = 1.10805e+00, constant_err = 4.01827e-02;
-                //float slope = 1.36880e-03, slope_err = 1.91672e-04, constant = 1.11018e+00, constant_err = 4.01700e-02;
-                float slope = 0.00148792, slope_err = 0.000222207, constant = 1.12203, constant_err = 0.045051;
-                if(pt<300) result = (slope + type*slope_err)*(pt-300.) + constant + type*constant_err;
-                else result = constant + type*constant_err;
+                slope2 = -5.52196e-04, slope1 = 1.79594e-03, constant1 = 6.51474e-01; //par2, par1, par0
+                cov00 = 0.001079, cov01 = -6.96e-06, cov02 = 2.348e-06;
+                cov11 = 6.606e-08, cov12 = -2.991e-08, cov22 = 5.363e-08;
             }
-            //if(result <0.01) result = 1.0;
-            //if(result >3.0) result = 1.0;
+            if(pt<300) result = slope1*pt + constant1 + type*sqrt(pt*pt*cov11 + cov00 + 2*pt*cov01);
+            else if(pt<1000.) result = constant1 + 300.*slope1 + (pt-300.)*slope2 + type*sqrt(cov00 + 300.*300.*cov11 + (pt-300.)*(pt-300.)*cov22 + 2*300.*cov01 + 2*(pt - 300.)*cov02 + 2*300.*(pt-300.)*cov12);
+            else result = constant1 + 300.*slope1 + (1000.-300.)*slope2 + 1.5*type*sqrt(cov00 + 300.*300.*cov11 + (1000.-300.)*(1000.-300.)*cov22 + 2*300.*cov01 + 2*(1000. - 300.)*cov02 + 2*300.*(1000.-300.)*cov12);
             return result;
         }
         float getPNetXbbShapeScaleFactors(string year, float xbb, int type=0)
