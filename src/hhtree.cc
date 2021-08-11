@@ -12,6 +12,18 @@ void hhtree::Init(TTree *tree)
  if(event_branch) event_branch->SetAddress(&event_);
  genWeight_branch = tree->GetBranch("genWeight");
  if(genWeight_branch) genWeight_branch->SetAddress(&genWeight_);
+ nLHEPdfWeight_branch = tree->GetBranch("nLHEPdfWeight");
+ if(nLHEPdfWeight_branch) nLHEPdfWeight_branch->SetAddress(&nLHEPdfWeight_);
+ LHEPdfWeight_branch = tree->GetBranch("LHEPdfWeight");
+ if(LHEPdfWeight_branch) LHEPdfWeight_branch->SetAddress(&LHEPdfWeight_);
+ nLHEScaleWeight_branch = tree->GetBranch("nLHEScaleWeight");
+ if(nLHEScaleWeight_branch) nLHEScaleWeight_branch->SetAddress(&nLHEScaleWeight_);
+ LHEScaleWeight_branch = tree->GetBranch("LHEScaleWeight");
+ if(LHEScaleWeight_branch) LHEScaleWeight_branch->SetAddress(LHEScaleWeight_);
+ nPSWeight_branch = tree->GetBranch("nPSWeight");
+ if(nPSWeight_branch) nPSWeight_branch->SetAddress(&nPSWeight_);
+ PSWeight_branch = tree->GetBranch("PSWeight");
+ if(PSWeight_branch) PSWeight_branch->SetAddress(PSWeight_);
  HLT_Ele27_WPTight_Gsf_branch = tree->GetBranch("HLT_Ele27_WPTight_Gsf");
  if(HLT_Ele27_WPTight_Gsf_branch) HLT_Ele27_WPTight_Gsf_branch->SetAddress(&HLT_Ele27_WPTight_Gsf_);
  HLT_Ele28_WPTight_Gsf_branch = tree->GetBranch("HLT_Ele28_WPTight_Gsf");
@@ -468,6 +480,10 @@ void hhtree::Init(TTree *tree)
  if(puWeightDown_branch) puWeightDown_branch->SetAddress(&puWeightDown_);
  xsecWeight_branch = tree->GetBranch("xsecWeight");
  if(xsecWeight_branch) xsecWeight_branch->SetAddress(&xsecWeight_);
+ LHEScaleWeightNorm_branch = tree->GetBranch("LHEScaleWeightNorm");
+ if(LHEScaleWeightNorm_branch) LHEScaleWeightNorm_branch->SetAddress(LHEScaleWeightNorm_);
+ LHEPdfWeightNorm_branch = tree->GetBranch("LHEPdfWeightNorm");
+ if(LHEPdfWeightNorm_branch) LHEPdfWeightNorm_branch->SetAddress(LHEPdfWeightNorm_);
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_branch = tree->GetBranch("disc_qcd_and_ttbar_Run2_enhanced_v8p2");
  if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_);
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_branch = tree->GetBranch("disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp");
@@ -492,6 +508,12 @@ void hhtree::GetEntry(unsigned int idx)
  luminosityBlock_isLoaded = false;
  event_isLoaded = false;
  genWeight_isLoaded = false;
+ nLHEPdfWeight_isLoaded = false;
+ LHEPdfWeight_isLoaded = false;
+ nLHEScaleWeight_isLoaded = false;
+ LHEScaleWeight_isLoaded = false;
+ nPSWeight_isLoaded = false;
+ PSWeight_isLoaded = false;
  HLT_Ele27_WPTight_Gsf_isLoaded = false;
  HLT_Ele28_WPTight_Gsf_isLoaded = false;
  HLT_Ele30_WPTight_Gsf_isLoaded = false;
@@ -720,6 +742,8 @@ void hhtree::GetEntry(unsigned int idx)
  puWeightUp_isLoaded = false;
  puWeightDown_isLoaded = false;
  xsecWeight_isLoaded = false;
+ LHEScaleWeightNorm_isLoaded = false;
+ LHEPdfWeightNorm_isLoaded = false;
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_isLoaded = false;
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_isLoaded = false;
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_isLoaded = false;
@@ -787,6 +811,91 @@ const float &hhtree::genWeight()
    genWeight_isLoaded = true;
  }
  return genWeight_;
+}
+const int &hhtree::nLHEPdfWeight()
+{
+ if(not nLHEPdfWeight_isLoaded)
+ {
+   if(nLHEPdfWeight_branch != 0) nLHEPdfWeight_branch->GetEntry(index);
+   else
+   {
+     //printf("branch nLHEPdfWeight_branch does not exist!\n");
+//exit(1);
+   }
+   nLHEPdfWeight_isLoaded = true;
+ }
+ return nLHEPdfWeight_;
+}
+const float * hhtree::LHEPdfWeight()
+{
+ if(not LHEPdfWeight_isLoaded)
+ {
+   if(LHEPdfWeight_branch != 0) LHEPdfWeight_branch->GetEntry(index);
+   else
+   {
+     //printf("branch LHEPdfWeight_branch does not exist!\n");
+//exit(1);
+   }
+   LHEPdfWeight_isLoaded = true;
+ }
+ return LHEPdfWeight_;
+}
+const int &hhtree::nLHEScaleWeight()
+{
+ if(not nLHEScaleWeight_isLoaded)
+ {
+   if(nLHEScaleWeight_branch != 0) nLHEScaleWeight_branch->GetEntry(index);
+   else
+   {
+     //printf("branch nLHEScaleWeight_branch does not exist!\n");
+//exit(1);
+   }
+   nLHEScaleWeight_isLoaded = true;
+ }
+ return nLHEScaleWeight_;
+}
+
+const float * hhtree::LHEScaleWeight()
+{
+ if(not LHEScaleWeight_isLoaded)
+ {
+   if(LHEScaleWeight_branch != 0) LHEScaleWeight_branch->GetEntry(index);
+   else
+   {
+     //printf("branch LHEScaleWeight_branch does not exist!\n");
+//exit(1);
+   }
+   LHEScaleWeight_isLoaded = true;
+ }
+ return LHEScaleWeight_;
+}
+const int &hhtree::nPSWeight()
+{
+ if(not nPSWeight_isLoaded)
+ {
+   if(nPSWeight_branch != 0) nPSWeight_branch->GetEntry(index);
+   else
+   {
+     //printf("branch nPSWeight_branch does not exist!\n");
+//exit(1);
+   }
+   nPSWeight_isLoaded = true;
+ }
+ return nPSWeight_;
+}
+const float * hhtree::PSWeight()
+{
+ if(not PSWeight_isLoaded)
+ {
+   if(PSWeight_branch != 0) PSWeight_branch->GetEntry(index);
+   else
+   {
+     //printf("branch PSWeight_branch does not exist!\n");
+//exit(1);
+   }
+   PSWeight_isLoaded = true;
+ }
+ return PSWeight_;
 }
 const bool &hhtree::HLT_Ele27_WPTight_Gsf() 
 {
@@ -4215,11 +4324,40 @@ const float &hhtree::xsecWeight()
    else
    {
      printf("branch xsecWeight_branch does not exist!\n");
-//exit(1);
+     exit(1);
    }
    xsecWeight_isLoaded = true;
  }
  return xsecWeight_;
+}
+const float * hhtree::LHEScaleWeightNorm()
+{
+ if(not LHEScaleWeightNorm_isLoaded)
+ {
+   if(LHEScaleWeightNorm_branch != 0) LHEScaleWeightNorm_branch->GetEntry(index);
+   else
+   {
+     //printf("branch LHEScaleWeightNorm_branch does not exist!\n");
+//exit(1);
+   }
+   LHEScaleWeightNorm_isLoaded = true;
+ }
+ return LHEScaleWeightNorm_;
+}
+
+const float * hhtree::LHEPdfWeightNorm()
+{
+ if(not LHEPdfWeightNorm_isLoaded)
+ {
+   if(LHEPdfWeightNorm_branch != 0) LHEPdfWeightNorm_branch->GetEntry(index);
+   else
+   {
+     //printf("branch LHEPdfWeightNorm_branch does not exist!\n");
+//exit(1);
+   }
+   LHEPdfWeightNorm_isLoaded = true;
+ }
+ return LHEPdfWeightNorm_;
 }
 
 const float &hhtree::disc_qcd_and_ttbar_Run2_enhanced_v8p2() 

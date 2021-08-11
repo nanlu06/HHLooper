@@ -448,8 +448,8 @@ cutflow.addCut("CutWeight", [&](){ return 1; },  [&](){
     }
     //apply PNet SF for Hbb
     if(isH){ //genHiggs1Eta
-        float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-        float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+        float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+        float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
         if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) )  total_weight = total_weight * PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
         else if( (fatJet1_genH_dR > fatJet2_genH_dR) && (fatJet2_genH_dR < 0.4) )  total_weight = total_weight * PNet_sf.getPNetHbbScaleFactors(hh.fatJet2Pt(), hh.fatJet2PNetXbb(), 0, 0, 0);
     }
@@ -664,6 +664,13 @@ else{
 /****Systematics******/
 if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outputFileName.find("data") == std::string::npos ) && (syst_name.find("nominal") != std::string::npos) )
 {    
+    //pdf uncertainty for the HH signal acceptance
+    //QCD scale uncertainty for the HH signal acceptance
+    //parton shower uncertainty for the HH signal yield (ISR and FSR)
+    cutflow.addWgtSyst("ISRPartonShowerUp",  [&](){return isHH ?  hh.PSWeight()[0] : 1.0;});
+    cutflow.addWgtSyst("ISRPartonShowerDown",  [&](){return isHH ? hh.PSWeight()[2] : 1.0;});
+    cutflow.addWgtSyst("FSRPartonShowerUp",  [&](){return isHH ?  hh.PSWeight()[1] : 1.0;});
+    cutflow.addWgtSyst("FSRPartonShowerDown",  [&](){return isHH ? hh.PSWeight()[3] : 1.0;});
     //BDT modeling uncertainty for ttbar
     cutflow.addWgtSyst("BDTv8p2ShapeUp",  [&](){return isTTJets ? ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.00008 ? 0.96 : ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  <  0.0002 ?  0.91 : (hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.0004 ? 0.90 :  1.12))) : 1.0;});
     cutflow.addWgtSyst("BDTv8p2ShapeDown",  [&](){return isTTJets ? ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.00008 ? 1.04 : ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  <  0.0002 ?  1.09 : (hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.0004 ? 1.10 :  0.88))) : 1.0;});
@@ -685,9 +692,9 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
     cutflow.addWgtSyst("PNetHbbScaleFactors"+year_+"bin11Up",  [&](){
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
-        if(isH){//genHiggs1Eta 
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+        if(isH){
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 1, 1, 1)/nominal_weight;
@@ -706,9 +713,9 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
     cutflow.addWgtSyst("PNetHbbScaleFactors"+year_+"bin11Down",  [&](){
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
-        if(isH){//genHiggs1Eta
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+        if(isH){
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 1, 1, -1)/nominal_weight;
@@ -727,9 +734,9 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
     cutflow.addWgtSyst("PNetHbbScaleFactors"+year_+"bin12Up",  [&](){
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
-        if(isH){ //genHiggs1Eta
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+        if(isH){
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 1, 2, 1)/nominal_weight;
@@ -748,9 +755,9 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
     cutflow.addWgtSyst("PNetHbbScaleFactors"+year_+"bin12Down",  [&](){
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
-        if(isH){//genHiggs1Eta
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+        if(isH){
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 1, 2, -1)/nominal_weight;
@@ -769,9 +776,9 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
     cutflow.addWgtSyst("PNetHbbScaleFactors"+year_+"bin13Up",  [&](){
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
-        if(isH){ //genHiggs1Eta
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+        if(isH){
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 1, 3, 1)/nominal_weight;
@@ -790,9 +797,9 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
     cutflow.addWgtSyst("PNetHbbScaleFactors"+year_+"bin13Down",  [&](){
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
-        if(isH){//genHiggs1Eta
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+        if(isH){
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 1, 3, -1)/nominal_weight;
@@ -812,8 +819,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 1, 4, 1)/nominal_weight;
@@ -833,8 +840,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 1, 4, -1)/nominal_weight;
@@ -854,8 +861,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 1, 5, 1)/nominal_weight;
@@ -875,8 +882,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 1, 5, -1)/nominal_weight;
@@ -896,8 +903,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 2, 1, 1)/nominal_weight;
@@ -917,8 +924,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 2, 1, -1)/nominal_weight;
@@ -938,8 +945,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 2, 2, 1)/nominal_weight;
@@ -959,8 +966,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 2, 2, -1)/nominal_weight;
@@ -980,8 +987,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 2, 3, 1)/nominal_weight;
@@ -1001,8 +1008,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 2, 3, -1)/nominal_weight;
@@ -1022,8 +1029,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 2, 4, 1)/nominal_weight;
@@ -1043,8 +1050,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 2, 4, -1)/nominal_weight;
@@ -1064,8 +1071,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 2, 5, 1)/nominal_weight;
@@ -1085,8 +1092,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 2, 5, -1)/nominal_weight;
@@ -1106,8 +1113,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 3, 1, 1)/nominal_weight;
@@ -1127,8 +1134,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 3, 1, -1)/nominal_weight;
@@ -1148,8 +1155,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 3, 2, 1)/nominal_weight;
@@ -1169,8 +1176,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 3, 2, -1)/nominal_weight;
@@ -1190,8 +1197,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 3, 3, 1)/nominal_weight;
@@ -1211,8 +1218,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 3, 3, -1)/nominal_weight;
@@ -1232,8 +1239,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 3, 4, 1)/nominal_weight;
@@ -1253,8 +1260,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 3, 4, -1)/nominal_weight;
@@ -1274,8 +1281,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 3, 5, 1)/nominal_weight;
@@ -1295,8 +1302,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 3, 5, -1)/nominal_weight;
@@ -1316,8 +1323,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 4, 1, 1)/nominal_weight;
@@ -1337,8 +1344,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 4, 1, -1)/nominal_weight;
@@ -1358,8 +1365,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 4, 2, 1)/nominal_weight;
@@ -1379,8 +1386,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 4, 2, -1)/nominal_weight;
@@ -1400,8 +1407,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 4, 3, 1)/nominal_weight;
@@ -1421,8 +1428,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 4, 3, -1)/nominal_weight;
@@ -1442,8 +1449,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 4, 4, 1)/nominal_weight;
@@ -1463,8 +1470,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 4, 4, -1)/nominal_weight;
@@ -1484,8 +1491,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 4, 5, 1)/nominal_weight;
@@ -1505,8 +1512,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 4, 5, -1)/nominal_weight;
@@ -1526,8 +1533,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 5, 1, 1)/nominal_weight;
@@ -1547,8 +1554,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 5, 1, -1)/nominal_weight;
@@ -1568,8 +1575,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 5, 2, 1)/nominal_weight;
@@ -1589,8 +1596,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 5, 2, -1)/nominal_weight;
@@ -1610,8 +1617,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 5, 3, 1)/nominal_weight;
@@ -1631,8 +1638,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 5, 3, -1)/nominal_weight;
@@ -1652,8 +1659,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 5, 4, 1)/nominal_weight;
@@ -1673,8 +1680,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 5, 4, -1)/nominal_weight;
@@ -1694,8 +1701,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 5, 5, 1)/nominal_weight;
@@ -1715,8 +1722,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 5, 5, -1)/nominal_weight;
@@ -1736,8 +1743,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 6, 1, 1)/nominal_weight;
@@ -1757,8 +1764,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 6, 1, -1)/nominal_weight;
@@ -1778,8 +1785,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 6, 2, 1)/nominal_weight;
@@ -1799,8 +1806,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 6, 2, -1)/nominal_weight;
@@ -1820,8 +1827,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 6, 3, 1)/nominal_weight;
@@ -1841,8 +1848,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 6, 3, -1)/nominal_weight;
@@ -1862,8 +1869,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 6, 4, 1)/nominal_weight;
@@ -1883,8 +1890,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 6, 4, -1)/nominal_weight;
@@ -1904,8 +1911,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 6, 5, 1)/nominal_weight;
@@ -1925,8 +1932,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         float nominal_weight =  1.0;
         float varied_weight = 1.0;
         if(isH){
-            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
-            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.fatJet1Eta(), hh.fatJet1Phi());
+            float fatJet1_genH_dR = DeltaR(hh.fatJet1Eta(), hh.fatJet1Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
+            float fatJet2_genH_dR = DeltaR(hh.fatJet2Eta(), hh.fatJet2Phi(), hh.genHiggs1Eta(), hh.genHiggs1Phi());
             if( (fatJet1_genH_dR < fatJet2_genH_dR) && (fatJet1_genH_dR < 0.4) ){
                 nominal_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 0, 0, 0);
                 if(nominal_weight!=0) varied_weight = PNet_sf.getPNetHbbScaleFactors(hh.fatJet1Pt(), hh.fatJet1PNetXbb(), 6, 5, -1)/nominal_weight;
@@ -1942,7 +1949,7 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         }
         return varied_weight;
     });
-
+        
     }
     
     if(dotrigsys){
