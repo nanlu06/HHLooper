@@ -142,7 +142,7 @@ if(argc > 5)
 
 if(argc > 6)
 {
-  syst_name = argv[6]; //_JMS_Up, _JMS_Down, _JMR_Up, _JMR_Down, JES_Up, JES_Down for vars (fatJet2MassSD,fatJet1MassSD; fatJet2Pt,fatJet1Pt)
+  syst_name = argv[6]; //_JMS_Up, _JMS_Down, _JMR_Up, _JMR_Down, _JES_Up, _JES_Down, _JER_Up, _JER_Down for vars (fatJet2MassSD,fatJet1MassSD; fatJet2Pt,fatJet1Pt)
 }
 
 if(argc > 7)
@@ -413,12 +413,18 @@ else
   
 cutflow.addCut("CutWeight", [&](){ return 1; },  [&](){
     //after ttbar recoil correction
-    float total_weight = isData ?  lumi :lumi * hh.weight() *hh.l1PreFiringWeight()*hh.xsecWeight()* hh.puWeight() * hh.genWeight()* (isTTJets  ? ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
+    float total_weight = isData ?  lumi :lumi * hh.weight() * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets  ? ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
     //before ttbar recoil correction
-    //float total_weight = isData ?  lumi :lumi * hh.weight() *hh.l1PreFiringWeight()*hh.xsecWeight()* hh.puWeight()* hh.genWeight();    
+    //float total_weight = isData ?  lumi :lumi * hh.weight() * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight());
     
     if(!isData){
     //apply trigger SF
+    if(syst_name.find("JER_Up") != std::string::npos){
+        total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JERUp(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JERUp(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0);
+    }
+    else if(syst_name.find("JER_Down") != std::string::npos){
+        total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JERDown(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JERDown(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0);
+    } 
     if(syst_name.find("JES_Up") != std::string::npos){
         total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JESUp(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JESUp(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0);
     }
@@ -462,7 +468,9 @@ cutflow.addCutToLastActiveCut("CutHLT",       [&](){
 
 //cutflow.addCutToLastActiveCut("CutfatJetsPt",       [&](){ return hh.fatJet1Pt() > 250.0 && hh.fatJet2Pt() > 250.0; },   UNITY);
 cutflow.addCutToLastActiveCut("CutfatJetsPt",       [&](){
-    if(isData || syst_name.find("nominal") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt() > 250.0 && hh.fatJet2Pt() > 250.0; 
+    if(isData || syst_name.find("nominal") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt() > 250.0 && hh.fatJet2Pt() > 250.0;
+    else if(syst_name.find("JER_Up") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt_JERUp() > 250.0 && hh.fatJet2Pt_JERUp() > 250.0; 
+    else if(syst_name.find("JER_Down") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt_JERDown() > 250.0 && hh.fatJet2Pt_JERDown() > 250.0; 
     else if(syst_name.find("JES_Up") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt_JESUp() > 250.0 && hh.fatJet2Pt_JESUp() > 250.0; 
     else if(syst_name.find("JES_Down") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt_JESDown() > 250.0 && hh.fatJet2Pt_JESDown() > 250.0; 
     else return hh.isVBFtag() < 1 && hh.fatJet1Pt() > 250.0 && hh.fatJet2Pt() > 250.0;
