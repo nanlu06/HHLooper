@@ -288,23 +288,19 @@ class TTJetsScaleFactors
             if (pt<0.1)  pt= 0.1;
             if(pt>999.9) pt =999.9;
             //default values are for 2018
-            float slope = 0.00148792, constant = 1.12203; //par1, par0
-            float cov00 = 0.00203, cov01 = 9.163e-06, cov11 = 4.938e-08;
+            float slope = 0.000686138, constant = 0.845944; //par1, par0
+            float cov00 = 0.002048, cov01 = 9.329e-06, cov11 = 4.957e-08;
             if(year == "2016")
             {
-                slope = 0.000291232, constant = 1.10197; //par1, par0
-                cov00 = 0.004345, cov01 = 1.969e-05, cov11 = 1.079e-07;
+                slope = 0.000410599, constant = 1.0068; //par1, par0
+                cov00 = 0.003678, cov01 = 1.681e-05, cov11 = 9.268e-08;
             }
             if(year == "2017")
             {
-                slope = 0.00177981, constant = 1.31793; //par1, par0
-                cov00 = 0.003392, cov01 = 1.519e-05, cov11 = 8.042e-08;
+                slope = 0.00178387, constant = 1.20647; //par1, par0
+                cov00 = 0.003326, cov01 = 1.477e-05, cov11 = 7.622e-08;
             }
-            if(year == "2018")
-            {
-                slope = 0.00148792, constant = 1.12203; //par1, par0
-                cov00 = 0.00203, cov01 = 9.163e-06, cov11 = 4.938e-08;
-            }
+            
             if(pt<300) result = slope*(pt-300.) + constant + type*sqrt((pt-300.)*(pt-300.)*cov11 + cov00 + 2*(pt-300)*cov01);
             else result = constant + type*sqrt(cov00);
             //if(result <0.01) result = 1.0;
@@ -319,26 +315,20 @@ class TTJetsScaleFactors
             if (pt<0.1)  pt= 0.1;
             if(pt>999.9) pt =999.9;
             //default values are for 2018
-            float slope2 = -8.90051e-04, slope1 = 8.93903e-04, constant1 = 9.66787e-01; //par2, par1, par0  of the fit function
-            float cov00 = 0.002517, cov01 = -1.618e-05, cov02 = 5.18e-06; //elements of the covariance matrix
-            float cov11 = 1.521e-07, cov12 = -6.53e-08, cov22 = 9.643e-08; //elements of the covariance matrix
+            float slope2 = -4.47034e-04, slope1 = 8.81129e-04, constant1 =  6.57155e-01; //par2, par1, par0  of the fit function
+            float cov00 = 0.0005963, cov01 = -3.92e-06, cov02 = 1.323e-06; //elements of the covariance matrix
+            float cov11 = 6.356e-08, cov12 = -3.092e-08, cov22 =  3.032e-08; //elements of the covariance matrix
             if(year == "2016")
             {
-                slope2 = -8.90051e-04, slope1 = 8.93903e-04, constant1 = 9.66787e-01; //par2, par1, par0
-                cov00 = 0.002517, cov01 = -1.618e-05, cov02 = 5.18e-06;
-                cov11 = 1.521e-07, cov12 = -6.53e-08, cov22 = 9.643e-08;
+                slope2 = -0.000364811, slope1 = 0.000614948, constant1 =  0.867032; //par2, par1, par0
+                cov00 = 0.002136, cov01 = -1.348e-05, cov02 = 4.426e-06;
+                cov11 = 1.232e-07, cov12 = -5.453e-08, cov22 = 9.735e-08;
             }
             if(year == "2017")
             {
-                slope2 = -4.27981e-04, slope1 = 1.99119e-03, constant1 = 7.67781e-01; //par2, par1, par0
-                cov00 = 0.001671, cov01 = -1.096e-05, cov02 = 4.099e-06;
-                cov11 = 1.068e-07, cov12 = -5.345e-08, cov22 = 1.082e-07;
-            }
-            if(year == "2018")
-            {
-                slope2 = -5.52196e-04, slope1 = 1.79594e-03, constant1 = 6.51474e-01; //par2, par1, par0
-                cov00 = 0.001079, cov01 = -6.96e-06, cov02 = 2.348e-06;
-                cov11 = 6.606e-08, cov12 = -2.991e-08, cov22 = 5.363e-08;
+                slope2 = 1.86038e-05, slope1 = 1.77608e-03, constant1 = 6.71892e-01; //par2, par1, par0
+                cov00 = 0.001446, cov01 = -9.696e-06, cov02 = 3.813e-06;
+                cov11 = 9.757e-08, cov12 = -5.101e-08, cov22 = 1.219e-07;
             }
             if(pt<300) result = slope1*pt + constant1 + type*sqrt(pt*pt*cov11 + cov00 + 2*pt*cov01);
             else if(pt<1000.) result = constant1 + 300.*slope1 + (pt-300.)*slope2 + type*sqrt(cov00 + 300.*300.*cov11 + (pt-300.)*(pt-300.)*cov22 + 2*300.*cov01 + 2*(pt - 300.)*cov02 + 2*300.*(pt-300.)*cov12);
