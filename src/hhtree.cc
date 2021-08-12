@@ -816,13 +816,15 @@ const int &hhtree::nLHEPdfWeight()
 {
  if(not nLHEPdfWeight_isLoaded)
  {
-   if(nLHEPdfWeight_branch != 0) nLHEPdfWeight_branch->GetEntry(index);
-   else
-   {
+   if(nLHEPdfWeight_branch != 0){
+       nLHEPdfWeight_branch->GetEntry(index);
+       nLHEPdfWeight_isLoaded = true;
+   } 
+   //else
+   //{
      //printf("branch nLHEPdfWeight_branch does not exist!\n");
 //exit(1);
-   }
-   nLHEPdfWeight_isLoaded = true;
+   //}  
  }
  return nLHEPdfWeight_;
 }
@@ -830,13 +832,15 @@ const float * hhtree::LHEPdfWeight()
 {
  if(not LHEPdfWeight_isLoaded)
  {
-   if(LHEPdfWeight_branch != 0) LHEPdfWeight_branch->GetEntry(index);
-   else
-   {
+   if(LHEPdfWeight_branch != 0){
+       LHEPdfWeight_branch->GetEntry(index);
+       LHEPdfWeight_isLoaded = true;
+   } 
+   //else
+   //{
      //printf("branch LHEPdfWeight_branch does not exist!\n");
 //exit(1);
-   }
-   LHEPdfWeight_isLoaded = true;
+   //}
  }
  return LHEPdfWeight_;
 }
@@ -844,13 +848,15 @@ const int &hhtree::nLHEScaleWeight()
 {
  if(not nLHEScaleWeight_isLoaded)
  {
-   if(nLHEScaleWeight_branch != 0) nLHEScaleWeight_branch->GetEntry(index);
-   else
-   {
+   if(nLHEScaleWeight_branch != 0){
+       nLHEScaleWeight_branch->GetEntry(index);
+       nLHEScaleWeight_isLoaded = true;
+   } 
+   //else
+   //{
      //printf("branch nLHEScaleWeight_branch does not exist!\n");
 //exit(1);
-   }
-   nLHEScaleWeight_isLoaded = true;
+   //}
  }
  return nLHEScaleWeight_;
 }
@@ -859,13 +865,15 @@ const float * hhtree::LHEScaleWeight()
 {
  if(not LHEScaleWeight_isLoaded)
  {
-   if(LHEScaleWeight_branch != 0) LHEScaleWeight_branch->GetEntry(index);
-   else
-   {
+   if(LHEScaleWeight_branch != 0){
+       LHEScaleWeight_branch->GetEntry(index);
+       LHEScaleWeight_isLoaded = true;
+   } 
+   //else
+   //{
      //printf("branch LHEScaleWeight_branch does not exist!\n");
 //exit(1);
-   }
-   LHEScaleWeight_isLoaded = true;
+   //}  
  }
  return LHEScaleWeight_;
 }
@@ -873,13 +881,15 @@ const int &hhtree::nPSWeight()
 {
  if(not nPSWeight_isLoaded)
  {
-   if(nPSWeight_branch != 0) nPSWeight_branch->GetEntry(index);
-   else
-   {
+   if(nPSWeight_branch != 0){
+       nPSWeight_branch->GetEntry(index);
+       nPSWeight_isLoaded = true;
+   }
+   //else
+   //{
      //printf("branch nPSWeight_branch does not exist!\n");
 //exit(1);
-   }
-   nPSWeight_isLoaded = true;
+   //}  
  }
  return nPSWeight_;
 }
@@ -887,13 +897,15 @@ const float * hhtree::PSWeight()
 {
  if(not PSWeight_isLoaded)
  {
-   if(PSWeight_branch != 0) PSWeight_branch->GetEntry(index);
-   else
-   {
+   if(PSWeight_branch != 0){
+       PSWeight_branch->GetEntry(index);
+       PSWeight_isLoaded = true;
+   } 
+   //else
+   //{
      //printf("branch PSWeight_branch does not exist!\n");
 //exit(1);
-   }
-   PSWeight_isLoaded = true;
+   //}   
  }
  return PSWeight_;
 }
