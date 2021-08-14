@@ -712,6 +712,140 @@ class EleTrigScaleFactors
             return result;
         }
 };
+class EleIDScaleFactors
+{
+    public: 
+        TFile *file_sf;       
+        TH2F *SF;
+
+        EleIDScaleFactors(string year)
+        {
+	  TString fname;
+	  if(year =="2016")
+	    {fname = "data/scale_factor/"+year+"LegacyReReco_ElectronTight_Fall17V2.root";}
+	  else{fname = "data/scale_factor/"+year+"_ElectronTightID.root";}
+	  file_sf = new  TFile(fname);
+	  TString hname = "EGamma_SF2D";
+	  SF =   (TH2F*)file_sf->Get(hname);
+          
+       
+        }
+        ~EleIDScaleFactors()
+        {
+	  delete SF;
+	  file_sf->Close();                                                                                                                                                                               
+	  
+        }
+        //get the trigger eff per AK8 jet
+        float getScaleFactors(float pt, float eta) 
+        {
+	  if( pt > SF->GetYaxis()->GetXmax() * 0.999 ) {
+                    pt = SF->GetYaxis()->GetXmax() * 0.999;
+            }
+           
+            float result = 1.0;
+
+            int bin_index_x = SF->GetXaxis()->FindFixBin(eta);
+            int bin_index_y = SF->GetYaxis()->FindFixBin(pt);
+            
+            int nbin_x = SF->GetNbinsX();
+            int nbin_y = SF->GetNbinsY();
+            
+            if ( (bin_index_x>0) && (bin_index_y>0) && (bin_index_x<=nbin_x) && (bin_index_y<=nbin_y) ){
+	      result = SF->GetBinContent(bin_index_x, bin_index_y);
+	    }  
+	    //cout<<pt<<", "<<eta<<", "<<result<<"\n";
+            return result;
+        }
+};
+class MuIDScaleFactors
+{
+    public: 
+        TFile *file_sf1;       
+        TH2F *SF1; //hname1 for f1
+	TH2F *SF2;//hname1 for f2
+
+	TFile *file_sf2;
+
+	TString fname1;
+	TString fname2;
+	TString hname1;
+        MuIDScaleFactors(string year)
+        {
+	  
+	  if(year =="2016"){
+	    fname1 = "data/scale_factor/RunBCDEF_SF_ID_2016.root";
+	    fname2 = "data/scale_factor/RunGH_SF_ID_2016.root";
+            	  }
+	  else{
+	    if(year =="2017"){
+	      fname1 = "data/scale_factor/RunBCDEF_SF_ID_JPsi_2017.root";
+	      fname2="";
+	    }
+	    else{
+	      fname1 = "data/scale_factor/RunABCD_SF_ID_2018.root";
+	      fname2 = "";
+
+	  
+	    }
+	  }
+
+	  hname1 = "NUM_TightID_DEN_genTracks_pt_abseta";
+	  file_sf1 = new  TFile(fname1);
+	  SF1 =   (TH2F*)file_sf1->Get(hname1);
+          if(fname2!=""){
+	    file_sf2 = new  TFile(fname2);
+	    SF2 =   (TH2F*)file_sf2->Get(hname1);
+	  }
+       
+        }
+        ~MuIDScaleFactors()
+        {
+	  delete SF1;
+	  delete SF2;
+	  file_sf1->Close();
+	  if(fname2!="") file_sf2->Close();
+        }
+	float getBinValue(TH2F *h2f, float pt, float eta){
+	  
+	  if( pt > h2f->GetXaxis()->GetXmax() * 0.999 ) {
+                    pt = h2f->GetXaxis()->GetXmax() * 0.999;
+            }
+           
+            float result = 1.0;
+
+            int bin_index_y = h2f->GetYaxis()->FindFixBin(fabs(eta));
+            int bin_index_x = h2f->GetXaxis()->FindFixBin(pt);
+            
+            int nbin_x = h2f->GetNbinsX();
+            int nbin_y = h2f->GetNbinsY();
+            
+            if ( (bin_index_x>0) && (bin_index_y>0) && (bin_index_x<=nbin_x) && (bin_index_y<=nbin_y) ){
+	      result = h2f->GetBinContent(bin_index_x, bin_index_y);
+	    }  
+ 
+            return result;
+	}
+        //get the trigger eff per AK8 jet
+        float getIDScaleFactors(float pt, float eta, TString year) 
+        {
+	  float result =1.0;
+	  float sf_f1 =1.0; // sf from f1
+	  float sf_f2 =1.0; //sf from f2
+	
+	  sf_f1 = getBinValue(SF1, pt, eta);
+
+	  if(year =="2016"){
+	    sf_f2 = getBinValue(SF2, pt, eta);
+	    result = (16578.*sf_f1+20232.*sf_f2)/(16578.+20232.);// lumi weighted
+	  }
+	  else{ result = sf_f1;
+	  }
+	  //cout<<pt<<", "<<eta<<", "<<whichHLT<<", "<<year<<", "<<result<<", "<<sf_f1<<", "<<sf_f2<<"\n";
+
+	  return result;
+        }
+};
 
 //#ifndef __CINT__
 //// Scale factors tools
