@@ -389,7 +389,7 @@ if(input.find("1LTopSkim") != std::string::npos) // this is 1LTopSkim input
   cutflow.addCut("CutWeight", [&](){ return 1; },   [&](){ return isData ?  lumi : lumi * hh.weight() *hh.l1PreFiringWeight()*hh.xsecWeight()* hh.puWeight() * hh.genWeight() * (abs(hh.lep1Id()) == 11 ? miniIsoEle_sf.getminiIsoScaleFactors(hh.lep1Pt(),hh.lep1Eta()) : miniIsoMu_sf.getminiIsoScaleFactors(hh.lep1Pt(),hh.lep1Eta())) * (abs(hh.lep1Id()) == 11 ? elTrig_sf.getScaleFactors(hh.lep1Pt(),hh.lep1Eta()) : muTrig_sf.getTrigScaleFactors(hh.lep1Pt(),hh.lep1Eta(), year_, ((hh.HLT_IsoMu24()  ||  hh.HLT_IsoMu27()) ? 1 : (hh.HLT_Mu50())? 2:0))) * (abs(hh.lep1Id()) == 11 ? elID_sf.getScaleFactors(hh.lep1Pt(),hh.lep1Eta()) : muID_sf.getIDScaleFactors(hh.lep1Pt(),hh.lep1Eta(), year_)) ;}); //before correction
 //cutflow.addCut("CutWeight", [&](){ return 1; },   [&](){ return isData ?  lumi : lumi * hh.weight() * hh.puWeight() * (isTTJets  ? ttjets_sf.getPNetXbbShapeScaleFactors(year_, hh.fatJet1PNetXbb(), 0) : 1.0); });//after correction
   if(input.find("HHc1") == std::string::npos) cutflow.addCutToLastActiveCut("CutHLT",       [&](){ return abs(hh.lep1Id()) == 11 ? (hh.HLT_Ele27_WPTight_Gsf() || hh.HLT_Ele32_WPTight_Gsf()) : (hh.HLT_IsoMu24()  ||  hh.HLT_IsoMu27()  || hh.HLT_Mu50() ); },   UNITY);
-cutflow.addCutToLastActiveCut("CutLepJetPt",       [&](){ return hh.fatJet1Pt() > 250.0 && hh.lep1Pt() > 50.0 && hh.lep2Pt() <=0 ; },   UNITY);
+cutflow.addCutToLastActiveCut("CutLepJetPt",       [&](){ return hh.fatJet1Pt() > 300.0 && hh.lep1Pt() > 50.0 && hh.lep2Pt() <=0 ; },   UNITY);
 cutflow.addCutToLastActiveCut("CutfatJetMassSD",       [&](){ return hh.fatJet1MassSD() > 50.0; },   UNITY);
 //ttbar 1L+jet control region
 cutflow.addCutToLastActiveCut("CutLepEta",       [&](){ return (abs(hh.lep1Id()) == 11 && fabs(hh.lep1Eta()) <  2.5) || (abs(hh.lep1Id()) == 13 && fabs(hh.lep1Eta()) <  2.4); },   UNITY);
@@ -402,6 +402,7 @@ cutflow.getCut("TTBarLepJetCR");
 cutflow.addCutToLastActiveCut("TTBarLepJetCRMuon",       [&](){ return abs(hh.lep1Id()) == 13; },   UNITY);
 }
 
+//two jet ttbar CR and SR
 else
 {
 
@@ -468,14 +469,14 @@ cutflow.addCutToLastActiveCut("CutHLT",       [&](){
    //cout <<"test "<<hh.HLT_AK8PFJet330_PFAK8BTagCSV_p17()<<endl;
    return isData ? ((year_ == "2016" && (hh.HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV_p20() || hh.HLT_AK8PFHT600_TrimR0p1PT0p03Mass50_BTagCSV_p20() || hh.HLT_AK8DiPFJet250_200_TrimMass30_BTagCSV_p20() || hh.HLT_AK8PFJet360_TrimMass30() || hh.HLT_AK8PFJet450() || hh.HLT_PFJet450() )) || (year_ == "2017" && (hh.HLT_PFJet450() || hh.HLT_PFJet500() || hh.HLT_AK8PFJet500() || hh.HLT_PFHT1050() || hh.HLT_AK8PFJet360_TrimMass30() || hh.HLT_AK8PFJet380_TrimMass30() || hh.HLT_AK8PFJet400_TrimMass30() || hh.HLT_AK8PFHT800_TrimMass50() || hh.HLT_AK8PFHT750_TrimMass50() || hh.HLT_AK8PFJet330_PFAK8BTagCSV_p17())) || (year_ == "2018" && (hh.HLT_PFHT1050() || hh.HLT_PFJet500() || hh.HLT_AK8PFJet500() || hh.HLT_AK8PFJet400_TrimMass30() || hh.HLT_AK8PFHT800_TrimMass50() || hh.HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4()))) : 1.0; },   UNITY);
 
-//cutflow.addCutToLastActiveCut("CutfatJetsPt",       [&](){ return hh.fatJet1Pt() > 250.0 && hh.fatJet2Pt() > 250.0; },   UNITY);
+//cutflow.addCutToLastActiveCut("CutfatJetsPt",       [&](){ return hh.fatJet1Pt() > 300.0 && hh.fatJet2Pt() > 300.0; },   UNITY);
 cutflow.addCutToLastActiveCut("CutfatJetsPt",       [&](){
-    if(isData || syst_name.find("nominal") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt() > 250.0 && hh.fatJet2Pt() > 250.0;
-    else if(syst_name.find("JER_Up") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt_JERUp() > 250.0 && hh.fatJet2Pt_JERUp() > 250.0; 
-    else if(syst_name.find("JER_Down") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt_JERDown() > 250.0 && hh.fatJet2Pt_JERDown() > 250.0; 
-    else if(syst_name.find("JES_Up") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt_JESUp() > 250.0 && hh.fatJet2Pt_JESUp() > 250.0; 
-    else if(syst_name.find("JES_Down") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt_JESDown() > 250.0 && hh.fatJet2Pt_JESDown() > 250.0; 
-    else return hh.isVBFtag() < 1 && hh.fatJet1Pt() > 250.0 && hh.fatJet2Pt() > 250.0;
+    if(isData || syst_name.find("nominal") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt() > 300.0 && hh.fatJet2Pt() > 300.0;
+    else if(syst_name.find("JER_Up") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt_JERUp() > 300.0 && hh.fatJet2Pt_JERUp() > 300.0; 
+    else if(syst_name.find("JER_Down") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt_JERDown() > 300.0 && hh.fatJet2Pt_JERDown() > 300.0; 
+    else if(syst_name.find("JES_Up") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt_JESUp() > 300.0 && hh.fatJet2Pt_JESUp() > 300.0; 
+    else if(syst_name.find("JES_Down") != std::string::npos) return hh.isVBFtag() < 1 && hh.fatJet1Pt_JESDown() > 300.0 && hh.fatJet2Pt_JESDown() > 300.0; 
+    else return hh.isVBFtag() < 1 && hh.fatJet1Pt() > 300.0 && hh.fatJet2Pt() > 300.0;
 },   UNITY);
 cutflow.addCutToLastActiveCut("CutfatJetsMassSD",       [&](){ 
     if(isData || syst_name.find("nominal") != std::string::npos) return hh.fatJet1MassSD() > 50.0 && hh.fatJet2MassSD() > 50.0; 
@@ -667,12 +668,40 @@ else{
 if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outputFileName.find("data") == std::string::npos ) && (syst_name.find("nominal") != std::string::npos) )
 {    
     //pdf uncertainty for the HH signal acceptance
-    //QCD scale uncertainty for the HH signal acceptance
+    for(int ipdf=0; ipdf<hh.nLHEPdfWeight(); ipdf++){
+        cutflow.addWgtSyst("LHEPDFHessianVector0",  [&](){return isHH ?  hh.LHEPdfWeight()[0] : 1.0;});
+    }
+        
+    //QCD scale uncertainty for the HH signal acceptance: take the envelope for weights [0,1,3,4,5,8,9]
+    /*
+    https://twiki.cern.ch/twiki/bin/viewauth/CMS/TopSystematics#Factorization_and_renormalizatio
+        ['LHE scale variation weights (w_var / w_nominal)',
+        ' [0] is renscfact=0.5d0 facscfact=0.5d0 ',
+        ' [1] is renscfact=0.5d0 facscfact=1d0 ',
+        ' [2] is renscfact=0.5d0 facscfact=2d0 ',
+        ' [3] is renscfact=1d0 facscfact=0.5d0 ',
+        ' [4] is renscfact=1d0 facscfact=1d0 ',
+        ' [5] is renscfact=1d0 facscfact=2d0 ',
+        ' [6] is renscfact=2d0 facscfact=0.5d0 ',
+        ' [7] is renscfact=2d0 facscfact=1d0 ',
+        ' [8] is renscfact=2d0 facscfact=2d0 ']
+    */
+    cutflow.addWgtSyst("QCDscale0",  [&](){return isHH ?  hh.LHEScaleWeight()[0] : 1.0;});
+    cutflow.addWgtSyst("QCDscale1",  [&](){return isHH ?  hh.LHEScaleWeight()[1] : 1.0;});
+    cutflow.addWgtSyst("QCDscale2",  [&](){return isHH ?  hh.LHEScaleWeight()[2] : 1.0;});
+    cutflow.addWgtSyst("QCDscale3",  [&](){return isHH ?  hh.LHEScaleWeight()[3] : 1.0;});
+    cutflow.addWgtSyst("QCDscale4",  [&](){return isHH ?  hh.LHEScaleWeight()[4] : 1.0;});
+    cutflow.addWgtSyst("QCDscale5",  [&](){return isHH ?  hh.LHEScaleWeight()[5] : 1.0;});
+    cutflow.addWgtSyst("QCDscale6",  [&](){return isHH ?  hh.LHEScaleWeight()[6] : 1.0;});
+    cutflow.addWgtSyst("QCDscale7",  [&](){return isHH ?  hh.LHEScaleWeight()[7] : 1.0;});
+    cutflow.addWgtSyst("QCDscale8",  [&](){return isHH ?  hh.LHEScaleWeight()[8] : 1.0;});
+                       
     //parton shower uncertainty for the HH signal yield (ISR and FSR)
-    cutflow.addWgtSyst("ISRPartonShowerUp",  [&](){return isHH ?  hh.PSWeight()[0] : 1.0;});
-    cutflow.addWgtSyst("ISRPartonShowerDown",  [&](){return isHH ? hh.PSWeight()[2] : 1.0;});
-    cutflow.addWgtSyst("FSRPartonShowerUp",  [&](){return isHH ?  hh.PSWeight()[1] : 1.0;});
-    cutflow.addWgtSyst("FSRPartonShowerDown",  [&](){return isHH ? hh.PSWeight()[3] : 1.0;});
+    cutflow.addWgtSyst("ISRPartonShowerUp",  [&](){return isHH ?  hh.PSWeight()[0] : 1.0;}); //ISR=2 FSR=1
+    cutflow.addWgtSyst("ISRPartonShowerDown",  [&](){return isHH ? hh.PSWeight()[2] : 1.0;}); //ISR=0.5 FSR=1
+    cutflow.addWgtSyst("FSRPartonShowerUp",  [&](){return isHH ?  hh.PSWeight()[1] : 1.0;}); //ISR=1 FSR=2
+    cutflow.addWgtSyst("FSRPartonShowerDown",  [&](){return isHH ? hh.PSWeight()[3] : 1.0;}); //ISR=1 FSR=0.5
+
     //BDT modeling uncertainty for ttbar
     cutflow.addWgtSyst("BDTv8p2ShapeUp",  [&](){return isTTJets ? ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.00008 ? 0.96 : ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  <  0.0002 ?  0.91 : (hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.0004 ? 0.90 :  1.12))) : 1.0;});
     cutflow.addWgtSyst("BDTv8p2ShapeDown",  [&](){return isTTJets ? ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.00008 ? 1.04 : ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  <  0.0002 ?  1.09 : (hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.0004 ? 1.10 :  0.88))) : 1.0;});
