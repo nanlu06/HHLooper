@@ -55,6 +55,9 @@ class hhtree{
   bool HLT_Ele32_WPTight_Gsf_;
   TBranch *HLT_Ele32_WPTight_Gsf_branch;
   bool HLT_Ele32_WPTight_Gsf_isLoaded;
+  bool HLT_Ele32_WPTight_Gsf_L1DoubleEG_;
+  TBranch *HLT_Ele32_WPTight_Gsf_L1DoubleEG_branch;
+  bool HLT_Ele32_WPTight_Gsf_L1DoubleEG_isLoaded;
   bool HLT_Ele35_WPTight_Gsf_;
   TBranch *HLT_Ele35_WPTight_Gsf_branch;
   bool HLT_Ele35_WPTight_Gsf_isLoaded;
@@ -774,6 +777,7 @@ class hhtree{
   const bool &HLT_Ele28_WPTight_Gsf();
   const bool &HLT_Ele30_WPTight_Gsf();
   const bool &HLT_Ele32_WPTight_Gsf();
+  const bool &HLT_Ele32_WPTight_Gsf_L1DoubleEG();
   const bool &HLT_Ele35_WPTight_Gsf();
   const bool &HLT_Ele38_WPTight_Gsf();
   const bool &HLT_Ele40_WPTight_Gsf();

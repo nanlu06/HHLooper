@@ -291,23 +291,19 @@ class TTJetsScaleFactors
             if (pt<0.1)  pt= 0.1;
             if(pt>999.9) pt =999.9;
             //default values are for 2018
-            float slope = 0.00148792, constant = 1.12203; //par1, par0
-            float cov00 = 0.00203, cov01 = 9.163e-06, cov11 = 4.938e-08;
+            float slope = 0.000686138, constant = 0.845944; //par1, par0
+            float cov00 = 0.002048, cov01 = 9.329e-06, cov11 = 4.957e-08;
             if(year == "2016")
             {
-                slope = 0.000291232, constant = 1.10197; //par1, par0
-                cov00 = 0.004345, cov01 = 1.969e-05, cov11 = 1.079e-07;
+                slope = 0.000410599, constant = 1.0068; //par1, par0
+                cov00 = 0.003678, cov01 = 1.681e-05, cov11 = 9.268e-08;
             }
             if(year == "2017")
             {
-                slope = 0.00177981, constant = 1.31793; //par1, par0
-                cov00 = 0.003392, cov01 = 1.519e-05, cov11 = 8.042e-08;
+                slope = 0.00178387, constant = 1.20647; //par1, par0
+                cov00 = 0.003326, cov01 = 1.477e-05, cov11 = 7.622e-08;
             }
-            if(year == "2018")
-            {
-                slope = 0.00148792, constant = 1.12203; //par1, par0
-                cov00 = 0.00203, cov01 = 9.163e-06, cov11 = 4.938e-08;
-            }
+            
             if(pt<300) result = slope*(pt-300.) + constant + type*sqrt((pt-300.)*(pt-300.)*cov11 + cov00 + 2*(pt-300)*cov01);
             else result = constant + type*sqrt(cov00);
             //if(result <0.01) result = 1.0;
@@ -322,26 +318,20 @@ class TTJetsScaleFactors
             if (pt<0.1)  pt= 0.1;
             if(pt>999.9) pt =999.9;
             //default values are for 2018
-            float slope2 = -8.90051e-04, slope1 = 8.93903e-04, constant1 = 9.66787e-01; //par2, par1, par0  of the fit function
-            float cov00 = 0.002517, cov01 = -1.618e-05, cov02 = 5.18e-06; //elements of the covariance matrix
-            float cov11 = 1.521e-07, cov12 = -6.53e-08, cov22 = 9.643e-08; //elements of the covariance matrix
+            float slope2 = -4.47034e-04, slope1 = 8.81129e-04, constant1 =  6.57155e-01; //par2, par1, par0  of the fit function
+            float cov00 = 0.0005963, cov01 = -3.92e-06, cov02 = 1.323e-06; //elements of the covariance matrix
+            float cov11 = 6.356e-08, cov12 = -3.092e-08, cov22 =  3.032e-08; //elements of the covariance matrix
             if(year == "2016")
             {
-                slope2 = -8.90051e-04, slope1 = 8.93903e-04, constant1 = 9.66787e-01; //par2, par1, par0
-                cov00 = 0.002517, cov01 = -1.618e-05, cov02 = 5.18e-06;
-                cov11 = 1.521e-07, cov12 = -6.53e-08, cov22 = 9.643e-08;
+                slope2 = -0.000364811, slope1 = 0.000614948, constant1 =  0.867032; //par2, par1, par0
+                cov00 = 0.002136, cov01 = -1.348e-05, cov02 = 4.426e-06;
+                cov11 = 1.232e-07, cov12 = -5.453e-08, cov22 = 9.735e-08;
             }
             if(year == "2017")
             {
-                slope2 = -4.27981e-04, slope1 = 1.99119e-03, constant1 = 7.67781e-01; //par2, par1, par0
-                cov00 = 0.001671, cov01 = -1.096e-05, cov02 = 4.099e-06;
-                cov11 = 1.068e-07, cov12 = -5.345e-08, cov22 = 1.082e-07;
-            }
-            if(year == "2018")
-            {
-                slope2 = -5.52196e-04, slope1 = 1.79594e-03, constant1 = 6.51474e-01; //par2, par1, par0
-                cov00 = 0.001079, cov01 = -6.96e-06, cov02 = 2.348e-06;
-                cov11 = 6.606e-08, cov12 = -2.991e-08, cov22 = 5.363e-08;
+                slope2 = 1.86038e-05, slope1 = 1.77608e-03, constant1 = 6.71892e-01; //par2, par1, par0
+                cov00 = 0.001446, cov01 = -9.696e-06, cov02 = 3.813e-06;
+                cov11 = 9.757e-08, cov12 = -5.101e-08, cov22 = 1.219e-07;
             }
             if(pt<300) result = slope1*pt + constant1 + type*sqrt(pt*pt*cov11 + cov00 + 2*pt*cov01);
             else if(pt<1000.) result = constant1 + 300.*slope1 + (pt-300.)*slope2 + type*sqrt(cov00 + 300.*300.*cov11 + (pt-300.)*(pt-300.)*cov22 + 2*300.*cov01 + 2*(pt - 300.)*cov02 + 2*300.*(pt-300.)*cov12);
@@ -485,7 +475,9 @@ class miniIsoEleScaleFactors
         {
 	  TString fname = "data/scale_factor/ElectronScaleFactors_Run"+year+".root";
 	  file_sf = new  TFile(fname);
-	  TString hname = "Run"+year+"_Mini2";
+	  TString hname;
+	  if(year == "2017")hname = "Run"+year+"_MVAVLooseTightIP2DMini2";
+	  else hname = "Run"+year+"_Mini2";
 	  miniIsoSF =   (TH2F*)file_sf->Get(hname);
           
        
@@ -514,7 +506,7 @@ class miniIsoEleScaleFactors
             if ( (bin_index_x>0) && (bin_index_y>0) && (bin_index_x<=nbin_x) && (bin_index_y<=nbin_y) ){
 	      result = miniIsoSF->GetBinContent(bin_index_x, bin_index_y);
 	    }  
- 
+	    //cout<<pt<<", "<<eta<<", "<<result<<"\n";
             return result;
         }
 };
@@ -721,6 +713,140 @@ class EleTrigScaleFactors
 	    }  
 	    //cout<<pt<<", "<<eta<<", "<<result<<"\n";
             return result;
+        }
+};
+class EleIDScaleFactors
+{
+    public: 
+        TFile *file_sf;       
+        TH2F *SF;
+
+        EleIDScaleFactors(string year)
+        {
+	  TString fname;
+	  if(year =="2016")
+	    {fname = "data/scale_factor/"+year+"LegacyReReco_ElectronTight_Fall17V2.root";}
+	  else{fname = "data/scale_factor/"+year+"_ElectronTightID.root";}
+	  file_sf = new  TFile(fname);
+	  TString hname = "EGamma_SF2D";
+	  SF =   (TH2F*)file_sf->Get(hname);
+          
+       
+        }
+        ~EleIDScaleFactors()
+        {
+	  delete SF;
+	  file_sf->Close();                                                                                                                                                                               
+	  
+        }
+        //get the trigger eff per AK8 jet
+        float getScaleFactors(float pt, float eta) 
+        {
+	  if( pt > SF->GetYaxis()->GetXmax() * 0.999 ) {
+                    pt = SF->GetYaxis()->GetXmax() * 0.999;
+            }
+           
+            float result = 1.0;
+
+            int bin_index_x = SF->GetXaxis()->FindFixBin(eta);
+            int bin_index_y = SF->GetYaxis()->FindFixBin(pt);
+            
+            int nbin_x = SF->GetNbinsX();
+            int nbin_y = SF->GetNbinsY();
+            
+            if ( (bin_index_x>0) && (bin_index_y>0) && (bin_index_x<=nbin_x) && (bin_index_y<=nbin_y) ){
+	      result = SF->GetBinContent(bin_index_x, bin_index_y);
+	    }  
+	    //cout<<pt<<", "<<eta<<", "<<result<<"\n";
+            return result;
+        }
+};
+class MuIDScaleFactors
+{
+    public: 
+        TFile *file_sf1;       
+        TH2F *SF1; //hname1 for f1
+	TH2F *SF2;//hname1 for f2
+
+	TFile *file_sf2;
+
+	TString fname1;
+	TString fname2;
+	TString hname1;
+        MuIDScaleFactors(string year)
+        {
+	  
+	  if(year =="2016"){
+	    fname1 = "data/scale_factor/RunBCDEF_SF_ID_2016.root";
+	    fname2 = "data/scale_factor/RunGH_SF_ID_2016.root";
+            	  }
+	  else{
+	    if(year =="2017"){
+	      fname1 = "data/scale_factor/RunBCDEF_SF_ID_JPsi_2017.root";
+	      fname2="";
+	    }
+	    else{
+	      fname1 = "data/scale_factor/RunABCD_SF_ID_2018.root";
+	      fname2 = "";
+
+	  
+	    }
+	  }
+
+	  hname1 = "NUM_TightID_DEN_genTracks_pt_abseta";
+	  file_sf1 = new  TFile(fname1);
+	  SF1 =   (TH2F*)file_sf1->Get(hname1);
+          if(fname2!=""){
+	    file_sf2 = new  TFile(fname2);
+	    SF2 =   (TH2F*)file_sf2->Get(hname1);
+	  }
+       
+        }
+        ~MuIDScaleFactors()
+        {
+	  delete SF1;
+	  delete SF2;
+	  file_sf1->Close();
+	  if(fname2!="") file_sf2->Close();
+        }
+	float getBinValue(TH2F *h2f, float pt, float eta){
+	  
+	  if( pt > h2f->GetXaxis()->GetXmax() * 0.999 ) {
+                    pt = h2f->GetXaxis()->GetXmax() * 0.999;
+            }
+           
+            float result = 1.0;
+
+            int bin_index_y = h2f->GetYaxis()->FindFixBin(fabs(eta));
+            int bin_index_x = h2f->GetXaxis()->FindFixBin(pt);
+            
+            int nbin_x = h2f->GetNbinsX();
+            int nbin_y = h2f->GetNbinsY();
+            
+            if ( (bin_index_x>0) && (bin_index_y>0) && (bin_index_x<=nbin_x) && (bin_index_y<=nbin_y) ){
+	      result = h2f->GetBinContent(bin_index_x, bin_index_y);
+	    }  
+ 
+            return result;
+	}
+        //get the trigger eff per AK8 jet
+        float getIDScaleFactors(float pt, float eta, TString year) 
+        {
+	  float result =1.0;
+	  float sf_f1 =1.0; // sf from f1
+	  float sf_f2 =1.0; //sf from f2
+	
+	  sf_f1 = getBinValue(SF1, pt, eta);
+
+	  if(year =="2016"){
+	    sf_f2 = getBinValue(SF2, pt, eta);
+	    result = (16578.*sf_f1+20232.*sf_f2)/(16578.+20232.);// lumi weighted
+	  }
+	  else{ result = sf_f1;
+	  }
+	  //cout<<pt<<", "<<eta<<", "<<whichHLT<<", "<<year<<", "<<result<<", "<<sf_f1<<", "<<sf_f2<<"\n";
+
+	  return result;
         }
 };
 

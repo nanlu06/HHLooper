@@ -32,6 +32,9 @@ void hhtree::Init(TTree *tree)
  if(HLT_Ele30_WPTight_Gsf_branch) HLT_Ele30_WPTight_Gsf_branch->SetAddress(&HLT_Ele30_WPTight_Gsf_);
  HLT_Ele32_WPTight_Gsf_branch = tree->GetBranch("HLT_Ele32_WPTight_Gsf");
  if(HLT_Ele32_WPTight_Gsf_branch) HLT_Ele32_WPTight_Gsf_branch->SetAddress(&HLT_Ele32_WPTight_Gsf_);
+ HLT_Ele32_WPTight_Gsf_L1DoubleEG_branch = tree->GetBranch("HLT_Ele32_WPTight_Gsf_L1DoubleEG");
+ if(HLT_Ele32_WPTight_Gsf_L1DoubleEG_branch) HLT_Ele32_WPTight_Gsf_L1DoubleEG_branch->SetAddress(&HLT_Ele32_WPTight_Gsf_L1DoubleEG_);
+
  HLT_Ele35_WPTight_Gsf_branch = tree->GetBranch("HLT_Ele35_WPTight_Gsf");
  if(HLT_Ele35_WPTight_Gsf_branch) HLT_Ele35_WPTight_Gsf_branch->SetAddress(&HLT_Ele35_WPTight_Gsf_);
  HLT_Ele38_WPTight_Gsf_branch = tree->GetBranch("HLT_Ele38_WPTight_Gsf");
@@ -518,6 +521,7 @@ void hhtree::GetEntry(unsigned int idx)
  HLT_Ele28_WPTight_Gsf_isLoaded = false;
  HLT_Ele30_WPTight_Gsf_isLoaded = false;
  HLT_Ele32_WPTight_Gsf_isLoaded = false;
+ HLT_Ele32_WPTight_Gsf_L1DoubleEG_isLoaded = false;
  HLT_Ele35_WPTight_Gsf_isLoaded = false;
  HLT_Ele38_WPTight_Gsf_isLoaded = false;
  HLT_Ele40_WPTight_Gsf_isLoaded = false;
@@ -968,7 +972,20 @@ const bool &hhtree::HLT_Ele32_WPTight_Gsf()
     }
   return HLT_Ele32_WPTight_Gsf_;
 }
-
+const bool &hhtree::HLT_Ele32_WPTight_Gsf_L1DoubleEG() 
+{
+  if(not HLT_Ele32_WPTight_Gsf_L1DoubleEG_isLoaded)
+    {
+      if(HLT_Ele32_WPTight_Gsf_L1DoubleEG_branch != 0) HLT_Ele32_WPTight_Gsf_L1DoubleEG_branch->GetEntry(index);
+      else
+	{
+	  //printf("branch HLT_Ele32_WPTight_Gsf_branch does not exist!\n");
+	  //exit(1);
+	}
+      HLT_Ele32_WPTight_Gsf_L1DoubleEG_isLoaded = true;
+    }
+  return HLT_Ele32_WPTight_Gsf_L1DoubleEG_;
+}
 const bool &hhtree::HLT_Ele35_WPTight_Gsf() 
 {
   if(not HLT_Ele35_WPTight_Gsf_isLoaded)
