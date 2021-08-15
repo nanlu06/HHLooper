@@ -155,8 +155,8 @@ class TrigEffScaleFactors
                 if( mass > trigEffHist->GetXaxis()->GetXmax() * 0.999 ) {
                     tmpMass = trigEffHist->GetXaxis()->GetXmax() * 0.999;
                 } 
-                else if ( mass < 0 ) {
-                    tmpMass = 0.001;
+                else if ( mass < trigEffHist->GetXaxis()->GetXmin() * 1.001 ) {
+                    tmpMass = trigEffHist->GetXaxis()->GetXmin();
                 } 
                 else {
                     tmpMass = mass;
@@ -165,9 +165,9 @@ class TrigEffScaleFactors
                 if( pt > trigEffHist->GetYaxis()->GetXmax() * 0.999 ) {
                     tmpPt = trigEffHist->GetYaxis()->GetXmax() * 0.999;
                 } 
-                else if (pt < 0) {
-                    tmpPt = 0.001;
-                    //cout << "Warning: pt=" << pt << " is negative and unphysical\n";
+                else if (pt < trigEffHist->GetYaxis()->GetXmin() * 1.001) {
+                    tmpPt = trigEffHist->GetYaxis()->GetXmin() * 1.001;
+                    //cout << "Warning: pt=" << pt << " is smaller than the trigger SF meaured range\n";
                 } 
                 else {
                    tmpPt = pt;
@@ -178,7 +178,10 @@ class TrigEffScaleFactors
                 //cout <<"bin_index_x, bin_index_y"<<bin_index_x<<" "<<bin_index_y<<endl;
                 //cout <<"ibin ibin_start + (bin_index_y-1)*nbin_x + bin_index_x "<<ibin<<" "<< ibin_start + (bin_index_y-1)*nbin_x + bin_index_x <<endl;
 
-                if( variation==0 ) result = trigEffHist->GetBinContent(bin_index_x, bin_index_y); 
+                if( variation==0 ){
+                   result = trigEffHist->GetBinContent(bin_index_x, bin_index_y); 
+                   //cout <<"eff for object "<<result<<endl;
+                }
                 else if( ibin == (ibin_start + (bin_index_y-1)*nbin_x + bin_index_x) ){
                     if( variation==1 ){
                         result = trigEffHist->GetBinContent(bin_index_x, bin_index_y) + trigEffHist->GetBinError(bin_index_x, bin_index_y);
@@ -195,7 +198,7 @@ class TrigEffScaleFactors
                 //std::cout << "Error: expected a histogram, got a null pointer" << std::endl;
                 return 0;
             }
-            //cout <<"eff per jet"<<endl;
+            //cout <<"eff per jet: "<<result<<endl;
             return result;
         }
         //get the trigger eff per event
