@@ -428,7 +428,7 @@ cutflow.addCut("CutWeight", [&](){ return 1; },  [&](){
     else if(syst_name.find("JER_Down") != std::string::npos){
         total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JERDown(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JERDown(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0);
     } 
-    if(syst_name.find("JES_Up") != std::string::npos){
+    else if(syst_name.find("JES_Up") != std::string::npos){
         total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JESUp(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JESUp(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0);
     }
     else if(syst_name.find("JES_Down") != std::string::npos){
