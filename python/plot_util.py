@@ -7,7 +7,7 @@ import sys
 import os
 
 leftMargin   = 0.13
-rightMargin  = 0.01
+rightMargin  = 0.05
 topMargin    = 0.07
 bottomMargin = 0.12
 r.gStyle.SetOptStat(0)
