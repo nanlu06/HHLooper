@@ -668,6 +668,7 @@ else{
 if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outputFileName.find("data") == std::string::npos ) && (syst_name.find("nominal") != std::string::npos) )
 {    
     //pdf uncertainty for the HH signal acceptance
+    if(isHH){
     cutflow.addWgtSyst("LHEPDFEigenv0",  [&](){return isHH ?  hh.LHEPdfWeight()[0] : 1.0;});
     cutflow.addWgtSyst("LHEPDFEigenv1",  [&](){return isHH ?  hh.LHEPdfWeight()[1] : 1.0;});
     cutflow.addWgtSyst("LHEPDFEigenv2",  [&](){return isHH ?  hh.LHEPdfWeight()[2] : 1.0;});
@@ -800,7 +801,8 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
     cutflow.addWgtSyst("ISRPartonShowerDown",  [&](){return isHH ? hh.PSWeight()[2] : 1.0;}); //ISR=0.5 FSR=1
     cutflow.addWgtSyst("FSRPartonShowerUp",  [&](){return isHH ?  hh.PSWeight()[1] : 1.0;}); //ISR=1 FSR=2
     cutflow.addWgtSyst("FSRPartonShowerDown",  [&](){return isHH ? hh.PSWeight()[3] : 1.0;}); //ISR=1 FSR=0.5
-
+    }
+    
     //BDT modeling uncertainty for ttbar
     cutflow.addWgtSyst("BDTv8p2ShapeUp",  [&](){return isTTJets ? ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.00008 ? 0.96 : ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  <  0.0002 ?  0.91 : (hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.0004 ? 0.90 :  1.12))) : 1.0;});
     cutflow.addWgtSyst("BDTv8p2ShapeDown",  [&](){return isTTJets ? ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.00008 ? 1.04 : ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  <  0.0002 ?  1.09 : (hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.0004 ? 1.10 :  0.88))) : 1.0;});
@@ -2924,11 +2926,11 @@ else
         //cutflow.bookHistogramsForCut(histograms, "FailFitCRv24");
 
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1");
-        cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp95");
-        cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp9");
-        cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp8");
-        cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp5");
-        cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp2");
+        //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp95");
+        //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp9");
+        //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp8");
+        //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp5");
+        //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp2");
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp0");
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin2");
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin3");
