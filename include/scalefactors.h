@@ -339,27 +339,28 @@ class TTJetsScaleFactors
         {
             //type: 0, 1, -1 for nominal Up Down
             int idx_xbb  = 0;
-            if(xbb < 0.945) idx_xbb  = 0;
-            else if (xbb  < 0.955) idx_xbb =1;
-            else if (xbb  < 0.975) idx_xbb =2;
-            else if (xbb < 0.985) idx_xbb =3;
-            else idx_xbb = 4;
+	    if(xbb < 0.9) idx_xbb  = 0;
+            else if(xbb < 0.945) idx_xbb  = 1;
+            else if (xbb  < 0.955) idx_xbb =2;
+            else if (xbb  < 0.975) idx_xbb =3;
+            else if (xbb < 0.985) idx_xbb =4;
+            else idx_xbb = 5;
             if (year == "2016")
             {
-               float sf[5] = {0.821, 0.789, 0.824, 0.701, 0.741};
-               float esf[5] = {0.012, 0.066, 0.044, 0.084, 0.069};
+	      float sf[6] = {0.826, 0.764, 0.858, 0.816, 0.713, 0.775};
+	      float esf[6] = {0.015, 0.033, 0.071, 0.046, 0.064,0.076};
                return sf[idx_xbb] + type*esf[idx_xbb];
             }
             if (year == "2017")
             {
-               float sf[5] = {0.901, 0.880, 0.876, 0.860, 0.916};
-               float esf[5] = {0.014, 0.067, 0.045, 0.064, 0.071};
+	      float sf[6] = {0.993, 1.049, 1.031, 1.018, 0.974, 1.032};
+	      float esf[6] = {0.017,0.041, 0.080, 0.054, 0.077, 0.084};
                return sf[idx_xbb] + type*esf[idx_xbb];
             }
             if (year == "2018")
             {
-               float sf[5] = {0.975, 1.024, 0.935, 0.890, 0.798};
-               float esf[5] = {0.016, 0.059, 0.039, 0.055, 0.056};
+	      float sf[6] = {0.865, 0.929, 0.962, 0.858, 0.851, 0.739};
+	      float esf[6] = {0.018, 0.031, 0.059, 0.039, 0.055, 0.056};
                return sf[idx_xbb] + type*esf[idx_xbb];
             }
             return 1.0;
@@ -502,6 +503,7 @@ class miniIsoEleScaleFactors
             
             if ( (bin_index_x>0) && (bin_index_y>0) && (bin_index_x<=nbin_x) && (bin_index_y<=nbin_y) ){
 	      result = miniIsoSF->GetBinContent(bin_index_x, bin_index_y);
+	      
 	    }  
 	    //cout<<pt<<", "<<eta<<", "<<result<<"\n";
             return result;
@@ -553,6 +555,7 @@ class miniIsoMuScaleFactors
             
             if ( (bin_index_x>0) && (bin_index_y>0) && (bin_index_x<=nbin_x) && (bin_index_y<=nbin_y) ){
 	      result = miniIsoSF->GetBinContent(bin_index_x, bin_index_y);
+	      
 	    }  
  
             return result;
