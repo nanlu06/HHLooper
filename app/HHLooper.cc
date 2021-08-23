@@ -346,10 +346,10 @@ histograms.addHistogram("fatJet1PNetXbb_Bin1",   "; j_{1} PNet Xbb tagger; Event
 histograms.addHistogram("fatJet2PNetXbb_Bin1",   "; j_{2} PNet Xbb tagger; Events",    {0.90, 0.95,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet2PNetXbb(); } );
 histograms.addHistogram("fatJet1PNetXbb_Bin2",   "; j_{1} PNet Xbb tagger; Events",    {0.90, 0.945, 0.955,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet1PNetXbb(); } );
 histograms.addHistogram("fatJet2PNetXbb_Bin2",   "; j_{2} PNet Xbb tagger; Events",    {0.90, 0.945, 0.955,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet2PNetXbb(); } );
-histograms.addHistogram("fatJet1Pt",          "; p_{T}^{j1} (GeV); Events",           72,   200.,   2000.,  [&]() { return  hh.fatJet1Pt(); } );
+histograms.addHistogram("fatJet1Pt",          "; p_{T}^{j1} (GeV); Events",           200,   300.,   2300.,  [&]() { return  hh.fatJet1Pt(); } );
 histograms.addHistogram("fatJet1Eta",          "; #eta^{j1}; Events",                 200,   -2.5,  2.5,  [&]() { return  hh.fatJet1Eta(); } );
 histograms.addHistogram("fatJet1Phi",          "; #Phi^{j1}; Events",                 200,  -3.2,   3.2,  [&]() { return  hh.fatJet1Phi(); } );
-histograms.addHistogram("fatJet2Pt",          "; p_{T}^{j2} (GeV); Events",           72,   200.,   2000.,  [&]() { return  hh.fatJet2Pt(); } );
+histograms.addHistogram("fatJet2Pt",          "; p_{T}^{j2} (GeV); Events",           200,   300.,   2300.,  [&]() { return  hh.fatJet2Pt(); } );
 histograms.addHistogram("fatJet2Eta",          "; #eta^{j2}; Events",                 200,   -2.5,  2.5,  [&]() { return  hh.fatJet2Eta(); } );
 histograms.addHistogram("fatJet2Phi",          "; #Phi^{j2}; Events",                 200,  -3.2,   3.2,  [&]() { return  hh.fatJet2Phi(); } );
 histograms.addHistogram("abs_dEta_j1j2",       "; #Delta#eta(j_{1}, j_{2}); Events",   200,   0.,   5.,    [&]() { return  fabs(hh.fatJet1Eta() - hh.fatJet2Eta()); } );
@@ -420,9 +420,9 @@ else
   
 cutflow.addCut("CutWeight", [&](){ return 1; },  [&](){
     //after ttbar recoil correction
-    float total_weight = isData ?  lumi :lumi * hh.weight() * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets  ? ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
+    float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets  ? ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
     //before ttbar recoil correction
-    //float total_weight = isData ?  lumi :lumi * hh.weight() * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight());
+    //float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets  ? ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
     
     if(!isData){
     //apply trigger SF
@@ -432,7 +432,7 @@ cutflow.addCut("CutWeight", [&](){ return 1; },  [&](){
     else if(syst_name.find("JER_Down") != std::string::npos){
         total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JERDown(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JERDown(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0);
     } 
-    if(syst_name.find("JES_Up") != std::string::npos){
+    else if(syst_name.find("JES_Up") != std::string::npos){
         total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JESUp(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JESUp(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0);
     }
     else if(syst_name.find("JES_Down") != std::string::npos){
@@ -672,9 +672,217 @@ else{
 if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outputFileName.find("data") == std::string::npos ) && (syst_name.find("nominal") != std::string::npos) )
 {    
     //pdf uncertainty for the HH signal acceptance
-    for(int ipdf=0; ipdf<hh.nLHEPdfWeight(); ipdf++){
-        cutflow.addWgtSyst("LHEPDFHessianVector0",  [&](){return isHH ?  hh.LHEPdfWeight()[0] : 1.0;});
-    }
+    if(isHH && (outputFileName.find("VBF") == std::string::npos)){
+        
+    cutflow.addWgtSyst("LHEPDFEigenv0",  [&](){return isHH ?  hh.LHEPdfWeight()[0] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv1",  [&](){return isHH ?  hh.LHEPdfWeight()[1] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv2",  [&](){return isHH ?  hh.LHEPdfWeight()[2] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv3",  [&](){return isHH ?  hh.LHEPdfWeight()[3] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv4",  [&](){return isHH ?  hh.LHEPdfWeight()[4] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv5",  [&](){return isHH ?  hh.LHEPdfWeight()[5] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv6",  [&](){return isHH ?  hh.LHEPdfWeight()[6] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv7",  [&](){return isHH ?  hh.LHEPdfWeight()[7] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv8",  [&](){return isHH ?  hh.LHEPdfWeight()[8] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv9",  [&](){return isHH ?  hh.LHEPdfWeight()[9] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv10",  [&](){return isHH ?  hh.LHEPdfWeight()[10] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv11",  [&](){return isHH ?  hh.LHEPdfWeight()[11] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv12",  [&](){return isHH ?  hh.LHEPdfWeight()[12] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv13",  [&](){return isHH ?  hh.LHEPdfWeight()[13] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv14",  [&](){return isHH ?  hh.LHEPdfWeight()[14] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv15",  [&](){return isHH ?  hh.LHEPdfWeight()[15] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv16",  [&](){return isHH ?  hh.LHEPdfWeight()[16] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv17",  [&](){return isHH ?  hh.LHEPdfWeight()[17] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv18",  [&](){return isHH ?  hh.LHEPdfWeight()[18] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv19",  [&](){return isHH ?  hh.LHEPdfWeight()[19] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv20",  [&](){return isHH ?  hh.LHEPdfWeight()[20] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv21",  [&](){return isHH ?  hh.LHEPdfWeight()[21] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv22",  [&](){return isHH ?  hh.LHEPdfWeight()[22] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv23",  [&](){return isHH ?  hh.LHEPdfWeight()[23] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv24",  [&](){return isHH ?  hh.LHEPdfWeight()[24] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv25",  [&](){return isHH ?  hh.LHEPdfWeight()[25] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv26",  [&](){return isHH ?  hh.LHEPdfWeight()[26] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv27",  [&](){return isHH ?  hh.LHEPdfWeight()[27] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv28",  [&](){return isHH ?  hh.LHEPdfWeight()[28] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv29",  [&](){return isHH ?  hh.LHEPdfWeight()[29] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv30",  [&](){return isHH ?  hh.LHEPdfWeight()[30] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv31",  [&](){return isHH ?  hh.LHEPdfWeight()[31] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv32",  [&](){return isHH ?  hh.LHEPdfWeight()[32] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv33",  [&](){return isHH ?  hh.LHEPdfWeight()[33] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv34",  [&](){return isHH ?  hh.LHEPdfWeight()[34] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv35",  [&](){return isHH ?  hh.LHEPdfWeight()[35] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv36",  [&](){return isHH ?  hh.LHEPdfWeight()[36] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv37",  [&](){return isHH ?  hh.LHEPdfWeight()[37] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv38",  [&](){return isHH ?  hh.LHEPdfWeight()[38] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv39",  [&](){return isHH ?  hh.LHEPdfWeight()[39] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv40",  [&](){return isHH ?  hh.LHEPdfWeight()[40] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv41",  [&](){return isHH ?  hh.LHEPdfWeight()[41] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv42",  [&](){return isHH ?  hh.LHEPdfWeight()[42] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv43",  [&](){return isHH ?  hh.LHEPdfWeight()[43] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv44",  [&](){return isHH ?  hh.LHEPdfWeight()[44] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv45",  [&](){return isHH ?  hh.LHEPdfWeight()[45] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv46",  [&](){return isHH ?  hh.LHEPdfWeight()[46] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv47",  [&](){return isHH ?  hh.LHEPdfWeight()[47] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv48",  [&](){return isHH ?  hh.LHEPdfWeight()[48] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv49",  [&](){return isHH ?  hh.LHEPdfWeight()[49] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv50",  [&](){return isHH ?  hh.LHEPdfWeight()[50] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv51",  [&](){return isHH ?  hh.LHEPdfWeight()[51] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv52",  [&](){return isHH ?  hh.LHEPdfWeight()[52] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv53",  [&](){return isHH ?  hh.LHEPdfWeight()[53] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv54",  [&](){return isHH ?  hh.LHEPdfWeight()[54] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv55",  [&](){return isHH ?  hh.LHEPdfWeight()[55] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv56",  [&](){return isHH ?  hh.LHEPdfWeight()[56] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv57",  [&](){return isHH ?  hh.LHEPdfWeight()[57] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv58",  [&](){return isHH ?  hh.LHEPdfWeight()[58] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv59",  [&](){return isHH ?  hh.LHEPdfWeight()[59] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv60",  [&](){return isHH ?  hh.LHEPdfWeight()[60] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv61",  [&](){return isHH ?  hh.LHEPdfWeight()[61] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv62",  [&](){return isHH ?  hh.LHEPdfWeight()[62] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv63",  [&](){return isHH ?  hh.LHEPdfWeight()[63] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv64",  [&](){return isHH ?  hh.LHEPdfWeight()[64] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv65",  [&](){return isHH ?  hh.LHEPdfWeight()[65] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv66",  [&](){return isHH ?  hh.LHEPdfWeight()[66] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv67",  [&](){return isHH ?  hh.LHEPdfWeight()[67] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv68",  [&](){return isHH ?  hh.LHEPdfWeight()[68] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv69",  [&](){return isHH ?  hh.LHEPdfWeight()[69] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv70",  [&](){return isHH ?  hh.LHEPdfWeight()[70] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv71",  [&](){return isHH ?  hh.LHEPdfWeight()[71] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv72",  [&](){return isHH ?  hh.LHEPdfWeight()[72] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv73",  [&](){return isHH ?  hh.LHEPdfWeight()[73] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv74",  [&](){return isHH ?  hh.LHEPdfWeight()[74] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv75",  [&](){return isHH ?  hh.LHEPdfWeight()[75] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv76",  [&](){return isHH ?  hh.LHEPdfWeight()[76] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv77",  [&](){return isHH ?  hh.LHEPdfWeight()[77] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv78",  [&](){return isHH ?  hh.LHEPdfWeight()[78] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv79",  [&](){return isHH ?  hh.LHEPdfWeight()[79] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv80",  [&](){return isHH ?  hh.LHEPdfWeight()[80] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv81",  [&](){return isHH ?  hh.LHEPdfWeight()[81] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv82",  [&](){return isHH ?  hh.LHEPdfWeight()[82] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv83",  [&](){return isHH ?  hh.LHEPdfWeight()[83] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv84",  [&](){return isHH ?  hh.LHEPdfWeight()[84] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv85",  [&](){return isHH ?  hh.LHEPdfWeight()[85] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv86",  [&](){return isHH ?  hh.LHEPdfWeight()[86] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv87",  [&](){return isHH ?  hh.LHEPdfWeight()[87] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv88",  [&](){return isHH ?  hh.LHEPdfWeight()[88] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv89",  [&](){return isHH ?  hh.LHEPdfWeight()[89] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv90",  [&](){return isHH ?  hh.LHEPdfWeight()[90] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv91",  [&](){return isHH ?  hh.LHEPdfWeight()[91] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv92",  [&](){return isHH ?  hh.LHEPdfWeight()[92] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv93",  [&](){return isHH ?  hh.LHEPdfWeight()[93] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv94",  [&](){return isHH ?  hh.LHEPdfWeight()[94] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv95",  [&](){return isHH ?  hh.LHEPdfWeight()[95] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv96",  [&](){return isHH ?  hh.LHEPdfWeight()[96] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv97",  [&](){return isHH ?  hh.LHEPdfWeight()[97] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv98",  [&](){return isHH ?  hh.LHEPdfWeight()[98] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv99",  [&](){return isHH ?  hh.LHEPdfWeight()[99] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv100",  [&](){return isHH ?  hh.LHEPdfWeight()[100] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv101",  [&](){return isHH ?  hh.LHEPdfWeight()[101] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv102",  [&](){return isHH ?  hh.LHEPdfWeight()[102] : 1.0;});
+
+    /*
+    cutflow.addWgtSyst("LHEPDFEigenv0",  [&](){return isHH ?  hh.LHEPdfWeight()[0]*hh.LHEPdfWeightNorm()[0] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv1",  [&](){return isHH ?  hh.LHEPdfWeight()[1]*hh.LHEPdfWeightNorm()[1] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv2",  [&](){return isHH ?  hh.LHEPdfWeight()[2]*hh.LHEPdfWeightNorm()[2] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv3",  [&](){return isHH ?  hh.LHEPdfWeight()[3]*hh.LHEPdfWeightNorm()[3] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv4",  [&](){return isHH ?  hh.LHEPdfWeight()[4]*hh.LHEPdfWeightNorm()[4] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv5",  [&](){return isHH ?  hh.LHEPdfWeight()[5]*hh.LHEPdfWeightNorm()[5] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv6",  [&](){return isHH ?  hh.LHEPdfWeight()[6]*hh.LHEPdfWeightNorm()[6] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv7",  [&](){return isHH ?  hh.LHEPdfWeight()[7]*hh.LHEPdfWeightNorm()[7] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv8",  [&](){return isHH ?  hh.LHEPdfWeight()[8]*hh.LHEPdfWeightNorm()[8] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv9",  [&](){return isHH ?  hh.LHEPdfWeight()[9]*hh.LHEPdfWeightNorm()[9] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv10",  [&](){return isHH ?  hh.LHEPdfWeight()[10]*hh.LHEPdfWeightNorm()[10] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv11",  [&](){return isHH ?  hh.LHEPdfWeight()[11]*hh.LHEPdfWeightNorm()[11] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv12",  [&](){return isHH ?  hh.LHEPdfWeight()[12]*hh.LHEPdfWeightNorm()[12] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv13",  [&](){return isHH ?  hh.LHEPdfWeight()[13]*hh.LHEPdfWeightNorm()[13] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv14",  [&](){return isHH ?  hh.LHEPdfWeight()[14]*hh.LHEPdfWeightNorm()[14] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv15",  [&](){return isHH ?  hh.LHEPdfWeight()[15]*hh.LHEPdfWeightNorm()[15] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv16",  [&](){return isHH ?  hh.LHEPdfWeight()[16]*hh.LHEPdfWeightNorm()[16] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv17",  [&](){return isHH ?  hh.LHEPdfWeight()[17]*hh.LHEPdfWeightNorm()[17] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv18",  [&](){return isHH ?  hh.LHEPdfWeight()[18]*hh.LHEPdfWeightNorm()[18] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv19",  [&](){return isHH ?  hh.LHEPdfWeight()[19]*hh.LHEPdfWeightNorm()[19] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv20",  [&](){return isHH ?  hh.LHEPdfWeight()[20]*hh.LHEPdfWeightNorm()[20] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv21",  [&](){return isHH ?  hh.LHEPdfWeight()[21]*hh.LHEPdfWeightNorm()[21] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv22",  [&](){return isHH ?  hh.LHEPdfWeight()[22]*hh.LHEPdfWeightNorm()[22] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv23",  [&](){return isHH ?  hh.LHEPdfWeight()[23]*hh.LHEPdfWeightNorm()[23] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv24",  [&](){return isHH ?  hh.LHEPdfWeight()[24]*hh.LHEPdfWeightNorm()[24] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv25",  [&](){return isHH ?  hh.LHEPdfWeight()[25]*hh.LHEPdfWeightNorm()[25] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv26",  [&](){return isHH ?  hh.LHEPdfWeight()[26]*hh.LHEPdfWeightNorm()[26] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv27",  [&](){return isHH ?  hh.LHEPdfWeight()[27]*hh.LHEPdfWeightNorm()[27] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv28",  [&](){return isHH ?  hh.LHEPdfWeight()[28]*hh.LHEPdfWeightNorm()[28] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv29",  [&](){return isHH ?  hh.LHEPdfWeight()[29]*hh.LHEPdfWeightNorm()[29] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv30",  [&](){return isHH ?  hh.LHEPdfWeight()[30]*hh.LHEPdfWeightNorm()[30] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv31",  [&](){return isHH ?  hh.LHEPdfWeight()[31]*hh.LHEPdfWeightNorm()[31] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv32",  [&](){return isHH ?  hh.LHEPdfWeight()[32]*hh.LHEPdfWeightNorm()[32] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv33",  [&](){return isHH ?  hh.LHEPdfWeight()[33]*hh.LHEPdfWeightNorm()[33] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv34",  [&](){return isHH ?  hh.LHEPdfWeight()[34]*hh.LHEPdfWeightNorm()[34] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv35",  [&](){return isHH ?  hh.LHEPdfWeight()[35]*hh.LHEPdfWeightNorm()[35] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv36",  [&](){return isHH ?  hh.LHEPdfWeight()[36]*hh.LHEPdfWeightNorm()[36] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv37",  [&](){return isHH ?  hh.LHEPdfWeight()[37]*hh.LHEPdfWeightNorm()[37] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv38",  [&](){return isHH ?  hh.LHEPdfWeight()[38]*hh.LHEPdfWeightNorm()[38] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv39",  [&](){return isHH ?  hh.LHEPdfWeight()[39]*hh.LHEPdfWeightNorm()[39] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv40",  [&](){return isHH ?  hh.LHEPdfWeight()[40]*hh.LHEPdfWeightNorm()[40] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv41",  [&](){return isHH ?  hh.LHEPdfWeight()[41]*hh.LHEPdfWeightNorm()[41] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv42",  [&](){return isHH ?  hh.LHEPdfWeight()[42]*hh.LHEPdfWeightNorm()[42] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv43",  [&](){return isHH ?  hh.LHEPdfWeight()[43]*hh.LHEPdfWeightNorm()[43] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv44",  [&](){return isHH ?  hh.LHEPdfWeight()[44]*hh.LHEPdfWeightNorm()[44] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv45",  [&](){return isHH ?  hh.LHEPdfWeight()[45]*hh.LHEPdfWeightNorm()[45] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv46",  [&](){return isHH ?  hh.LHEPdfWeight()[46]*hh.LHEPdfWeightNorm()[46] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv47",  [&](){return isHH ?  hh.LHEPdfWeight()[47]*hh.LHEPdfWeightNorm()[47] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv48",  [&](){return isHH ?  hh.LHEPdfWeight()[48]*hh.LHEPdfWeightNorm()[48] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv49",  [&](){return isHH ?  hh.LHEPdfWeight()[49]*hh.LHEPdfWeightNorm()[49] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv50",  [&](){return isHH ?  hh.LHEPdfWeight()[50]*hh.LHEPdfWeightNorm()[50] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv51",  [&](){return isHH ?  hh.LHEPdfWeight()[51]*hh.LHEPdfWeightNorm()[51] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv52",  [&](){return isHH ?  hh.LHEPdfWeight()[52]*hh.LHEPdfWeightNorm()[52] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv53",  [&](){return isHH ?  hh.LHEPdfWeight()[53]*hh.LHEPdfWeightNorm()[53] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv54",  [&](){return isHH ?  hh.LHEPdfWeight()[54]*hh.LHEPdfWeightNorm()[54] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv55",  [&](){return isHH ?  hh.LHEPdfWeight()[55]*hh.LHEPdfWeightNorm()[55] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv56",  [&](){return isHH ?  hh.LHEPdfWeight()[56]*hh.LHEPdfWeightNorm()[56] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv57",  [&](){return isHH ?  hh.LHEPdfWeight()[57]*hh.LHEPdfWeightNorm()[57] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv58",  [&](){return isHH ?  hh.LHEPdfWeight()[58]*hh.LHEPdfWeightNorm()[58] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv59",  [&](){return isHH ?  hh.LHEPdfWeight()[59]*hh.LHEPdfWeightNorm()[59] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv60",  [&](){return isHH ?  hh.LHEPdfWeight()[60]*hh.LHEPdfWeightNorm()[60] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv61",  [&](){return isHH ?  hh.LHEPdfWeight()[61]*hh.LHEPdfWeightNorm()[61] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv62",  [&](){return isHH ?  hh.LHEPdfWeight()[62]*hh.LHEPdfWeightNorm()[62] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv63",  [&](){return isHH ?  hh.LHEPdfWeight()[63]*hh.LHEPdfWeightNorm()[63] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv64",  [&](){return isHH ?  hh.LHEPdfWeight()[64]*hh.LHEPdfWeightNorm()[64] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv65",  [&](){return isHH ?  hh.LHEPdfWeight()[65]*hh.LHEPdfWeightNorm()[65] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv66",  [&](){return isHH ?  hh.LHEPdfWeight()[66]*hh.LHEPdfWeightNorm()[66] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv67",  [&](){return isHH ?  hh.LHEPdfWeight()[67]*hh.LHEPdfWeightNorm()[67] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv68",  [&](){return isHH ?  hh.LHEPdfWeight()[68]*hh.LHEPdfWeightNorm()[68] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv69",  [&](){return isHH ?  hh.LHEPdfWeight()[69]*hh.LHEPdfWeightNorm()[69] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv70",  [&](){return isHH ?  hh.LHEPdfWeight()[70]*hh.LHEPdfWeightNorm()[70] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv71",  [&](){return isHH ?  hh.LHEPdfWeight()[71]*hh.LHEPdfWeightNorm()[71] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv72",  [&](){return isHH ?  hh.LHEPdfWeight()[72]*hh.LHEPdfWeightNorm()[72] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv73",  [&](){return isHH ?  hh.LHEPdfWeight()[73]*hh.LHEPdfWeightNorm()[73] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv74",  [&](){return isHH ?  hh.LHEPdfWeight()[74]*hh.LHEPdfWeightNorm()[74] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv75",  [&](){return isHH ?  hh.LHEPdfWeight()[75]*hh.LHEPdfWeightNorm()[75] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv76",  [&](){return isHH ?  hh.LHEPdfWeight()[76]*hh.LHEPdfWeightNorm()[76] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv77",  [&](){return isHH ?  hh.LHEPdfWeight()[77]*hh.LHEPdfWeightNorm()[77] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv78",  [&](){return isHH ?  hh.LHEPdfWeight()[78]*hh.LHEPdfWeightNorm()[78] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv79",  [&](){return isHH ?  hh.LHEPdfWeight()[79]*hh.LHEPdfWeightNorm()[79] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv80",  [&](){return isHH ?  hh.LHEPdfWeight()[80]*hh.LHEPdfWeightNorm()[80] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv81",  [&](){return isHH ?  hh.LHEPdfWeight()[81]*hh.LHEPdfWeightNorm()[81] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv82",  [&](){return isHH ?  hh.LHEPdfWeight()[82]*hh.LHEPdfWeightNorm()[82] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv83",  [&](){return isHH ?  hh.LHEPdfWeight()[83]*hh.LHEPdfWeightNorm()[83] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv84",  [&](){return isHH ?  hh.LHEPdfWeight()[84]*hh.LHEPdfWeightNorm()[84] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv85",  [&](){return isHH ?  hh.LHEPdfWeight()[85]*hh.LHEPdfWeightNorm()[85] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv86",  [&](){return isHH ?  hh.LHEPdfWeight()[86]*hh.LHEPdfWeightNorm()[86] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv87",  [&](){return isHH ?  hh.LHEPdfWeight()[87]*hh.LHEPdfWeightNorm()[87] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv88",  [&](){return isHH ?  hh.LHEPdfWeight()[88]*hh.LHEPdfWeightNorm()[88] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv89",  [&](){return isHH ?  hh.LHEPdfWeight()[89]*hh.LHEPdfWeightNorm()[89] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv90",  [&](){return isHH ?  hh.LHEPdfWeight()[90]*hh.LHEPdfWeightNorm()[90] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv91",  [&](){return isHH ?  hh.LHEPdfWeight()[91]*hh.LHEPdfWeightNorm()[91] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv92",  [&](){return isHH ?  hh.LHEPdfWeight()[92]*hh.LHEPdfWeightNorm()[92] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv93",  [&](){return isHH ?  hh.LHEPdfWeight()[93]*hh.LHEPdfWeightNorm()[93] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv94",  [&](){return isHH ?  hh.LHEPdfWeight()[94]*hh.LHEPdfWeightNorm()[94] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv95",  [&](){return isHH ?  hh.LHEPdfWeight()[95]*hh.LHEPdfWeightNorm()[95] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv96",  [&](){return isHH ?  hh.LHEPdfWeight()[96]*hh.LHEPdfWeightNorm()[96] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv97",  [&](){return isHH ?  hh.LHEPdfWeight()[97]*hh.LHEPdfWeightNorm()[97] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv98",  [&](){return isHH ?  hh.LHEPdfWeight()[98]*hh.LHEPdfWeightNorm()[98] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv99",  [&](){return isHH ?  hh.LHEPdfWeight()[99]*hh.LHEPdfWeightNorm()[99] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv100",  [&](){return isHH ?  hh.LHEPdfWeight()[100]*hh.LHEPdfWeightNorm()[100] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv101",  [&](){return isHH ?  hh.LHEPdfWeight()[101]*hh.LHEPdfWeightNorm()[101] : 1.0;});
+    cutflow.addWgtSyst("LHEPDFEigenv102",  [&](){return isHH ?  hh.LHEPdfWeight()[102]*hh.LHEPdfWeightNorm()[102] : 1.0;});
+    */
         
     //QCD scale uncertainty for the HH signal acceptance: take the envelope for weights [0,1,3,4,5,8,9]
     /*
@@ -690,6 +898,7 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         ' [7] is renscfact=2d0 facscfact=1d0 ',
         ' [8] is renscfact=2d0 facscfact=2d0 ']
     */
+        
     cutflow.addWgtSyst("QCDscale0",  [&](){return isHH ?  hh.LHEScaleWeight()[0] : 1.0;});
     cutflow.addWgtSyst("QCDscale1",  [&](){return isHH ?  hh.LHEScaleWeight()[1] : 1.0;});
     cutflow.addWgtSyst("QCDscale2",  [&](){return isHH ?  hh.LHEScaleWeight()[2] : 1.0;});
@@ -699,13 +908,28 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
     cutflow.addWgtSyst("QCDscale6",  [&](){return isHH ?  hh.LHEScaleWeight()[6] : 1.0;});
     cutflow.addWgtSyst("QCDscale7",  [&](){return isHH ?  hh.LHEScaleWeight()[7] : 1.0;});
     cutflow.addWgtSyst("QCDscale8",  [&](){return isHH ?  hh.LHEScaleWeight()[8] : 1.0;});
-                       
-    //parton shower uncertainty for the HH signal yield (ISR and FSR)
-    cutflow.addWgtSyst("ISRPartonShowerUp",  [&](){return isHH ?  hh.PSWeight()[0] : 1.0;}); //ISR=2 FSR=1
-    cutflow.addWgtSyst("ISRPartonShowerDown",  [&](){return isHH ? hh.PSWeight()[2] : 1.0;}); //ISR=0.5 FSR=1
-    cutflow.addWgtSyst("FSRPartonShowerUp",  [&](){return isHH ?  hh.PSWeight()[1] : 1.0;}); //ISR=1 FSR=2
-    cutflow.addWgtSyst("FSRPartonShowerDown",  [&](){return isHH ? hh.PSWeight()[3] : 1.0;}); //ISR=1 FSR=0.5
-
+        
+    /*   
+    cutflow.addWgtSyst("QCDscale0",  [&](){return isHH ?  hh.LHEScaleWeight()[0]*hh.LHEScaleWeightNorm()[0] : 1.0;});
+    cutflow.addWgtSyst("QCDscale1",  [&](){return isHH ?  hh.LHEScaleWeight()[1]*hh.LHEScaleWeightNorm()[1] : 1.0;});
+    cutflow.addWgtSyst("QCDscale2",  [&](){return isHH ?  hh.LHEScaleWeight()[2]*hh.LHEScaleWeightNorm()[2] : 1.0;});
+    cutflow.addWgtSyst("QCDscale3",  [&](){return isHH ?  hh.LHEScaleWeight()[3]*hh.LHEScaleWeightNorm()[3] : 1.0;});
+    cutflow.addWgtSyst("QCDscale4",  [&](){return isHH ?  hh.LHEScaleWeight()[4]*hh.LHEScaleWeightNorm()[4] : 1.0;});
+    cutflow.addWgtSyst("QCDscale5",  [&](){return isHH ?  hh.LHEScaleWeight()[5]*hh.LHEScaleWeightNorm()[5] : 1.0;});
+    cutflow.addWgtSyst("QCDscale6",  [&](){return isHH ?  hh.LHEScaleWeight()[6]*hh.LHEScaleWeightNorm()[6] : 1.0;});
+    cutflow.addWgtSyst("QCDscale7",  [&](){return isHH ?  hh.LHEScaleWeight()[7]*hh.LHEScaleWeightNorm()[7] : 1.0;});
+    cutflow.addWgtSyst("QCDscale8",  [&](){return isHH ?  hh.LHEScaleWeight()[8]*hh.LHEScaleWeightNorm()[8] : 1.0;});
+    */  
+    }
+ 
+    if(isHH){                   
+        //parton shower uncertainty for the gluon fusion and VBF HH signal yield (ISR and FSR)
+        cutflow.addWgtSyst("ISRPartonShowerUp",  [&](){return isHH ?  hh.PSWeight()[0] : 1.0;}); //ISR=2 FSR=1
+        cutflow.addWgtSyst("ISRPartonShowerDown",  [&](){return isHH ? hh.PSWeight()[2] : 1.0;}); //ISR=0.5 FSR=1
+        cutflow.addWgtSyst("FSRPartonShowerUp",  [&](){return isHH ?  hh.PSWeight()[1] : 1.0;}); //ISR=1 FSR=2
+        cutflow.addWgtSyst("FSRPartonShowerDown",  [&](){return isHH ? hh.PSWeight()[3] : 1.0;}); //ISR=1 FSR=0.5
+    }
+    
     //BDT modeling uncertainty for ttbar
     cutflow.addWgtSyst("BDTv8p2ShapeUp",  [&](){return isTTJets ? ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.00008 ? 0.96 : ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  <  0.0002 ?  0.91 : (hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.0004 ? 0.90 :  1.12))) : 1.0;});
     cutflow.addWgtSyst("BDTv8p2ShapeDown",  [&](){return isTTJets ? ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.00008 ? 1.04 : ( hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  <  0.0002 ?  1.09 : (hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2()  < 0.0004 ? 1.10 :  0.88))) : 1.0;});
@@ -2829,11 +3053,11 @@ else
         //cutflow.bookHistogramsForCut(histograms, "FailFitCRv24");
 
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1");
-        cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp95");
-        cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp9");
-        cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp8");
-        cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp5");
-        cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp2");
+        //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp95");
+        //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp9");
+        //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp8");
+        //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp5");
+        //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp2");
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp0");
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin2");
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin3");
