@@ -268,12 +268,12 @@ histograms.addHistogram("yield",               "; yield; Events",               
 if(doSystematics)
 {
 histograms.addHistogram("fatJet2MassSD",   "; j_{2} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet2MassSD();} );
-histograms.addHistogram("fatJet1MassSD",   "; j_{1} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet1MassSD();} );
+//histograms.addHistogram("fatJet1MassSD",   "; j_{1} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet1MassSD();} );
 histograms.addHistogram("fatJet2MassRegressed",   "; j_{2} regressed mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet2MassRegressed();} );
-histograms.addHistogram("fatJet1MassRegressed",   "; j_{1} regressed mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet1MassRegressed();} );
-histograms.addHistogram("fatJet1PNetXbb",   "; j_{1} PNet Xbb tagger; Events",           200,   0.95, 1.0,   [&]() { return  hh.fatJet1PNetXbb(); } );
-histograms.addHistogram("fatJet2PNetXbb",   "; j_{2} PNet Xbb tagger; Events",           200,   0.95, 1.0,   [&]() { return  hh.fatJet2PNetXbb(); } );
-histograms.addHistogram("EventBDTv8p2",   "; Event BDT; Events",           200, 0.0, 1.0,   [&]() { return  hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(); } );
+//histograms.addHistogram("fatJet1MassRegressed",   "; j_{1} regressed mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet1MassRegressed();} );
+//histograms.addHistogram("fatJet1PNetXbb",   "; j_{1} PNet Xbb tagger; Events",           200,   0.95, 1.0,   [&]() { return  hh.fatJet1PNetXbb(); } );
+//histograms.addHistogram("fatJet2PNetXbb",   "; j_{2} PNet Xbb tagger; Events",           200,   0.95, 1.0,   [&]() { return  hh.fatJet2PNetXbb(); } );
+//histograms.addHistogram("EventBDTv8p2",   "; Event BDT; Events",           200, 0.0, 1.0,   [&]() { return  hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(); } );
 
 //histograms.addHistogram("fatJet2MassSD_JMSDown",   "; j_{2} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return isData ? hh.fatJet2MassSD() : hh.fatJet2MassSD_JMS_Down();} );
 //histograms.addHistogram("fatJet2MassSD_JMSUp",   "; j_{2} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return isData ? hh.fatJet2MassSD() : hh.fatJet2MassSD_JMS_Up();} );
@@ -420,9 +420,9 @@ else
   
 cutflow.addCut("CutWeight", [&](){ return 1; },  [&](){
     //after ttbar recoil correction
-    float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets  ? ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
+    float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets ? ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
     //before ttbar recoil correction
-    //float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets  ? ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
+    //float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight());
     
     if(!isData){
     //apply trigger SF
@@ -3053,15 +3053,20 @@ else
         //cutflow.bookHistogramsForCut(histograms, "FailFitCRv24");
 
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1");
+
         //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp95");
         //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp9");
         //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp8");
         //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp5");
         //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp2");
+
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp0");
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin2");
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin3");
         cutflow.bookHistogramsForCut(histograms, "FailSRv8p2");
+
+        //check preselection 
+        //cutflow.bookHistogramsForCut(histograms, "CutfatJetsMassSD");
 
         //cutflow.bookHistogramsForCut(histograms, "J2MassSideBandv8p2Bin1");
         //cutflow.bookHistogramsForCut(histograms, "J2MassSideBandv8p2Bin2");
@@ -3193,7 +3198,7 @@ for(int idx = 0; idx < list_chain.size(); idx++)
 
       tree_out->Fill();
 	}
-	if(iEntry%10000 == 0) cout<<"[INFO] processing event "<<iEntry<<" / "<<nEntries<<endl;
+	if(iEntry%100000 == 0) cout<<"[INFO] processing event "<<iEntry<<" / "<<nEntries<<endl;
 	iEntry ++;
   }
   delete tree_this;
