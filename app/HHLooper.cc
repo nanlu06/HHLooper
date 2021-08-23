@@ -398,7 +398,7 @@ cutflow.addCutToLastActiveCut("CutfatJetMassSD",       [&](){ return hh.fatJet1M
 //ttbar 1L+jet control region
 cutflow.addCutToLastActiveCut("CutLepEta",       [&](){ return (abs(hh.lep1Id()) == 11 && fabs(hh.lep1Eta()) <  2.5) || (abs(hh.lep1Id()) == 13 && fabs(hh.lep1Eta()) <  2.4); },   UNITY);
 cutflow.addCutToLastActiveCut("CutMET",       [&](){ return hh.met() > 100.0; },   UNITY);
- cutflow.addCutToLastActiveCut("CutHEM2018",       [&](){ return ((year_ == "2018" && isData && hh.run() >=319077) ? !((abs(hh.lep1Id()) == 11 && hh.lep1Phi() > -1.57 && hh.lep1Phi() < -0.87 && hh.lep1Eta() < -1.3) || (hh.fatJet1Phi() > -1.57 && hh.fatJet1Phi() < -0.87 && hh.fatJet1Eta()< -1.3 ) ||(hh.metphi() > -1.57 && hh.metphi() < -0.87)): true); },   UNITY);
+//cutflow.addCutToLastActiveCut("CutHEM2018",       [&](){ return ((year_ == "2018" && isData && hh.run() >=319077) ? !((abs(hh.lep1Id()) == 11 && hh.lep1Phi() > -1.57 && hh.lep1Phi() < -0.87 && hh.lep1Eta() < -1.3) || (hh.fatJet1Phi() > -1.57 && hh.fatJet1Phi() < -0.87 && hh.fatJet1Eta()< -1.3 ) ): true); },   UNITY);
 cutflow.addCutToLastActiveCut("CutTau3Over2",       [&](){ return hh.fatJet1MassSD() > 140.0 && hh.fatJet1Tau3OverTau2() < 0.46 ; },   [&]() {return isTTJets ? TopTagSF("0.46", year_, hh.fatJet1Pt() ) : 1.0;} );
 cutflow.addCutToLastActiveCut("TTBarLepJetCR",       [&](){ return sqrt(pow(hh.lep1Eta() - hh.fatJet1Eta(), 2) + pow(fabs(hh.lep1Phi()-hh.fatJet1Phi()) > pi ? fabs(hh.lep1Phi()-hh.fatJet1Phi()) - 2*pi : hh.lep1Phi()-hh.fatJet1Phi(), 2)) > 1.0; },   UNITY); //delta R > 1.0
 cutflow.addCutToLastActiveCut("TTBarLepJetCRElectron",       [&](){ return abs(hh.lep1Id()) == 11; },   UNITY);
