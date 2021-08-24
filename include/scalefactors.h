@@ -325,7 +325,7 @@ class TTJetsScaleFactors
             {
                 slope2 = -1.50996e-04, slope1 = 1.57231e-03, constant1 =  6.55257e-01; //par2, par1, par0
                 cov00 = 0.001238, cov01 = -8.472e-06, cov02 = 3.257e-06;
-                cov11 = 8.809e-08, cov12 = -4.487-08, cov22 = 9.929e-08;
+                cov11 = 8.809e-08, cov12 = -4.487e-08, cov22 = 9.929e-08;
             }
             if(year == "2016")
             {
