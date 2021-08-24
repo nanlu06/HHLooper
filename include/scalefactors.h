@@ -318,20 +318,20 @@ class TTJetsScaleFactors
             if (pt<0.1)  pt= 0.1;
             if(pt>999.9) pt =999.9;
             //default values are for 2018
-            float slope2 = -4.47034e-04, slope1 = 8.81129e-04, constant1 =  6.57155e-01; //par2, par1, par0  of the fit function
-            float cov00 = 0.0005963, cov01 = -3.92e-06, cov02 = 1.323e-06; //elements of the covariance matrix
-            float cov11 = 6.356e-08, cov12 = -3.092e-08, cov22 =  3.032e-08; //elements of the covariance matrix
-            if(year == "2016")
-            {
-                slope2 = -0.000364811, slope1 = 0.000614948, constant1 =  0.867032; //par2, par1, par0
-                cov00 = 0.002136, cov01 = -1.348e-05, cov02 = 4.426e-06;
-                cov11 = 1.232e-07, cov12 = -5.453e-08, cov22 = 9.735e-08;
-            }
+            float slope2 = -6.72553e-04, slope1 = 1.39394e-03, constant1 =  7.47688e-01; //par2, par1, par0  of the fit function
+            float cov00 =  0.001292, cov01 = -8.393e-06, cov02 = 2.845e-06; //elements of the covariance matrix
+            float cov11 = 7.843e-08, cov12 = -3.513e-08, cov22 =   5.994e-08; //elements of the covariance matrix
             if(year == "2017")
             {
-                slope2 = 1.86038e-05, slope1 = 1.77608e-03, constant1 = 6.71892e-01; //par2, par1, par0
-                cov00 = 0.001446, cov01 = -9.696e-06, cov02 = 3.813e-06;
-                cov11 = 9.757e-08, cov12 = -5.101e-08, cov22 = 1.219e-07;
+                slope2 = -1.50996e-04, slope1 = 1.57231e-03, constant1 =  6.55257e-01; //par2, par1, par0
+                cov00 = 0.001238, cov01 = -8.472e-06, cov02 = 3.257e-06;
+                cov11 = 8.809e-08, cov12 = -4.487-08, cov22 = 9.929e-08;
+            }
+            if(year == "2016")
+            {
+                slope2 = -5.05937e-04, slope1 =  5.10033e-04, constant1 = 9.65924e-01; //par2, par1, par0
+                cov00 =  0.00253, cov01 = -1.592e-05, cov02 = 5.219e-06;
+                cov11 = 1.441e-07, cov12 = -6.351e-08, cov22 = 1.066e-07;
             }
             if(pt<300) result = slope1*pt + constant1 + type*sqrt(pt*pt*cov11 + cov00 + 2*pt*cov01);
             else if(pt<1000.) result = constant1 + 300.*slope1 + (pt-300.)*slope2 + type*sqrt(cov00 + 300.*300.*cov11 + (pt-300.)*(pt-300.)*cov22 + 2*300.*cov01 + 2*(pt - 300.)*cov02 + 2*300.*(pt-300.)*cov12);
