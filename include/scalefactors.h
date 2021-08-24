@@ -350,20 +350,20 @@ class TTJetsScaleFactors
             else idx_xbb = 5;
             if (year == "2016")
             {
-	      float sf[6] = {0.826, 0.764, 0.858, 0.816, 0.713, 0.775};
-	      float esf[6] = {0.015, 0.033, 0.071, 0.046, 0.064,0.076};
+	      float sf[6] = {0.813, 0.803, 0.829, 0.789, 0.691, 0.750};
+	      float esf[6] = {0.013, 0.012, 0.069, 0.045, 0.062,0.074};
                return sf[idx_xbb] + type*esf[idx_xbb];
             }
             if (year == "2017")
             {
-	      float sf[6] = {0.993, 1.049, 1.031, 1.018, 0.974, 1.032};
-	      float esf[6] = {0.017,0.041, 0.080, 0.054, 0.077, 0.084};
+	      float sf[6] = {0.959, 0.965, 0.987, 0.976, 0.930, 1.000};
+	      float esf[6] = {0.015,0.014, 0.077, 0.053, 0.074, 0.082};
                return sf[idx_xbb] + type*esf[idx_xbb];
             }
             if (year == "2018")
             {
-	      float sf[6] = {0.865, 0.929, 0.962, 0.858, 0.851, 0.739};
-	      float esf[6] = {0.018, 0.031, 0.059, 0.039, 0.055, 0.056};
+	      float sf[6] = {0.932, 0.937, 1.015, 0.906, 0.884, 0.783};
+	      float esf[6] = {0.016, 0.015, 0.061, 0.039, 0.056, 0.056};
                return sf[idx_xbb] + type*esf[idx_xbb];
             }
             return 1.0;
@@ -645,20 +645,16 @@ class MuTrigScaleFactors
             return result;
 	}
         //get the trigger eff per AK8 jet
-        float getTrigScaleFactors(float pt, float eta, TString year, int whichHLT) 
+        float getTrigScaleFactors(float pt, float eta, TString year) 
         {
 	  float result =1.0;
 	  float sf_f1 =1.0; // sf from f1
 	  float sf_f2 =1.0; //sf from f2
-	  if(whichHLT==0)return result;
+	  
 
-	  if(whichHLT ==1){ //1: IsoMu24/27 ; 2: Mu50
-	    sf_f1 = getBinValue(trigSF1, pt, eta);}
-	  else {sf_f1 = getBinValue(trigSF2, pt, eta);}
+	  sf_f1 = (getBinValue(trigSF1, pt, eta)+ getBinValue(trigSF2, pt, eta))/2.;
 	  if(fname2!=""){
-	    if(whichHLT ==1){
-	      sf_f2 = getBinValue(trigSF3,pt, eta);}
-	    else{ sf_f2 = getBinValue(trigSF4, pt, eta);}
+	    sf_f2 = (getBinValue(trigSF3,pt, eta) + getBinValue(trigSF4, pt, eta))/2.;
 	  }
 	  if(year =="2016"){
 	    result = (16578.*sf_f1+20232.*sf_f2)/(16578.+20232.);// lumi weighted
@@ -669,7 +665,7 @@ class MuTrigScaleFactors
 	      result = (50789.75*sf_f1+8950.82*sf_f2)/(50789.75+8950.82); // lumi weighted
 	    }
 	  }
-	  //cout<<pt<<", "<<eta<<", "<<whichHLT<<", "<<year<<", "<<result<<", "<<sf_f1<<", "<<sf_f2<<"\n";
+	  //cout<<pt<<", "<<eta<<",  "<<year<<", "<<result<<", "<<sf_f1<<", "<<sf_f2<<"\n";
 
 	  return result;
         }
