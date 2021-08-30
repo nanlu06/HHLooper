@@ -318,20 +318,20 @@ class TTJetsScaleFactors
             if (pt<0.1)  pt= 0.1;
             if(pt>999.9) pt =999.9;
             //default values are for 2018
-            float slope2 = -4.47034e-04, slope1 = 8.81129e-04, constant1 =  6.57155e-01; //par2, par1, par0  of the fit function
-            float cov00 = 0.0005963, cov01 = -3.92e-06, cov02 = 1.323e-06; //elements of the covariance matrix
-            float cov11 = 6.356e-08, cov12 = -3.092e-08, cov22 =  3.032e-08; //elements of the covariance matrix
-            if(year == "2016")
-            {
-                slope2 = -0.000364811, slope1 = 0.000614948, constant1 =  0.867032; //par2, par1, par0
-                cov00 = 0.002136, cov01 = -1.348e-05, cov02 = 4.426e-06;
-                cov11 = 1.232e-07, cov12 = -5.453e-08, cov22 = 9.735e-08;
-            }
+            float slope2 = -6.72553e-04, slope1 = 1.39394e-03, constant1 =  7.47688e-01; //par2, par1, par0  of the fit function
+            float cov00 =  0.001292, cov01 = -8.393e-06, cov02 = 2.845e-06; //elements of the covariance matrix
+            float cov11 = 7.843e-08, cov12 = -3.513e-08, cov22 =   5.994e-08; //elements of the covariance matrix
             if(year == "2017")
             {
-                slope2 = 1.86038e-05, slope1 = 1.77608e-03, constant1 = 6.71892e-01; //par2, par1, par0
-                cov00 = 0.001446, cov01 = -9.696e-06, cov02 = 3.813e-06;
-                cov11 = 9.757e-08, cov12 = -5.101e-08, cov22 = 1.219e-07;
+                slope2 = -1.50996e-04, slope1 = 1.57231e-03, constant1 =  6.55257e-01; //par2, par1, par0
+                cov00 = 0.001238, cov01 = -8.472e-06, cov02 = 3.257e-06;
+                cov11 = 8.809e-08, cov12 = -4.487e-08, cov22 = 9.929e-08;
+            }
+            if(year == "2016")
+            {
+                slope2 = -5.05937e-04, slope1 =  5.10033e-04, constant1 = 9.65924e-01; //par2, par1, par0
+                cov00 =  0.00253, cov01 = -1.592e-05, cov02 = 5.219e-06;
+                cov11 = 1.441e-07, cov12 = -6.351e-08, cov22 = 1.066e-07;
             }
             if(pt<300) result = slope1*pt + constant1 + type*sqrt(pt*pt*cov11 + cov00 + 2*pt*cov01);
             else if(pt<1000.) result = constant1 + 300.*slope1 + (pt-300.)*slope2 + type*sqrt(cov00 + 300.*300.*cov11 + (pt-300.)*(pt-300.)*cov22 + 2*300.*cov01 + 2*(pt - 300.)*cov02 + 2*300.*(pt-300.)*cov12);
@@ -342,27 +342,28 @@ class TTJetsScaleFactors
         {
             //type: 0, 1, -1 for nominal Up Down
             int idx_xbb  = 0;
-            if(xbb < 0.945) idx_xbb  = 0;
-            else if (xbb  < 0.955) idx_xbb =1;
-            else if (xbb  < 0.975) idx_xbb =2;
-            else if (xbb < 0.985) idx_xbb =3;
-            else idx_xbb = 4;
+	    if(xbb < 0.9) idx_xbb  = 0;
+            else if(xbb < 0.945) idx_xbb  = 1;
+            else if (xbb  < 0.955) idx_xbb =2;
+            else if (xbb  < 0.975) idx_xbb =3;
+            else if (xbb < 0.985) idx_xbb =4;
+            else idx_xbb = 5;
             if (year == "2016")
             {
-               float sf[5] = {0.821, 0.789, 0.824, 0.701, 0.741};
-               float esf[5] = {0.012, 0.066, 0.044, 0.084, 0.069};
+	      float sf[6] = {0.813, 0.803, 0.829, 0.789, 0.691, 0.750};
+	      float esf[6] = {0.013, 0.012, 0.069, 0.045, 0.062,0.074};
                return sf[idx_xbb] + type*esf[idx_xbb];
             }
             if (year == "2017")
             {
-               float sf[5] = {0.901, 0.880, 0.876, 0.860, 0.916};
-               float esf[5] = {0.014, 0.067, 0.045, 0.064, 0.071};
+	      float sf[6] = {0.959, 0.965, 0.987, 0.976, 0.930, 1.000};
+	      float esf[6] = {0.015,0.014, 0.077, 0.053, 0.074, 0.082};
                return sf[idx_xbb] + type*esf[idx_xbb];
             }
             if (year == "2018")
             {
-               float sf[5] = {0.975, 1.024, 0.935, 0.890, 0.798};
-               float esf[5] = {0.016, 0.059, 0.039, 0.055, 0.056};
+	      float sf[6] = {0.932, 0.937, 1.015, 0.906, 0.884, 0.783};
+	      float esf[6] = {0.016, 0.015, 0.061, 0.039, 0.056, 0.056};
                return sf[idx_xbb] + type*esf[idx_xbb];
             }
             return 1.0;
@@ -505,6 +506,7 @@ class miniIsoEleScaleFactors
             
             if ( (bin_index_x>0) && (bin_index_y>0) && (bin_index_x<=nbin_x) && (bin_index_y<=nbin_y) ){
 	      result = miniIsoSF->GetBinContent(bin_index_x, bin_index_y);
+	      
 	    }  
 	    //cout<<pt<<", "<<eta<<", "<<result<<"\n";
             return result;
@@ -556,6 +558,7 @@ class miniIsoMuScaleFactors
             
             if ( (bin_index_x>0) && (bin_index_y>0) && (bin_index_x<=nbin_x) && (bin_index_y<=nbin_y) ){
 	      result = miniIsoSF->GetBinContent(bin_index_x, bin_index_y);
+	      
 	    }  
  
             return result;
@@ -642,20 +645,16 @@ class MuTrigScaleFactors
             return result;
 	}
         //get the trigger eff per AK8 jet
-        float getTrigScaleFactors(float pt, float eta, TString year, int whichHLT) 
+        float getTrigScaleFactors(float pt, float eta, TString year) 
         {
 	  float result =1.0;
 	  float sf_f1 =1.0; // sf from f1
 	  float sf_f2 =1.0; //sf from f2
-	  if(whichHLT==0)return result;
+	  
 
-	  if(whichHLT ==1){ //1: IsoMu24/27 ; 2: Mu50
-	    sf_f1 = getBinValue(trigSF1, pt, eta);}
-	  else {sf_f1 = getBinValue(trigSF2, pt, eta);}
+	  sf_f1 = (getBinValue(trigSF1, pt, eta)+ getBinValue(trigSF2, pt, eta))/2.;
 	  if(fname2!=""){
-	    if(whichHLT ==1){
-	      sf_f2 = getBinValue(trigSF3,pt, eta);}
-	    else{ sf_f2 = getBinValue(trigSF4, pt, eta);}
+	    sf_f2 = (getBinValue(trigSF3,pt, eta) + getBinValue(trigSF4, pt, eta))/2.;
 	  }
 	  if(year =="2016"){
 	    result = (16578.*sf_f1+20232.*sf_f2)/(16578.+20232.);// lumi weighted
@@ -666,7 +665,7 @@ class MuTrigScaleFactors
 	      result = (50789.75*sf_f1+8950.82*sf_f2)/(50789.75+8950.82); // lumi weighted
 	    }
 	  }
-	  //cout<<pt<<", "<<eta<<", "<<whichHLT<<", "<<year<<", "<<result<<", "<<sf_f1<<", "<<sf_f2<<"\n";
+	  //cout<<pt<<", "<<eta<<",  "<<year<<", "<<result<<", "<<sf_f1<<", "<<sf_f2<<"\n";
 
 	  return result;
         }
