@@ -418,9 +418,16 @@ else
 
 //Pre-selection cuts
   
-cutflow.addCut("CutWeight", [&](){ return 1; },  [&](){
-    //after ttbar recoil correction
-    float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets ? ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
+  cutflow.addCut("CutWeight", [&](){ return 1; },  [&](){
+      //after ttbar recoil correction
+      float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets ? ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
+      //If applying correction from VBF analysis
+      //float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight());
+      //if(isTTJets){
+      //	if (hh.fatJet1Pt()>hh.fatJet2Pt())total_weight *= ttjets_sf.getScaleFactors_VBF(year_, hh.fatJet1Pt()) ;
+      //	else total_weight *= ttjets_sf.getScaleFactors_VBF(year_, hh.fatJet2Pt()) ;
+      //}
+
     //before ttbar recoil correction
     //float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight());
     

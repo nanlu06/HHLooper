@@ -338,6 +338,45 @@ class TTJetsScaleFactors
             else result = constant1 + 300.*slope1 + (1000.-300.)*slope2 + 1.5*type*sqrt(cov00 + 300.*300.*cov11 + (1000.-300.)*(1000.-300.)*cov22 + 2*300.*cov01 + 2*(1000. - 300.)*cov02 + 2*300.*(1000.-300.)*cov12);
             return result;
         }
+
+	float getScaleFactors_VBF(string year, float pt)
+        {
+	  float result =1.0;
+	  if(pt <400.){
+	    if(year == "2016")return result =0.93;
+	    else {
+	      if(year == "2017") return result =0.82;
+	      else{return result =0.87;}
+	    }
+	  }
+	  else{//<400.
+	    if(pt<600.){
+	      if(year == "2016")return result =0.86;
+	      else {
+		if(year == "2017") return result =0.80;
+		else{return result =0.83;}
+	      }
+	    }
+	    else{//600.
+	      if(pt<800.){
+		if(year == "2016")return result =0.79;
+		else {
+		  if(year == "2017") return result =0.81;
+		  else{return result =0.89;}
+		}
+	      }
+	      else{ //800.
+		if(year == "2016")return result =0.77;
+		else {
+		  if(year == "2017") return result =0.76;
+		  else{return result =0.80;}
+		}
+	      }//800.
+	    }//600.
+	  }//400.
+	  return result;
+	     
+	}
         float getPNetXbbShapeScaleFactors(string year, float xbb, int type=0)
         {
             //type: 0, 1, -1 for nominal Up Down
