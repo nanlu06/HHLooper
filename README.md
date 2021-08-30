@@ -45,7 +45,9 @@ The first argument is a tag for the folder name of the output histograms, and th
 ## Command to run for the signal region
 
 ./run_syst_test.sh 
+
 cd python
+
 ./prepare_histogram_forcard.sh
 
 ## Command to run for the ttbar one lepton CR
