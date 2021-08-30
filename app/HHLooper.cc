@@ -416,7 +416,7 @@ else
   
 cutflow.addCut("CutWeight", [&](){ return 1; },  [&](){
     //after ttbar recoil correction
-    float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets ? ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
+    float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets ? 2.0*ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
     //before ttbar recoil correction
     //float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight());
     
