@@ -4,8 +4,11 @@ TAG=$1
 mkdir -p hists/${TAG}/
 rm -rf hists/${TAG}/*
 
+inputBase=/storage/af/user/nlu/work/HH/ntuples/20210712_regression_v2/option5/combined/BDT/
+#from Si's ntuple /eos/cms/store/group/phys_susy/razor/Run2Analysis/HH/HHTo4BNtupler/20210712_regression/option5/combined/BDT/
+
+#inputBase=/storage/af/user/nlu/work/HH/ntuples/20210510_regression/option5/combined/BDT/
 #from Si's ntuple /eos/cms/store/group/phys_susy/razor/Run2Analysis/HH/HHTo4BNtupler/20210510_regression/option5/combined/BDT/
-inputBase=/storage/af/user/nlu/work/HH/ntuples/20210510_regression/option5/combined/BDT/
 #from Si's ntuple /storage/user/sixie/data/HH/HHTo4BNtupler/20210310/option5/combined/BDT/
 #inputBase=/storage/af/user/nlu/work/HH/ntuples/20210403/option5/combined/BDT/
 #inputBase=/storage/user/nlu/work/HH/ntuples/20210318/option5/combined/BDT/
@@ -46,7 +49,6 @@ do
  (set -x ;./HHLooper ${inputBase}/${year}/ttbar/ ttbar.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
 
 #this is for signal region only
- #(set -x ;./HHLooper ${inputBase}/${year}/ttbar/skim/ ttbar.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
  (set -x ;./HHLooper ${inputBase}/${year}/HHSM/ HHSM.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
  (set -x ;./HHLooper ${inputBase}/${year}/HHc0/ HHc0.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
  (set -x ;./HHLooper ${inputBase}/${year}/HHc1/ HHc1.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
@@ -63,7 +65,6 @@ do
  (set -x ;./HHLooper ${inputBase}/${year}/Higgs/ Higgs.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
  (set -x ;./HHLooper ${inputBase}/${year}/ttH/ ttH.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
  (set -x ;./HHLooper ${inputBase}/${year}/others/ others.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
- #(set -x ;./HHLooper ${inputBase}/${year}/others/skim/ others.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
 
 done
 
@@ -71,7 +72,7 @@ sleep 1
 wait
 
 mkdir -p hists/${TAG}/combine/
-hadd -k -f hists/${TAG}/combine/TT_Mtt.root hists/${TAG}/2016/TT_Mtt.root hists/${TAG}/2017/TT_Mtt.root hists/${TAG}/2018/TT_Mtt.root
+#hadd -k -f hists/${TAG}/combine/TT_Mtt.root hists/${TAG}/2016/TT_Mtt.root hists/${TAG}/2017/TT_Mtt.root hists/${TAG}/2018/TT_Mtt.root
 hadd -k -f hists/${TAG}/combine/data.root hists/${TAG}/2016/data.root hists/${TAG}/2017/data.root hists/${TAG}/2018/data.root
 hadd -k -f hists/${TAG}/combine/qcd.root hists/${TAG}/2016/qcd.root hists/${TAG}/2017/qcd.root hists/${TAG}/2018/qcd.root
 hadd -k -f hists/${TAG}/combine/ttbar.root hists/${TAG}/2016/ttbar.root hists/${TAG}/2017/ttbar.root hists/${TAG}/2018/ttbar.root

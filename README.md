@@ -46,6 +46,10 @@ The first argument is a tag for the folder name of the output histograms, and th
 
 ./run_syst_test.sh 
 
+cd python
+
+./prepare_histogram_forcard.sh
+
 ## Command to run for the ttbar one lepton CR
 
 ./process_1Lttbar.sh  yield_AN_1Lttbar

@@ -1,0 +1,5 @@
+#weight sys, trigger sys, spectral treatment for the ttbar bkg in BDT bin1
+python prepare_card_SR_final.py yield_AN_sr_sys_0819 yield_AN_sr_sys_0819_trig yield_AN_sr_sys_0819 v8p2
+
+#python prepare_card_SR_final.py yield_AN_sr_sys_0819 yield_AN_sr_sys_0517BaselineNewTTcorPNetV2_trig yield_AN_sr_sys_0819 v8p2
+#python prepare_card_allSR_beta.py yield_AN_sr_sys_0517BaselineNewTTcorPNetV2 yield_AN_sr_sys_0517BaselineNewTTcorPNetV2_trig yield_AN_sr_sys_0604BaselineNewTTcorPNetV2 v8p2
