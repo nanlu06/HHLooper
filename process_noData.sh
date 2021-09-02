@@ -74,10 +74,18 @@ mkdir -p hists/${TAG}/combine/
 #hadd -k -f hists/${TAG}/combine/TT_Mtt.root hists/${TAG}/2016/TT_Mtt.root hists/${TAG}/2017/TT_Mtt.root hists/${TAG}/2018/TT_Mtt.root
 #hadd -k -f hists/${TAG}/combine/data.root hists/${TAG}/2016/data.root hists/${TAG}/2017/data.root hists/${TAG}/2018/data.root
 old_suffix='_J*'
+old_suffix2='_nominal'
 new_suffix='_nominal_nosys'
-suffix_removed_String=${TAG//$old_suffix/}
+if [[$TAG =~ $old_suffix2 ]]; then 
+    suffix_removed_String=${TAG//$old_suffix2/}
+else 
+    suffix_removed_String=${TAG//$old_suffix/}
+fi
 new_string="$suffix_removed_String$new_suffix"
 cp hists/$new_string/combine/data.root hists/${TAG}/combine/data.root ## copy the nominal data file here
+cp hists/$new_string/2016/data.root hists/${TAG}/2016/data.root ## copy the nominal data file here
+cp hists/$new_string/2017/data.root hists/${TAG}/2017/data.root ## copy the nominal data file here
+cp hists/$new_string/2018/data.root hists/${TAG}/2018/data.root ## copy the nominal data file here                                                                                                          
 hadd -k -f hists/${TAG}/combine/qcd.root hists/${TAG}/2016/qcd.root hists/${TAG}/2017/qcd.root hists/${TAG}/2018/qcd.root
 hadd -k -f hists/${TAG}/combine/ttbar.root hists/${TAG}/2016/ttbar.root hists/${TAG}/2017/ttbar.root hists/${TAG}/2018/ttbar.root
 hadd -k -f hists/${TAG}/combine/HHSM.root hists/${TAG}/2016/HHSM.root hists/${TAG}/2017/HHSM.root hists/${TAG}/2018/HHSM.root
