@@ -21,6 +21,8 @@ if __name__ == "__main__":
     vbdt = sys.argv[3]
     histdir = sys.argv[4]
     ttbar_bin1 = sys.argv[5]
+    ttbar_bin1_up = "PNetp95"
+    ttbar_bin1_down = "PNetp2"
 
     obs = "__fatJet2MassSD"
     #obs = "__fatJet2MassRegressed" #Regressed
@@ -38,13 +40,13 @@ if __name__ == "__main__":
     "PNetHbbScaleFactors","FSRPartonShower","ISRPartonShower","ggHHPDFacc","ggHHQCDacc"]
     
     #source of shape systematics 
-    systs_shape = ["JER","JES","JMS","JMR"]
+    systs_shape = ["JER","JES","JMS","JMR","ttbarBin1Jet2PNetCut"]
     
-    outName = "HHTo4BPlots_Run2_BDT"+vbdt+".root"
+    outName = "HHTo4BPlots_Run2_BDT"+vbdt+tag+".root"
     
     outFile =  r.TFile(outName, "recreate")
 
-    #ttbar yield scale PNet9 yield to the actual yield
+    #ttbar yield: scale PNet9 yield to the actual yield with PNet>0.98
     inFile_this_ttbar_loose = r.TFile(histdir+tag+"_nominal/combine/ttbar.root",  "READ")
     ttbar_bin1_yield = inFile_this_ttbar_loose.Get("SRv8p2Bin1"+obs).Integral()
     print("ttbar yields nominal", ttbar_bin1_yield)
@@ -62,11 +64,14 @@ if __name__ == "__main__":
         #read histogram for shape syst (jet related syst)
         inFile_systs_shape = []
         for isysts_shape in systs_shape:
-            inFile_systs_shape.append(r.TFile(histdir+tag+"_"+isysts_shape+"_Up/combine/"+proc_file[idx]+".root",  "READ"))
-            inFile_systs_shape.append(r.TFile(histdir+tag+"_"+isysts_shape+"_Down/combine/"+proc_file[idx]+".root",  "READ"))
+            if isysts_shape != "ttbarBin1Jet2PNetCut":
+                inFile_systs_shape.append(r.TFile(histdir+tag+"_"+isysts_shape+"_Up/combine/"+proc_file[idx]+".root",  "READ"))
+                inFile_systs_shape.append(r.TFile(histdir+tag+"_"+isysts_shape+"_Down/combine/"+proc_file[idx]+".root",  "READ"))
+            else:
+                inFile_systs_shape.append(r.TFile(histdir+tag+"_nominal_nosys/combine/"+proc_file[idx]+".root",  "READ"))
+                inFile_systs_shape.append(r.TFile(histdir+tag+"_nominal_nosys/combine/"+proc_file[idx]+".root",  "READ"))
          
         #names of the analysis categories (3 BDT bins + 1 fail region for QCD fit)
-        region_list = []
         region_list = ["SRv8p2Bin1", "SRv8p2Bin2",  "SRv8p2Bin3", "FailSRv8p2"] #, "FitCRv8p2", "FailFitCRv8p2"]
         
         #loop over analysis categories
@@ -120,7 +125,7 @@ if __name__ == "__main__":
                                 hist_Down_2016_PNet = inFile2016_PNet.Get(region+sys+"2016bin"+str(ii+1)+str(jj+1)+"Down"+obs)
                                 hist_Down_2017_PNet = inFile2017_PNet.Get(region+sys+"2017bin"+str(ii+1)+str(jj+1)+"Down"+obs)
                                 hist_Down_2018_PNet = inFile2018_PNet.Get(region+sys+"2018bin"+str(ii+1)+str(jj+1)+"Down"+obs)
-                                    #print("debug PNet SF unc: ", ii, jj, hist_Up_2016.Integral(), hist_Up_2017.Integral(), hist_Up_2018.Integral())                             
+                                #print("debug PNet SF unc: ", ii, jj, hist_Up_2016.Integral(), hist_Up_2017.Integral(), hist_Up_2018.Integral())                             
                                 up_all = 1.0*(hist_Up_2016_PNet.GetBinContent(ibin+1) - hist_2016_PNet.GetBinContent(ibin+1)) ** 2 
                                 + 1.0*(hist_Up_2017_PNet.GetBinContent(ibin+1) - hist_2017_PNet.GetBinContent(ibin+1)) ** 2
                                 + 1.0*(hist_Up_2018_PNet.GetBinContent(ibin+1) - hist_2018_PNet.GetBinContent(ibin+1)) ** 2                                
@@ -169,7 +174,6 @@ if __name__ == "__main__":
                         hist_Up.SetBinContent(ibin+1,hist_nominal.GetBinContent(ibin+1)+np.sqrt(tmp_bin_up_sq)) 
                         hist_Down.SetBinContent(ibin+1,hist_nominal.GetBinContent(ibin+1)-np.sqrt(tmp_bin_up_sq))
                     
-                #other weight sysetmatics like pileup weights unc
                 elif "PartonShower" in sys:
                     if "HH" in proc[idx]:
                         hist_Up = inFile_this.Get(region+sys+"Up"+obs)
@@ -247,19 +251,28 @@ if __name__ == "__main__":
                     continue
                 if(debug): print("studying systs_shape for proc:",systs_shape[isysts_shape], proc_file[idx])
                     
-                hist_Up =  inFile_systs_shape[isysts_shape*2].Get(region+obs)
+                #ttbar bin 1 PNet cut uncertainty for the ttbar Jet 2 mass shape
+                if (proc[idx]=='TTJets') and ('Bin1' in region) and systs_shape[isysts_shape] == "ttbarBin1Jet2PNetCut": 
+                    print("debug ttbarBin1Jet2PNetCut")
+                    hist_Up =  inFile_systs_shape[isysts_shape*2].Get(iregion+ttbar_bin1_up+obs)
+                    hist_Down =  inFile_systs_shape[isysts_shape*2+1].Get(iregion+ttbar_bin1_down+obs)     
+                else:
+                    hist_Up =  inFile_systs_shape[isysts_shape*2].Get(region+obs)
+                    hist_Down =  inFile_systs_shape[isysts_shape*2+1].Get(region+obs) 
+                    
                 hist_Up.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+systs_shape[isysts_shape]+"Up")
-                
-                hist_Down =  inFile_systs_shape[isysts_shape*2+1].Get(region+obs)                 
                 hist_Down.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+systs_shape[isysts_shape]+"Down")
                 
                 if(debug): print("yields nominal", hist_nominal.Integral())
                 
                 if proc[idx]=="TTJets" and ("SRv8p2Bin1" in region):
                     
-                    hist_Up.Scale(ratio_yield_ttbar);
+                    hist_up_total = hist_Up.Integral();
+                    hist_Up.Scale(ttbar_bin1_yield/hist_up_total);
                     print("ttbar hist up integral ",hist_Up.Integral())
-                    hist_Down.Scale(ratio_yield_ttbar); 
+                    
+                    hist_down_total = hist_Down.Integral();
+                    hist_Down.Scale(ttbar_bin1_yield/hist_down_total); 
                     print("ttbar hist down integral ",hist_Down.Integral())
                 
                     hist_nominal_total = hist_nominal.Integral();
