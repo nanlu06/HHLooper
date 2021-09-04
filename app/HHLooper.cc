@@ -417,12 +417,10 @@ else
 //cutflow.addCut("CutWeight", [&](){ return 1; },   [&](){ return isData ?  lumi : lumi*hh.weight()*hh.xsecWeight()*hh.l1PreFiringWeight()*hh.triggerEff3DWeight()*hh.puWeight(); }); //before correction
 
 //Pre-selection cuts
-
-
   cutflow.addCut("CutWeight", [&](){ return 1; },  [&](){
       //after ttbar recoil correction
       float ttbar_factor = input.find("option5") == std::string::npos ? 1.0 : 2.0;
-      
+     
       float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets ? ttbar_factor*ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
 
       //If applying correction from VBF analysis
@@ -483,6 +481,7 @@ else
 cutflow.addCutToLastActiveCut("CutHLT",       [&](){ 
    //cout <<"test "<<hh.HLT_AK8PFJet330_PFAK8BTagCSV_p17()<<endl;
    return isData ? ((year_ == "2016" && (hh.HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV_p20() || hh.HLT_AK8PFHT600_TrimR0p1PT0p03Mass50_BTagCSV_p20() || hh.HLT_AK8DiPFJet250_200_TrimMass30_BTagCSV_p20() || hh.HLT_AK8PFJet360_TrimMass30() || hh.HLT_AK8PFJet450() || hh.HLT_PFJet450() )) || (year_ == "2017" && (hh.HLT_PFJet450() || hh.HLT_PFJet500() || hh.HLT_AK8PFJet500() || hh.HLT_PFHT1050() || hh.HLT_AK8PFJet360_TrimMass30() || hh.HLT_AK8PFJet380_TrimMass30() || hh.HLT_AK8PFJet400_TrimMass30() || hh.HLT_AK8PFHT800_TrimMass50() || hh.HLT_AK8PFHT750_TrimMass50() || hh.HLT_AK8PFJet330_PFAK8BTagCSV_p17())) || (year_ == "2018" && (hh.HLT_PFHT1050() || hh.HLT_PFJet500() || hh.HLT_AK8PFJet500() || hh.HLT_AK8PFJet400_TrimMass30() || hh.HLT_AK8PFHT800_TrimMass50() || hh.HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4()))) : 1.0; },   UNITY);
+    
 
 //cutflow.addCutToLastActiveCut("CutfatJetsPt",       [&](){ return hh.fatJet1Pt() > 300.0 && hh.fatJet2Pt() > 300.0; },   UNITY);
 cutflow.addCutToLastActiveCut("CutfatJetsPt",       [&](){
@@ -3066,12 +3065,12 @@ else
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1");
 
         //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp95");
-        //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp9");
+        cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp9");
         //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp8");
         //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp5");
         //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp2");
 
-        cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp0");
+        //cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin1PNetp0");
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin2");
         cutflow.bookHistogramsForCut(histograms, "SRv8p2Bin3");
         cutflow.bookHistogramsForCut(histograms, "FailSRv8p2");
