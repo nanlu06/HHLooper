@@ -102,10 +102,12 @@ def makeplot_single(
             hist_b.Add(h1_bkg[idx]) 
             
     for idx in range(len(h1_sig)):
+        print("ggH signal yield: ", hist_s.Integral())
         if idx > 0:
             hist_temp = h1_sig[idx].Clone(h1_sig[idx].GetName()+"_temp")
             #hist_all.Add(hist_temp)
             hist_s.Add(h1_sig[idx])
+        print("all signal yield: ", hist_s.Integral())
 
     stack.SetTitle("")
     
@@ -350,7 +352,7 @@ def makeplot_single(
         text_file.write("\n\n")
         
     #print yield table for AN
-    text_file.write("print yield table for AN \n")
+    text_file.write("print yield table for AN\n")
     bkg_all = 0
     bkg_all_errsq = 0
     for idx in range(len(h1_bkg)):
@@ -361,7 +363,8 @@ def makeplot_single(
         text_file.write("%s"%(bkg_legends_[idx])+"& %7.2f"%(bkg_tmp)+"$\\pm$"+ "%7.2f"%np.sqrt(bkg_errsq_tmp)+"\n")
     text_file.write("total background & %7.2f"%(bkg_all)+"$\\pm$"+ "%7.2f"%np.sqrt(bkg_all_errsq)+"\n")
     
-    text_file.write("ggHH SM & %7.2f"%((h1_sig[0].GetBinContent(7)+h1_sig[0].GetBinContent(8)+h1_sig[0].GetBinContent(9))*sig_scale_)+"$\\pm$"+ "%7.2f"%(sig_scale_*np.sqrt(h1_sig[0].GetBinError(7)*h1_sig[0].GetBinError(7)+h1_sig[0].GetBinError(8)*h1_sig[0].GetBinError(8)+h1_sig[0].GetBinError(9)*h1_sig[0].GetBinError(9)))+"\n")
+    text_file.write("\ggHH SM ($\kapl=1$) & %7.2f"%((h1_sig[0].GetBinContent(7)+h1_sig[0].GetBinContent(8)+h1_sig[0].GetBinContent(9))/sig_scale_)+"$\\pm$"+ "%7.1f"%(sig_scale_*np.sqrt(h1_sig[0].GetBinError(7)*h1_sig[0].GetBinError(7)+h1_sig[0].GetBinError(8)*h1_sig[0].GetBinError(8)+h1_sig[0].GetBinError(9)*h1_sig[0].GetBinError(9)))+"\n")
+    text_file.write("\VBFHH SM ($\kapl=1$) & %7.2f"%((h1_sig[1].GetBinContent(7)+h1_sig[1].GetBinContent(8)+h1_sig[1].GetBinContent(9))/sig_scale_)+"$\\pm$"+ "%7.1f"%(sig_scale_*np.sqrt(h1_sig[1].GetBinError(7)*h1_sig[1].GetBinError(7)+h1_sig[1].GetBinError(8)*h1_sig[1].GetBinError(8)+h1_sig[1].GetBinError(9)*h1_sig[1].GetBinError(9)))+"\n")
     
     text_file.write("HH bin 8 value %s"%h1_sig[0].GetBinContent(8)+"\n")
     text_file.write("HH bin 9 value %s"%h1_sig[0].GetBinContent(9)+"\n")
@@ -371,7 +374,7 @@ def makeplot_single(
     text_file.write("HH bin 9 error %s"%h1_sig[0].GetBinError(9)+"\n")
     text_file.write("HH bin 7 error %s"%h1_sig[0].GetBinError(7)+"\n")
     
-    text_file.write("total & %7.2f"%(bkg_all+(h1_sig[0].GetBinContent(7)+h1_sig[0].GetBinContent(8)+h1_sig[0].GetBinContent(9))*sig_scale_)+"$\\pm$"+ "%7.2f"%(np.sqrt((h1_sig[0].GetBinError(7)*h1_sig[0].GetBinError(7)+h1_sig[0].GetBinError(8)*h1_sig[0].GetBinError(8)+h1_sig[0].GetBinError(9)*h1_sig[0].GetBinError(9))*sig_scale_*sig_scale_+bkg_all_errsq))+"\n")
+    text_file.write("total & %7.2f"%(bkg_all+(h1_sig[0].GetBinContent(7)+h1_sig[0].GetBinContent(8)+h1_sig[0].GetBinContent(9)+h1_sig[1].GetBinContent(7)+h1_sig[1].GetBinContent(8)+h1_sig[1].GetBinContent(9))/sig_scale_)+"$\\pm$"+ "%7.2f"%(np.sqrt((h1_sig[0].GetBinError(7)*h1_sig[0].GetBinError(7)+h1_sig[0].GetBinError(8)*h1_sig[0].GetBinError(8)+h1_sig[0].GetBinError(9)*h1_sig[0].GetBinError(9))/(sig_scale_*sig_scale_)+(h1_sig[1].GetBinError(7)*h1_sig[1].GetBinError(7)+h1_sig[1].GetBinError(8)*h1_sig[1].GetBinError(8)+h1_sig[1].GetBinError(9)*h1_sig[1].GetBinError(9))/(sig_scale_*sig_scale_)+bkg_all_errsq))+"\n")
     
     text_file.close()
     os.system("cp "+outFile+"_linY.txt "+outFile+"_logY.txt")
@@ -505,6 +508,8 @@ def main(vbdt, HH_limit):
                 )
 
 if __name__ == "__main__":
-    vbdt = "v8p2_0830_newntuple_newrecoilcorr_PNetp9_Regressed"
+    vbdt = "v8p2yield_AN_sr_sys_0830_fix2017trigSF0908"
+    #vbdt = "v8p2yield_AN_sr_sys_0830_regressed_PNetp9_allsys"
+    #vbdt = "v8p2yield_AN_sr_sys_0824_ntuple_20210403_HHLooper_sysTest_pT300_ttbarbin1PNet9v1"
     HH_limit = 5.0;
     main(vbdt,HH_limit)
