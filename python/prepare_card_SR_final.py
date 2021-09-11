@@ -4,13 +4,12 @@ import math
 import numpy as np
 
 def checkbin(hist):
-    #nx = hist.FindBin(125.0)
 
     for ibin in range(hist.GetNbinsX()):
         ibinv = hist.GetBinContent(ibin+1)
         if math.isnan(ibinv):
             print("bug isNaN")
-        elif(ibinv==0 and ("Data" not in hist.GetName())): #  and (ibin<nx-1 or ibin>nx+1)):
+        elif(ibinv==0 and ("Data" not in hist.GetName())):
             #print("empty bin, set to 0.000001")
             hist.SetBinContent(ibin+1, 0.000001)
     return;            
@@ -36,7 +35,7 @@ if __name__ == "__main__":
                   "qqHH_CV_1_C2V_1_kl_2_boost4b", "qqHH_CV_1_C2V_2_kl_1_boost4b", "qqHH_CV_1_C2V_0_kl_1_boost4b"]
 
     #source of weight systematics name here should match that in the histogram name
-    systs_weight = ["pileupWeight","PNetShape","ttJetsCorr","BDT"+vbdt+"Shape", #"triggerEffSF",
+    systs_weight = ["pileupWeight","PNetShape","ttJetsCorr","BDT"+vbdt+"Shape", "triggerEffSF",
     "PNetHbbScaleFactors","FSRPartonShower","ISRPartonShower","ggHHPDFacc","ggHHQCDacc"]
     
     #source of shape systematics 
