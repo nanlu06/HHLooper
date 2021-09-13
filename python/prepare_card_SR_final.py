@@ -20,11 +20,11 @@ if __name__ == "__main__":
     vbdt = sys.argv[3]
     histdir = sys.argv[4]
     ttbar_bin1 = sys.argv[5]
-    ttbar_bin1_up = "PNetp95"
+    ttbar_bin1_up = "PNetp92"
     ttbar_bin1_down = "PNetp2"
 
-    obs = "__fatJet2MassSD"
-    #obs = "__fatJet2MassRegressed" #Regressed
+    #obs = "__fatJet2MassSD"
+    obs = "__fatJet2MassRegressed" #Regressed
     #print out information for debugging
     debug = False
     
@@ -174,7 +174,8 @@ if __name__ == "__main__":
                         hist_Down.SetBinContent(ibin+1,hist_nominal.GetBinContent(ibin+1)-np.sqrt(tmp_bin_up_sq))
                     
                 elif "PartonShower" in sys:
-                    if "HH" in proc[idx]:
+                    #if "HH" in proc[idx]:
+                    if ("HH" in proc[idx]) and ("qqHH" not in proc[idx]):
                         hist_Up = inFile_this.Get(region+sys+"Up"+obs)
                         hist_Down = inFile_this.Get(region+sys+"Down"+obs)   
                     else:
