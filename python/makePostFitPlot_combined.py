@@ -226,7 +226,7 @@ def makeplot_single(
         ratio.SetMarkerColor(1)
         ratio.SetMarkerSize(1)
         ratio.SetMarkerStyle(20)
-        ratio.GetXaxis().SetTitle("j_{2} soft drop mass")
+        ratio.GetXaxis().SetTitle("j_{2} regressed mass [GeV]")
         #myC.Update()
         
         if "ratio_range" in extraoptions:
@@ -321,7 +321,7 @@ def makeplot_single(
         outFile = outFile + "/" + hist_name_
 
     #print("maxY = "+str(maxY))
-    stack.SetMaximum(maxY*1.6)
+    stack.SetMaximum(maxY*1.7)
 
     #print everything into txt file
     text_file = open(outFile+"_linY.txt", "w")
@@ -419,6 +419,10 @@ def main(vbdt, HH_limit):
         pname_data = "data"
         sig_colors = [2, 839, 800, 1, 632]
         bkg_colors = [2003, 2011, 2001, 2005, 2007, 800, 839]
+        
+        #color scheme for paper draft
+        #sig_colors = [2, 4, 800, 1, 632]
+        #bkg_colors = [616, 2011, 2001, 601, 797, 2007, 839]
 
         region = "SBplusfail"
         #the first three are the sideband region, the next three is the full AK8 jet 2 mass region, the last one is the common fail region
@@ -491,7 +495,7 @@ def main(vbdt, HH_limit):
                 h1_data.SetBinContent(7,0)
                 h1_data.SetBinContent(8,0)
                 h1_data.SetBinContent(9,0)
-            h1_data.GetXaxis().SetTitle("j_{2} soft drop mass (GeV)")
+            h1_data.GetXaxis().SetTitle("j_{2} regressed mass (GeV)")
 
             makeplot_single(
                 h1_sig=h1_sig,
@@ -502,14 +506,14 @@ def main(vbdt, HH_limit):
                 sig_colors_=sig_colors,
                 bkg_colors_=bkg_colors,
                 sig_scale_=HH_limit,
-                output_name_=dirName+"_"+bdtbin+"_BDT"+vbdt,
+                output_name_=dirName+"_"+bdtbin+"_BDTv8p2",
                 dir_name_= "plots/postfitplots/output_all_"+vbdt+"/",
                 extraoptions={"stack_signal": False}
                 )
 
 if __name__ == "__main__":
-    vbdt = "v8p2yield_AN_sr_sys_0830_fix2017trigSF0908"
-    #vbdt = "v8p2yield_AN_sr_sys_0830_regressed_PNetp9_allsys"
-    #vbdt = "v8p2yield_AN_sr_sys_0824_ntuple_20210403_HHLooper_sysTest_pT300_ttbarbin1PNet9v1"
-    HH_limit = 5.0;
+    vbdt = "v8p2yield_AN_sr_sys_0830_fix2017trigSF0913v1"
+    #"v8p2yield_AN_sr_sys_0830_fix2017trigSF0908_SDv1"
+    #"v8p2yield_AN_sr_sys_0830_fix2017trigSF0908"
+    HH_limit = 5.2;
     main(vbdt,HH_limit)
