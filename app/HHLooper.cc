@@ -267,57 +267,72 @@ histograms.addHistogram("yield",               "; yield; Events",               
 
 if(doSystematics)
 {
-histograms.addHistogram("fatJet2MassSD",   "; j_{2} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet2MassSD();} );
-//histograms.addHistogram("fatJet1MassSD",   "; j_{1} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet1MassSD();} );
-histograms.addHistogram("fatJet2MassRegressed",   "; j_{2} regressed mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet2MassRegressed();} );
-//histograms.addHistogram("fatJet1MassRegressed",   "; j_{1} regressed mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet1MassRegressed();} );
-//histograms.addHistogram("fatJet1PNetXbb",   "; j_{1} PNet Xbb tagger; Events",           200,   0.95, 1.0,   [&]() { return  hh.fatJet1PNetXbb(); } );
-//histograms.addHistogram("fatJet2PNetXbb",   "; j_{2} PNet Xbb tagger; Events",           200,   0.95, 1.0,   [&]() { return  hh.fatJet2PNetXbb(); } );
-//histograms.addHistogram("EventBDTv8p2",   "; Event BDT; Events",           200, 0.0, 1.0,   [&]() { return  hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(); } );
+    histograms.addHistogram("fatJet2MassSD",   "; j_{2} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet2MassSD();} );
+    //histograms.addHistogram("fatJet1MassSD",   "; j_{1} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet1MassSD();} );
+    histograms.addHistogram("fatJet2MassRegressed",   "; j_{2} regressed mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet2MassRegressed();} );
+    //histograms.addHistogram("fatJet1MassRegressed",   "; j_{1} regressed mass (GeV); Events", 46,   40.,    500.,  [&]() { return hh.fatJet1MassRegressed();} );
+    //histograms.addHistogram("fatJet1PNetXbb",   "; j_{1} PNet Xbb tagger; Events",           200,   0.95, 1.0,   [&]() { return  hh.fatJet1PNetXbb(); } );
+    //histograms.addHistogram("fatJet2PNetXbb",   "; j_{2} PNet Xbb tagger; Events",           200,   0.95, 1.0,   [&]() { return  hh.fatJet2PNetXbb(); } );
 
-//histograms.addHistogram("fatJet2MassSD_JMSDown",   "; j_{2} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return isData ? hh.fatJet2MassSD() : hh.fatJet2MassSD_JMS_Down();} );
-//histograms.addHistogram("fatJet2MassSD_JMSUp",   "; j_{2} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return isData ? hh.fatJet2MassSD() : hh.fatJet2MassSD_JMS_Up();} );
-//histograms.addHistogram("fatJet2MassSD_JMRDown",   "; j_{2} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return  isData ? hh.fatJet2MassSD() : hh.fatJet2MassSD_JMR_Down(); } );
-//histograms.addHistogram("fatJet2MassSD_JMRUp",   "; j_{2} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() { return  isData ? hh.fatJet2MassSD() : hh.fatJet2MassSD_JMR_Up(); } );
+    if(input.find("Tau32TopSkim") != std::string::npos){
+        histograms.addHistogram("fatJet1Pt",          "; p_{T}^{j1} (GeV); Events",           200,   300.,   2300.,  [&]() { return  hh.fatJet1Pt(); });
+        histograms.addHistogram("fatJet2Pt",          "; p_{T}^{j2} (GeV); Events",           200,   300.,   2300.,  [&]() { return  hh.fatJet2Pt(); });
+    }   
+    
+    //histograms.addHistogram("EventBDTv8p2",   "; Event BDT; Events",           200, 0.0, 1.0,   [&]() { return  hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(); } );
 }
 
 else
 {
 //final fit discriminant 
 histograms.addHistogram("fatJet2MassSD",   "; j_{2} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() {
- if(syst_name.find("JMS_Down") != std::string::npos) return hh.fatJet2MassSD_JMS_Down();
- else if(syst_name.find("JMS_Up") != std::string::npos) return hh.fatJet2MassSD_JMS_Up();
- else if(syst_name.find("JMR_Down") != std::string::npos) return hh.fatJet2MassSD_JMR_Down();
- else if(syst_name.find("JMR_Up") != std::string::npos) return hh.fatJet2MassSD_JMR_Up();
- else return hh.fatJet2MassSD();
-} 
-  );
+    if(syst_name.find("JMS_Down") != std::string::npos) return hh.fatJet2MassSD_JMS_Down();
+    else if(syst_name.find("JMS_Up") != std::string::npos) return hh.fatJet2MassSD_JMS_Up();
+    else if(syst_name.find("JMR_Down") != std::string::npos) return hh.fatJet2MassSD_JMR_Down();
+    else if(syst_name.find("JMR_Up") != std::string::npos) return hh.fatJet2MassSD_JMR_Up();
+    else return hh.fatJet2MassSD();
+});
+    
 histograms.addHistogram("fatJet2MassRegressed",   "; j_{2} regressed mass (GeV); Events", 46,   40.,    500.,  [&]() {
- if(syst_name.find("JMS_Down") != std::string::npos) return hh.fatJet2MassRegressed_JMS_Down();
- else if(syst_name.find("JMS_Up") != std::string::npos) return hh.fatJet2MassRegressed_JMS_Up();
- else if(syst_name.find("JMR_Down") != std::string::npos) return hh.fatJet2MassRegressed_JMR_Down();
- else if(syst_name.find("JMR_Up") != std::string::npos) return hh.fatJet2MassRegressed_JMR_Up();
- else return hh.fatJet2MassRegressed();
-} 
-);
+    if(syst_name.find("JMS_Down") != std::string::npos) return hh.fatJet2MassRegressed_JMS_Down();
+    else if(syst_name.find("JMS_Up") != std::string::npos) return hh.fatJet2MassRegressed_JMS_Up();
+    else if(syst_name.find("JMR_Down") != std::string::npos) return hh.fatJet2MassRegressed_JMR_Down();
+    else if(syst_name.find("JMR_Up") != std::string::npos) return hh.fatJet2MassRegressed_JMR_Up();
+    else return hh.fatJet2MassRegressed();
+});
+    
 histograms.addHistogram("fatJet1MassSD",   "; j_{1} soft drop mass (GeV); Events", 46,   40.,    500.,  [&]() {
- if(syst_name.find("JMS_Down") != std::string::npos) return hh.fatJet1MassSD_JMS_Down();
- else if(syst_name.find("JMS_Up") != std::string::npos) return hh.fatJet1MassSD_JMS_Up();
- else if(syst_name.find("JMR_Down") != std::string::npos) return hh.fatJet1MassSD_JMR_Down();
- else if(syst_name.find("JMR_Up") != std::string::npos) return hh.fatJet1MassSD_JMR_Up();
- else return hh.fatJet1MassSD();
-  });
+    if(syst_name.find("JMS_Down") != std::string::npos) return hh.fatJet1MassSD_JMS_Down();
+    else if(syst_name.find("JMS_Up") != std::string::npos) return hh.fatJet1MassSD_JMS_Up();
+    else if(syst_name.find("JMR_Down") != std::string::npos) return hh.fatJet1MassSD_JMR_Down();
+    else if(syst_name.find("JMR_Up") != std::string::npos) return hh.fatJet1MassSD_JMR_Up();
+    else return hh.fatJet1MassSD();
+});
+    
 histograms.addHistogram("fatJet1MassRegressed",   "; j_{1} regressed mass (GeV); Events", 46,   40.,    500.,  [&]() {
- if(syst_name.find("JMS_Down") != std::string::npos) return hh.fatJet1MassRegressed_JMS_Down();
- else if(syst_name.find("JMS_Up") != std::string::npos) return hh.fatJet1MassRegressed_JMS_Up();
- else if(syst_name.find("JMR_Down") != std::string::npos) return hh.fatJet1MassRegressed_JMR_Down();
- else if(syst_name.find("JMR_Up") != std::string::npos) return hh.fatJet1MassRegressed_JMR_Up();
- else return hh.fatJet1MassRegressed();
-}
+    if(syst_name.find("JMS_Down") != std::string::npos) return hh.fatJet1MassRegressed_JMS_Down();
+    else if(syst_name.find("JMS_Up") != std::string::npos) return hh.fatJet1MassRegressed_JMS_Up();
+    else if(syst_name.find("JMR_Down") != std::string::npos) return hh.fatJet1MassRegressed_JMR_Down();
+    else if(syst_name.find("JMR_Up") != std::string::npos) return hh.fatJet1MassRegressed_JMR_Up();
+    else return hh.fatJet1MassRegressed();
+});
 
- );
+histograms.addHistogram("fatJet1Pt",          "; p_{T}^{j1} (GeV); Events",           200,   300.,   2300.,  [&]() { 
+    if(syst_name.find("JES_Down") != std::string::npos) return hh.fatJet1Pt_JESDown();
+    else if(syst_name.find("JES_Up") != std::string::npos) return hh.fatJet1Pt_JESUp();
+    else if(syst_name.find("JER_Down") != std::string::npos) return hh.fatJet1Pt_JERDown();
+    else if(syst_name.find("JER_Up") != std::string::npos) return hh.fatJet1Pt_JERUp();
+    else return  hh.fatJet1Pt(); 
+});
 
- 
+histograms.addHistogram("fatJet2Pt",          "; p_{T}^{j2} (GeV); Events",           200,   300.,   2300.,  [&]() { 
+    if(syst_name.find("JES_Down") != std::string::npos) return hh.fatJet2Pt_JESDown();
+    else if(syst_name.find("JES_Up") != std::string::npos) return hh.fatJet2Pt_JESUp();
+    else if(syst_name.find("JER_Down") != std::string::npos) return hh.fatJet2Pt_JERDown();
+    else if(syst_name.find("JER_Up") != std::string::npos) return hh.fatJet2Pt_JERUp();
+    else return  hh.fatJet2Pt(); 
+});
+
 //other variables does not have correct JMS/JMR variations    
 histograms.add2DHistogram("fat Jet2 MassSD vs pT", "mj2", 30,   50.,   200., "ptj2",  25,   250.,   750.,  [&]() { return  hh.fatJet2MassSD(); }, [&]() { return hh.fatJet2Pt();} );
 histograms.add2DHistogram("fat Jet1 MassSD vs pT", "mj1", 30,   50.,   200., "ptj1",  25,   250.,   750.,  [&]() { return  hh.fatJet1MassSD(); }, [&]() { return hh.fatJet1Pt();} );
@@ -346,10 +361,8 @@ histograms.addHistogram("fatJet1PNetXbb_Bin1",   "; j_{1} PNet Xbb tagger; Event
 histograms.addHistogram("fatJet2PNetXbb_Bin1",   "; j_{2} PNet Xbb tagger; Events",    {0.90, 0.95,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet2PNetXbb(); } );
 histograms.addHistogram("fatJet1PNetXbb_Bin2",   "; j_{1} PNet Xbb tagger; Events",    {0.90, 0.945, 0.955,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet1PNetXbb(); } );
 histograms.addHistogram("fatJet2PNetXbb_Bin2",   "; j_{2} PNet Xbb tagger; Events",    {0.90, 0.945, 0.955,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet2PNetXbb(); } );
-histograms.addHistogram("fatJet1Pt",          "; p_{T}^{j1} (GeV); Events",           200,   300.,   2300.,  [&]() { return  hh.fatJet1Pt(); } );
 histograms.addHistogram("fatJet1Eta",          "; #eta^{j1}; Events",                 200,   -2.5,  2.5,  [&]() { return  hh.fatJet1Eta(); } );
 histograms.addHistogram("fatJet1Phi",          "; #Phi^{j1}; Events",                 200,  -3.2,   3.2,  [&]() { return  hh.fatJet1Phi(); } );
-histograms.addHistogram("fatJet2Pt",          "; p_{T}^{j2} (GeV); Events",           200,   300.,   2300.,  [&]() { return  hh.fatJet2Pt(); } );
 histograms.addHistogram("fatJet2Eta",          "; #eta^{j2}; Events",                 200,   -2.5,  2.5,  [&]() { return  hh.fatJet2Eta(); } );
 histograms.addHistogram("fatJet2Phi",          "; #Phi^{j2}; Events",                 200,  -3.2,   3.2,  [&]() { return  hh.fatJet2Phi(); } );
 histograms.addHistogram("abs_dEta_j1j2",       "; #Delta#eta(j_{1}, j_{2}); Events",   200,   0.,   5.,    [&]() { return  fabs(hh.fatJet1Eta() - hh.fatJet2Eta()); } );
@@ -657,6 +670,12 @@ else{
     }
     else if(syst_name.find("JES_Down") != std::string::npos){
         return isTTJets ? (TopTagSF("0.46", year_, hh.fatJet1Pt_JESDown()) * TopTagSF("0.46", year_, hh.fatJet2Pt_JESDown())) : 1.0;
+    }
+    else if(syst_name.find("JER_Up") != std::string::npos){
+        return isTTJets ? (TopTagSF("0.46", year_, hh.fatJet1Pt_JERUp()) * TopTagSF("0.46", year_, hh.fatJet2Pt_JERUp())) : 1.0;
+    }
+    else if(syst_name.find("JER_Down") != std::string::npos){
+        return isTTJets ? (TopTagSF("0.46", year_, hh.fatJet1Pt_JERDown()) * TopTagSF("0.46", year_, hh.fatJet2Pt_JERDown())) : 1.0;
     }
     else{
         return isTTJets ? (TopTagSF("0.46", year_, hh.fatJet1Pt()) * TopTagSF("0.46", year_, hh.fatJet2Pt())) : 1.0;
@@ -3037,15 +3056,11 @@ else
     if(input.find("Tau32TopSkim") != std::string::npos) // this is ttbar enriched input
     {
         cutflow.bookHistogramsForCut(histograms, "TTBarCR");
-        cutflow.bookHistogramsForCut(histograms, "TTBarCRTight");
-        //cutflow.bookHistogramsForCut(histograms, "TTBarCRBDT1v24");
-        //cutflow.bookHistogramsForCut(histograms, "TTBarCRBDT2v24");
-        //cutflow.bookHistogramsForCut(histograms, "TTBarCRBDT3v24");
-        //cutflow.bookHistogramsForCut(histograms, "TTBarCRBDT4v24");
-        cutflow.bookHistogramsForCut(histograms, "TTBarCRBDT1v8p2");
-        cutflow.bookHistogramsForCut(histograms, "TTBarCRBDT2v8p2");
-        cutflow.bookHistogramsForCut(histograms, "TTBarCRBDT3v8p2");
-        cutflow.bookHistogramsForCut(histograms, "TTBarCRBDT4v8p2");
+        //cutflow.bookHistogramsForCut(histograms, "TTBarCRTight");
+        //cutflow.bookHistogramsForCut(histograms, "TTBarCRBDT1v8p2");
+        //cutflow.bookHistogramsForCut(histograms, "TTBarCRBDT2v8p2");
+        //cutflow.bookHistogramsForCut(histograms, "TTBarCRBDT3v8p2");
+        //cutflow.bookHistogramsForCut(histograms, "TTBarCRBDT4v8p2");
     }
     else // normal  signal enriched input
     {
