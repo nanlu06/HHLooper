@@ -58,7 +58,7 @@ cd python
 
 ./run_syst_ttbar_test.sh (including the recoil correction)
 
-To remove the recoil correction, now comment Line 382, and uncomment Line  384 in ../app/HHLooper.cc to remove recoil correction;  
+To remove the recoil correction, now comment Line 437, and uncomment Line  447 in ../app/HHLooper.cc to remove recoil correction;  
 
 make clean; make
 
