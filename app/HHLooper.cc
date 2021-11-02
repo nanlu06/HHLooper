@@ -13,6 +13,7 @@
 #include <TFile.h>
 #include <TROOT.h>
 #include <TRandom3.h>
+#include <TLorentzVector.h>
 //LOCAL INCLUDES
 #include "hhtree.hh"
 #include "anautil.h"
@@ -368,7 +369,10 @@ histograms.addHistogram("fatJet1Tau3OverTau2",   "; j_{1} Tau3/2; Events",      
 histograms.addHistogram("fatJet2Tau3OverTau2",   "; j_{2} Tau3/2; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet2Tau3OverTau2(); } );
 histograms.addHistogram("lep1Eta",          "; #eta^{j1}; Events",                 200,   -2.5,  2.5,  [&]() { return  hh.lep1Eta(); } );
 histograms.addHistogram("lep1Phi",          "; #Phi^{j1}; Events",                 200,  -3.2,   3.2,  [&]() { return  hh.lep1Phi(); } );
-
+ histograms.addHistogram("gen_mHH",          "; gen m_{HH}; Events",                 200, 0.,   1500.,[&]() {  TLorentzVector gh1,gh2;
+	  gh1.SetPtEtaPhiM(hh.genHiggs1Pt(), hh.genHiggs1Eta(),hh.genHiggs1Phi(),125.0);
+	  gh2.SetPtEtaPhiM(hh.genHiggs2Pt(), hh.genHiggs2Eta(),hh.genHiggs2Phi(),125.0);
+	  return (gh1+gh2).M();} );
 if(input.find("1LTopSkim") != std::string::npos) histograms.addHistogram("abs_dR_l1j1",       "; #DeltaR(l_{1}, j_{1}); Events",        200,   0.,   5.0,    [&]() { return  sqrt(pow(hh.lep1Eta() - hh.fatJet1Eta(), 2) + pow(fabs(hh.lep1Phi()-hh.fatJet1Phi()) > pi ? fabs(hh.lep1Phi()-hh.fatJet1Phi()) - 2*pi : hh.lep1Phi()-hh.fatJet1Phi(), 2)); } );
 else
 {
@@ -431,7 +435,7 @@ else
       //}
 
     //before ttbar recoil correction
-    //float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight());
+      //float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()* (isTTJets ? ttbar_factor:1.0));
     
     if(!isData){
     //apply trigger SF
@@ -650,7 +654,7 @@ else{
     cutflow.getCut("CutfatJetsMassSD");
     cutflow.addCutToLastActiveCut("CutfatJetsXbb",       [&](){ return hh.fatJet1PNetXbb() > 0.1 && hh.fatJet2PNetXbb() > 0.1; },   [&](){ return isTTJets  ? ttjets_sf.getPNetXbbShapeScaleFactors(year_, hh.fatJet1PNetXbb(), 0) * ttjets_sf.getPNetXbbShapeScaleFactors(year_, hh.fatJet2PNetXbb(), 0)     : 1.0; });
     cutflow.addCutToLastActiveCut("TTBarCR",       [&](){ 
-    return hh.fatJet1Tau3OverTau2() < 0.46 && hh.fatJet2Tau3OverTau2() < 0.46 &&  hh.fatJet1HasBJetCSVLoose() && hh.fatJet2HasBJetCSVLoose(); },   [&]() {
+	return hh.fatJet1Tau3OverTau2() < 0.46 && hh.fatJet2Tau3OverTau2() < 0.46 &&  hh.fatJet1HasBJetCSVLoose() && hh.fatJet2HasBJetCSVLoose();},   [&]() {// && hh.fatJet1Pt() >450. && hh.fatJet2Pt() > 450.;},   [&]() {
    
     if(syst_name.find("JES_Up") != std::string::npos){
         return isTTJets ? (TopTagSF("0.46", year_, hh.fatJet1Pt_JESUp()) * TopTagSF("0.46", year_, hh.fatJet2Pt_JESUp())) : 1.0;
@@ -3123,6 +3127,7 @@ float hh_pt;
 float hh_eta;
 float hh_phi;
 float hh_mass;
+ float gen_hh_mass;
 
 if(saveSkim)
 { 
@@ -3156,6 +3161,7 @@ tree_out->Branch("hh_pt", &hh_pt, "hh_pt/F");
 tree_out->Branch("hh_eta", &hh_eta, "hh_eta/F");
 tree_out->Branch("hh_phi", &hh_phi, "hh_phi/F");
 tree_out->Branch("hh_mass", &hh_mass, "hh_mass/F");
+ tree_out->Branch("gen_hh_mass", &gen_hh_mass, "gen_hh_mass/F");
 }
 
 for(int idx = 0; idx < list_chain.size(); idx++)
@@ -3205,7 +3211,10 @@ for(int idx = 0; idx < list_chain.size(); idx++)
 	  hh_eta = hh.hh_eta();
 	  hh_phi = hh.hh_phi();
 	  hh_mass = hh.hh_mass();
-
+	  TLorentzVector gh1,gh2;
+	  gh1.SetPtEtaPhiM(hh.genHiggs1Pt(), hh.genHiggs1Eta(),hh.genHiggs1Phi(),125.0);
+	  gh2.SetPtEtaPhiM(hh.genHiggs2Pt(), hh.genHiggs2Eta(),hh.genHiggs2Phi(),125.0);
+	  gen_hh_mass = (gh1+gh2).M();
       tree_out->Fill();
 	}
 	if(iEntry%100000 == 0) cout<<"[INFO] processing event "<<iEntry<<" / "<<nEntries<<endl;
