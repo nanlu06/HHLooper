@@ -311,7 +311,7 @@ class TTJetsScaleFactors
             return result;
         }
         //two linear functions
-        float getScaleFactorsFit(string year, float pt, int type=0)
+        float getScaleFactorsFitv1(string year, float pt, int type=0)
         {
             //type: 0, 1, -1 for norminal Up, Down
             float result = 1.0;
@@ -329,6 +329,34 @@ class TTJetsScaleFactors
             }
             if(year == "2016")
             {
+                slope2 = -0.000654915, slope1 =  -8.078e-05, constant1 =  0.936567; //par2, par1, par0
+                cov00 =  0.003326, cov01 = -2.147e-05, cov02 = 7.094e-06;
+                cov11 =  2.11e-07, cov12 = -9.528e-08, cov22 = 1.452e-07;
+            }
+            if(pt<300) result = slope1*pt + constant1 + type*sqrt(pt*pt*cov11 + cov00 + 2*pt*cov01);
+            else if(pt<1000.) result = constant1 + 300.*slope1 + (pt-300.)*slope2 + type*sqrt(cov00 + 300.*300.*cov11 + (pt-300.)*(pt-300.)*cov22 + 2*300.*cov01 + 2*(pt - 300.)*cov02 + 2*300.*(pt-300.)*cov12);
+            else result = constant1 + 300.*slope1 + (1000.-300.)*slope2 + 1.5*type*sqrt(cov00 + 300.*300.*cov11 + (1000.-300.)*(1000.-300.)*cov22 + 2*300.*cov01 + 2*(1000. - 300.)*cov02 + 2*300.*(1000.-300.)*cov12);
+            return result;
+        }
+
+        float getScaleFactorsFit(string year, float pt, int type=0)
+        {
+            //type: 0, 1, -1 for norminal Up, Down
+            float result = 1.0;
+            if (pt<0.1)  pt= 0.1;
+            if(pt>999.9) pt =999.9;
+            //default values are for 2018
+            float slope2 = -0.000678301, slope1 = 0.000930604, constant1 =  0.810344; //par2, par1, par0  of the fit function
+            float cov00 =  0.00148, cov01 = -1.046e-05, cov02 = 3.713e-06; //elements of the covariance matrix
+            float cov11 = 1.22e-07, cov12 = -5.853e-08, cov22 = 1.041e-07 ; //elements of the covariance matrix
+            if(year == "2017")
+            {
+                slope2 = -2.64583e-05, slope1 =  0.00124218 , constant1 =  0.723257; //par2, par1, par0
+                cov00 = 0.002079 , cov01 = -1.467e-05, cov02 = 5.723e-06;
+                cov11 = 1.682e-07, cov12 = -8.812e-08 , cov22 = 2.032e-07;
+            }
+            if(year == "2016")
+            {
                 slope2 = -5.05937e-04, slope1 =  5.10033e-04, constant1 = 9.65924e-01; //par2, par1, par0
                 cov00 =  0.00253, cov01 = -1.592e-05, cov02 = 5.219e-06;
                 cov11 = 1.441e-07, cov12 = -6.351e-08, cov22 = 1.066e-07;
@@ -338,6 +366,7 @@ class TTJetsScaleFactors
             else result = constant1 + 300.*slope1 + (1000.-300.)*slope2 + 1.5*type*sqrt(cov00 + 300.*300.*cov11 + (1000.-300.)*(1000.-300.)*cov22 + 2*300.*cov01 + 2*(1000. - 300.)*cov02 + 2*300.*(1000.-300.)*cov12);
             return result;
         }
+
 
 	float getScaleFactors_VBF(string year, float pt)
         {
