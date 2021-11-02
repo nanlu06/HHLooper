@@ -111,14 +111,18 @@ void fit_topmass_inBDTbins() {
     func->SetParameters(0,0);
     func->SetParNames("Constant","Slope");
     
-    TFile *f = new TFile("../../python/plots/yield_AN_ttbar_cor/combine/"+name+"__fatJet2MassSD.root");
+    TFile *f = new TFile("../../python/plots/yield_AN_ttbar_reg_cor/combine/"+name+"__fatJet2MassRegressed.root");
+    //TFile *f = new TFile("../../python/plots/yield_AN_ttbar_reg_cor/combine/"+name+"__fatJet2MassSD.root");
     
-    TH1F *h_data = (TH1F*)f->Get(name+"__fatJet2MassSD_data");
+    TH1F *h_data = (TH1F*)f->Get(name+"__fatJet2MassRegressed_data");
+    TH1F *h_bkg1 = (TH1F*)f->Get(name+"__fatJet2MassRegressed_bkg_0_stack_1_stack_1");
+    TH1F *h_bkg2 = (TH1F*)f->Get(name+"__fatJet2MassRegressed_bkg_1_stack_2_stack_2");
+    TH1F *h_bkg3 = (TH1F*)f->Get(name+"__fatJet2MassRegressed_bkg_2_stack_3_stack_3");
+    /*TH1F *h_data = (TH1F*)f->Get(name+"__fatJet2MassSD_data");
     TH1F *h_bkg1 = (TH1F*)f->Get(name+"__fatJet2MassSD_bkg_0_stack_1_stack_1");
     TH1F *h_bkg2 = (TH1F*)f->Get(name+"__fatJet2MassSD_bkg_1_stack_2_stack_2");
-    TH1F *h_bkg3 = (TH1F*)f->Get(name+"__fatJet2MassSD_bkg_2_stack_3_stack_3");
-    
-    TF1 *f1 =  new TF1("f1","gaus",148,194);
+    TH1F *h_bkg3 = (TH1F*)f->Get(name+"__fatJet2MassSD_bkg_2_stack_3_stack_3");*/
+    TF1 *f1 =  new TF1("f1","gaus",130,200);
     TH1F *h_mc = (TH1F*)h_bkg1->Clone("bkg");
     h_mc->Add(h_bkg2);
     h_mc->Add(h_bkg3);
@@ -128,13 +132,13 @@ void fit_topmass_inBDTbins() {
     TCanvas *cv = new TCanvas("c","c");
     h_mc->Draw();
     cv->SaveAs(name+"_mcfit.pdf");
-    
+    //cv->SaveAs(name+"_mcfit_msd.pdf");
     cout <<"fit data"<<endl;
     h_data->Fit("f1","R");
     TCanvas *cv1 = new TCanvas("c1","c1");
     h_data->Draw();
     cv1->SaveAs(name+"_datafit.pdf");
-    
+    //cv1->SaveAs(name+"_datafit_msd.pdf");
     //perform the fit
     cout <<"mc fit result"<<endl;
     TF1 *fit = h_mc->GetFunction("f1");
@@ -177,7 +181,7 @@ void fit_topmass_inBDTbins() {
     legend->AddEntry(grData,"Data","l");
     legend->Draw();
     
-    cresult->SaveAs("mass_vs_BDT_data_vs_mc_v8p2.pdf");
-
+    cresult->SaveAs("mass_vs_BDT_data_vs_mc_v8p2_mreg.pdf");
+    //cresult->SaveAs("mass_vs_BDT_data_vs_mc_v8p2_msd.pdf");
     
 }

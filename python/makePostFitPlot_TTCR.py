@@ -377,7 +377,7 @@ for dirName in ["shapes_prefit",  "shapes_fit_s"]:
             for idx in range(nBins):
                 g.GetPoint(idx, x, y)
                 h1_data.SetBinContent(idx+1, y*10)
-        h1_data.GetXaxis().SetTitle("j_{2} soft drop mass (GeV)")
+        h1_data.GetXaxis().SetTitle("j_{2} regressed mass (GeV)")
 
 
         makeplot_single(
