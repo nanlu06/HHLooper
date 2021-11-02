@@ -28,6 +28,7 @@ def makeplot_single(
     bkg_legends_=None,
     sig_colors_=None,
     bkg_colors_=None,
+    lumi_=137,
     hist_name_=None,
     sig_scale_=1.0,
     dir_name_="plots",
@@ -252,7 +253,7 @@ def makeplot_single(
     tex2.SetLineWidth(2)
     tex2.Draw()
 
-    lumi_value = 137
+    lumi_value = lumi_
     if "lumi_value" in extraoptions:
         lumi_value = extraoptions["lumi_value"]
     tex3 = r.TLatex(0.72,0.912,"%d"%lumi_value+" fb^{-1} (13 TeV)")
@@ -328,16 +329,24 @@ def makeplot_single(
 if __name__ == "__main__":
     inputfile = sys.argv[1]
 
+lumi = 137
+if "2016" in inputfile:
+    lumi = 35
+elif "2017" in inputfile:
+    lumi = 41
+elif "2018" in inputfile:
+    lumi = 59
+    
 vbdt = "v8p2"
 for dirName in ["shapes_prefit",  "shapes_fit_s"]:
 
     pnames_sig = ["HH"]
-    pnames_bkg = ["others", "TTJets", "QCD"]
-    bkg_legends = ["others", "t#bar{t}+jets","QCD"]
+    pnames_bkg = ["others", "QCD", "TTJets"]
+    bkg_legends = ["others", "QCD", "t#bar{t}+jets"]
     sig_legends = ["HH"]
     pname_data = "data"
     sig_colors = [2, 839, 800, 1, 632]
-    bkg_colors = [2001, 2005, 2007, 800, 839]
+    bkg_colors = [2001, 2007, 2005, 800, 839]
 
     bdtbins = ["TTBarCR"]
         
@@ -377,8 +386,10 @@ for dirName in ["shapes_prefit",  "shapes_fit_s"]:
             for idx in range(nBins):
                 g.GetPoint(idx, x, y)
                 h1_data.SetBinContent(idx+1, y*10)
-        h1_data.GetXaxis().SetTitle("j_{2} regressed mass (GeV)")
 
+        #h1_data.GetXaxis().SetTitle("j_{2} regressed mass (GeV)")
+        #h1_data.GetXaxis().SetTitle("j_{2} soft drop mass (GeV)")
+        h1_data.GetXaxis().SetTitle("p_{T}^{j_{1}} (GeV)")
 
         makeplot_single(
                 h1_sig=h1_sig,
@@ -388,7 +399,8 @@ for dirName in ["shapes_prefit",  "shapes_fit_s"]:
                 bkg_legends_=bkg_legends,
                 sig_colors_=sig_colors,
                 bkg_colors_=bkg_colors,
-                output_name_=dirName+"_"+bdtbin+"_BDT"+vbdt,
+                lumi_=lumi,
+                output_name_=dirName+str(lumi)+"_"+bdtbin+"_BDT"+vbdt,
                 #dir_name_= "cards_shapes_v8p2_TTBarCR/cards_shapes_TTBarCR/HHModel/",
                 extraoptions={"stack_signal": False}
                 )

@@ -50,8 +50,6 @@ TAG=yield_AN_ttbar_ptcheck_1Nov_cor
 for year in 2016 2017 2018
 do
     python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__hh_pt  -d 
-    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet2Pt  -d
-    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1Pt  -d
     #other BDT vars
     python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__hh_eta  -d
     python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__hh_mass  -d
@@ -68,6 +66,8 @@ do
     python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__ptj2_over_mhh  -d
     python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__ptj2_over_ptj1  -d
 
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet2Pt  -d -n 40
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1Pt  -d -n 40
 done
 
 #figure 24
