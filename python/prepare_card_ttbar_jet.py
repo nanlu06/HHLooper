@@ -21,6 +21,9 @@ if __name__ == "__main__":
         inFile_this = r.TFile("../hists/"+tag+"_wsys/combine/"+proc_file[idx]+".root",  "READ")
         print("read file "+"../hists/"+tag+"_wsys/combine/"+proc_file[idx]+".root")
         
+        inFile_JERUp_this = r.TFile("../hists/"+tag+"_JER_Up/combine/"+proc_file[idx]+".root",  "READ")
+        inFile_JERDown_this = r.TFile("../hists/"+tag+"_JER_Down/combine/"+proc_file[idx]+".root",  "READ")
+
         inFile_JMSUp_this = r.TFile("../hists/"+tag+"_JMS_Up/combine/"+proc_file[idx]+".root",  "READ")
         inFile_JMSDown_this = r.TFile("../hists/"+tag+"_JMS_Down/combine/"+proc_file[idx]+".root",  "READ")
         
@@ -40,7 +43,7 @@ if __name__ == "__main__":
                 region_list = ["SRv8p2Bin1", "SRv8p2Bin2",  "SRv8p2Bin3", "FailSRv8p2", "FitCRv8p2", "FailFitCRv8p2"]
         for region in region_list:
             inFile_this.cd()
-            hist_nominal = inFile_this.Get(region+"__fatJet2MassSD")
+            hist_nominal = inFile_this.Get(region+"__fatJet2MassRegressed")
             outBinName=region.replace("SR",  "").replace("Fail", "fail").replace(vbdt, "")
             hist_nominal.SetName("histJet2Mass_"+outBinName+"_"+proc[idx])
 
@@ -48,41 +51,49 @@ if __name__ == "__main__":
             for sys in systs:
                 if idx==0: 
                     continue
-                print("hist_Up ",  region+sys+"Up__fatJet2MassSD")
+                print("hist_Up ",  region+sys+"Up__fatJet2MassRegressed")
                 if idx==1:
-                    hist_Up = inFile_this.Get(region+"__fatJet2MassSD")
+                    hist_Up = inFile_this.Get(region+"__fatJet2MassRegressed")
                     hist_Up.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Up")
-                    hist_Down = inFile_this.Get(region+"__fatJet2MassSD")
+                    hist_Down = inFile_this.Get(region+"__fatJet2MassRegressed")
                     hist_Down.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Down")
                     
                 else:
-                    hist_Up = inFile_this.Get(region+sys+"Up__fatJet2MassSD")
+                    hist_Up = inFile_this.Get(region+sys+"Up__fatJet2MassRegressed")
                     hist_Up.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Up")
-                    hist_Down = inFile_this.Get(region+sys+"Down__fatJet2MassSD")
+                    hist_Down = inFile_this.Get(region+sys+"Down__fatJet2MassRegressed")
                     hist_Down.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Down")
                 
                 hists_sys.append(hist_Up)               
                 hists_sys.append(hist_Down)
       
             if idx!=0:
-                hist_JMSUp =  inFile_JMSUp_this.Get(region+"__fatJet2MassSD")
+
+                hist_JERUp =  inFile_JERUp_this.Get(region+"__fatJet2MassRegressed")
+                hist_JERUp.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JERUp")
+                hists_sys.append(hist_JERUp)
+                hist_JERDown =  inFile_JERDown_this.Get(region+"__fatJet2MassRegressed")
+                hist_JERDown.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JERDown")
+                hists_sys.append(hist_JERDown)
+
+                hist_JMSUp =  inFile_JMSUp_this.Get(region+"__fatJet2MassRegressed")
                 hist_JMSUp.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMSUp")
                 hists_sys.append(hist_JMSUp)
-                hist_JMSDown =  inFile_JMSDown_this.Get(region+"__fatJet2MassSD")
+                hist_JMSDown =  inFile_JMSDown_this.Get(region+"__fatJet2MassRegressed")
                 hist_JMSDown.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMSDown")
                 hists_sys.append(hist_JMSDown)
 
-                hist_JMRUp =  inFile_JMRUp_this.Get(region+"__fatJet2MassSD")
+                hist_JMRUp =  inFile_JMRUp_this.Get(region+"__fatJet2MassRegressed")
                 hist_JMRUp.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMRUp")
                 hists_sys.append(hist_JMRUp)
-                hist_JMRDown =  inFile_JMRDown_this.Get(region+"__fatJet2MassSD")
+                hist_JMRDown =  inFile_JMRDown_this.Get(region+"__fatJet2MassRegressed")
                 hist_JMRDown.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMRDown")
                 hists_sys.append(hist_JMRDown)
 
-                hist_JESUp =  inFile_JESUp_this.Get(region+"__fatJet2MassSD")
+                hist_JESUp =  inFile_JESUp_this.Get(region+"__fatJet2MassRegressed")
                 hist_JESUp.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JESUp")
                 hists_sys.append(hist_JESUp)
-                hist_JESDown =  inFile_JESDown_this.Get(region+"__fatJet2MassSD")
+                hist_JESDown =  inFile_JESDown_this.Get(region+"__fatJet2MassRegressed")
                 hist_JESDown.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JESDown")
                 hists_sys.append(hist_JESDown)
 

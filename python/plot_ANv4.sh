@@ -12,8 +12,8 @@
 #\includegraphics[width=0.32\textwidth]{figs/yield_AN_1Lttbar/2017/TTBarLepJetCR__fatJet1PNetXbb_Bin2_linY.pdf}
 #\includegraphics[width=0.32\textwidth]{figs/yield_AN_1Lttbar/2018/TTBarLepJetCR__fatJet1PNetXbb_Bin2_linY.pdf}
 
-TAG=yield_AN_1Lttbar
-for year in 2016 2017  2018
+TAG=yield_AN_1Lttbar_reg
+for year in 2016 2017 2018
 do
     for var in MET fatJet1Tau3OverTau2 fatJet1MassSD
     do
@@ -24,21 +24,50 @@ do
 done
 
 #recoil plots, Figure 19
-TAG=yield_AN_ttbar
-for year in 2016 2017  2018
+TAG=yield_AN_ttbar_ptcheck_1Nov
+for year in 2016 2017 2018
 do
     python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__hh_pt  -d 
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1MassSD  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__MET  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__hh_mass  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1PNetXbb  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1PNetQCDb  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1PNetQCDbb  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1PNetQCDothers  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__ptj1_over_mhh  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__ptj2_over_mhh  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__ptj2_over_ptj1  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1Tau3OverTau2  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet2Tau3OverTau2  -d
+
 done
 
 #Figure 20 is a manual fit from  Figure 19 using script scripts/ttbarscripts/PNetcorrection.C
 
 #recoil plots, Figure 21,22,23
-TAG=yield_AN_ttbar_cor
+TAG=yield_AN_ttbar_ptcheck_1Nov_cor
 for year in 2016 2017 2018
 do
     python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__hh_pt  -d 
     python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet2Pt  -d
     python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1Pt  -d
+    #other BDT vars
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__hh_eta  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__hh_mass  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__met  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1Tau3OverTau2  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet2Tau3OverTau2  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1MassSD  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1Eta  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1PNetXbb  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1PNetQCDb  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1PNetQCDbb  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__fatJet1PNetQCDothers  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__ptj1_over_mhh  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__ptj2_over_mhh  -d
+    python plot.py -i ../hists/${TAG}/${year}/ -s 1 TTBarCR__ptj2_over_ptj1  -d
+
 done
 
 #figure 24
@@ -50,23 +79,24 @@ python plot.py -i ../hists/${TAG}/combine/ -s 1 TTBarCR__hh_mass_lr  -d
 #\includegraphics[width=0.4\textwidth]{figs/yield_AN_ttbar_cor/combine/TTBarCRBDT3v8p2__fatJet2MassSD_linY.pdf}
 #\includegraphics[width=0.4\textwidth]{figs/yield_AN_ttbar_cor/combine/TTBarCRBDT4v8p2__fatJet2MassSD_linY.pdf}
 
-TAG=yield_AN_ttbar_cor
+TAG=yield_AN_ttbar_reg_cor
 for BDTv in v8p2
 do
     for  BDTbin in  1 2 3 4
     do
         python plot.py -i ../hists/${TAG}/combine/ -s 1 -w TTBarCRBDT${BDTbin}${BDTv}__fatJet2MassSD -n 40 -d
+	python plot.py -i ../hists/${TAG}/combine/ -s 1 -w TTBarCRBDT${BDTbin}${BDTv}__fatJet2MassRegressed -n 40 -d
     done
 done
 
-#figure 26 scripts/ttbarscripts/fit_topmass_inBDTbins.C
+#figure 26 scripts/ttbar_scripts/fit_topmass_inBDTbins.C
 
 #####ttbar BDT shapes, Figure 28
 #\includegraphics[width=0.45\textwidth]{figs/yield_AN_ttbar_cor/combine/TTBarCRTight__EventBDTv8p2_logY.pdf}
 #\includegraphics[width=0.45\textwidth]{figs/yield_AN_ttbar_cor/combine/TTBarCRTight__EventBDTv8p2v3_logY.pdf}
 
 #figure 25
-python prepare_card_ttbar_jet.py yield_AN_ttbar_cor v8p2
+python prepare_card_ttbar_jet.py yield_AN_ttbar_reg_cor v8p2
 
 #the output is HHTo4BPlots_Run2_ttbarSkim_BDTv8p2.root, now go to the combine-hh directory and follow the instructions in the README.md on how to make the datacards figure 27 in ANv4. How to install combined-hh package see https://github.com/LPC-HH/combine-hh
 
@@ -77,7 +107,7 @@ python prepare_card_ttbar_jet.py yield_AN_ttbar_cor v8p2
 # for example: python makePostFitPlot_TTCR.py /storage/af/user/nlu/work/HH/CMSSW_10_2_13/src/combine-hh/cards_shapes_TTBarCR/HHModel/fitDiagnosticsSBfitonly.root
 
 #figure 28
-TAG=yield_AN_ttbar_cor
+TAG=yield_AN_ttbar_reg_cor
 python plot.py -i ../hists/${TAG}/combine/ -s 1 -w TTBarCRTight__EventBDTv8p2 -d
 
 
