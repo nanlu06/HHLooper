@@ -201,10 +201,76 @@ class TrigEffScaleFactors
             //cout <<"eff per jet: "<<result<<endl;
             return result;
         }
+
+	// double getTriggerCorrection (TGraphAsymmErrors *correction, double fatJet1Pt) {
+	double getTriggerCorrection (double fatJet1Pt, int category, string year, string type) {
+
+	  double result = 1.0;
+  
+	  if (year == "2016" && (type=="up" || type=="nom")) {
+	    if (category == 1) {
+	      if (fatJet1Pt >= 300 && fatJet1Pt < 350) result = 1.70;
+	      if (fatJet1Pt >= 350 && fatJet1Pt < 400) result = 1.32;
+	      if (fatJet1Pt >= 400 && fatJet1Pt < 450) result = 1.10;
+	    } 
+	    if (category == 2) {
+	      if (fatJet1Pt >= 300 && fatJet1Pt < 350) result = 1.53;
+	      if (fatJet1Pt >= 350 && fatJet1Pt < 400) result = 1.21;
+	      if (fatJet1Pt >= 400 && fatJet1Pt < 450) result = 1.05;
+	    } 
+	    if (category == 3) {
+	      if (fatJet1Pt >= 300 && fatJet1Pt < 350) result = 1.50;
+	      if (fatJet1Pt >= 350 && fatJet1Pt < 400) result = 1.18;
+	      if (fatJet1Pt >= 400 && fatJet1Pt < 450) result = 1.06;
+	    } 
+	  }
+
+	  if (year == "2017"&& type=="up") {
+	    if (category == 1) {
+	      if (fatJet1Pt >= 300 && fatJet1Pt < 350) result = 0.89;
+	      if (fatJet1Pt >= 350 && fatJet1Pt < 400) result = 0.89;
+	      if (fatJet1Pt >= 400 && fatJet1Pt < 450) result = 0.96;
+	    } 
+	    if (category == 2) {
+	      if (fatJet1Pt >= 300 && fatJet1Pt < 350) result = 0.80;
+	      if (fatJet1Pt >= 350 && fatJet1Pt < 400) result = 0.80;
+	      if (fatJet1Pt >= 400 && fatJet1Pt < 450) result = 1.00;
+	    } 
+	    if (category == 3) {
+	      if (fatJet1Pt >= 300 && fatJet1Pt < 350) result = 0.90;
+	      if (fatJet1Pt >= 350 && fatJet1Pt < 400) result = 0.95;
+	      if (fatJet1Pt >= 400 && fatJet1Pt < 450) result = 1.00;
+	    } 
+	  }
+
+	  if (year == "2018"&& type=="up") {
+	    if (category == 1) {
+	      if (fatJet1Pt >= 300 && fatJet1Pt < 350) result = 0.97;
+	      if (fatJet1Pt >= 350 && fatJet1Pt < 400) result = 1.02;
+	      if (fatJet1Pt >= 400 && fatJet1Pt < 450) result = 0.99;
+	    } 
+	    if (category == 2) {
+	      if (fatJet1Pt >= 300 && fatJet1Pt < 350) result = 1.02;
+	      if (fatJet1Pt >= 350 && fatJet1Pt < 400) result = 0.97;
+	      if (fatJet1Pt >= 400 && fatJet1Pt < 450) result = 1.00;
+	    } 
+	    if (category == 3) {
+	      if (fatJet1Pt >= 300 && fatJet1Pt < 350) result = 1.00;
+	      if (fatJet1Pt >= 350 && fatJet1Pt < 400) result = 0.99;
+	      if (fatJet1Pt >= 400 && fatJet1Pt < 450) result = 0.97;
+	    } 
+	  }
+
+
+	  return result;
+	}
         //get the trigger eff per event
-        float getTrigEffEvt(float pt1, float mass1, float PNetXbb1, float pt2, float mass2, float PNetXbb2, int variation, int ibin){
+        float getTrigEffEvt(float pt1, float mass1, float PNetXbb1, float pt2, float mass2, float PNetXbb2, int variation, int ibin, int category, string year, bool isHH, string type){
             //cout <<"ibin in getTrigEffEvt: "<<ibin<<endl;
             float eff = 1.0 - (1.0 - getTriggerEff3D(pt1, mass1, PNetXbb1, variation, ibin))*(1.0 - getTriggerEff3D(pt2, mass2, PNetXbb2, variation, ibin));
+	    if(isHH && category!=-1){
+	      //cout<<"Trig corr for year"<< year<<":type:signal- "<<year<<","<<type<<","<<isHH<<","<<getTriggerCorrection(pt1, category, year, type)<<endl;
+	      eff = eff*getTriggerCorrection(pt1, category, year, type); }
             return eff;
         }
         //get the number of systematic uncertainties sources (number of bins in trigger map)
@@ -213,12 +279,12 @@ class TrigEffScaleFactors
             return Nbins;
         }
         //get the SF ratio of variation/nominal 
-        float get_unc_ratio(float pt1, float mass1, float PNetXbb1, float pt2, float mass2, float PNetXbb2, int variation, int itrig_unc){           
+        float get_unc_ratio(float pt1, float mass1, float PNetXbb1, float pt2, float mass2, float PNetXbb2, int variation, int itrig_unc, int category, string year, bool isHH, string type){           
             float tmp = 0;
             //cout <<"ibin in get_unc_ratio: "<<itrig_unc<<endl;           
-            float nominal = getTrigEffEvt(pt1, mass1, PNetXbb1, pt2, mass2, PNetXbb2, 0, 0);     
+            float nominal = getTrigEffEvt(pt1, mass1, PNetXbb1, pt2, mass2, PNetXbb2, 0, 0, category, year, isHH, type);     
             if( nominal!=0 ){
-                tmp = getTrigEffEvt(pt1, mass1, PNetXbb1, pt2, mass2, PNetXbb2, variation, itrig_unc)/nominal;   
+	      tmp = getTrigEffEvt(pt1, mass1, PNetXbb1, pt2, mass2, PNetXbb2, variation, itrig_unc, category, year, isHH, type)/nominal;   
                 //if (tmp!=1) cout <<" ratio for itrig_unc: "<< itrig_unc<<" "<<tmp<< endl;
             } 
             return tmp;
