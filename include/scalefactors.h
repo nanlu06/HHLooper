@@ -265,11 +265,22 @@ class TrigEffScaleFactors
 	  return result;
 	}
         //get the trigger eff per event
-        float getTrigEffEvt(float pt1, float mass1, float PNetXbb1, float pt2, float mass2, float PNetXbb2, int variation, int ibin, int category, string year, bool isHH, string type){
+        float getTrigEffEvt(float pt1, float mass1, float PNetXbb1, float pt2, float mass2, float PNetXbb2, int variation, int ibin, float bdt, string year, bool isHH, string type){
             //cout <<"ibin in getTrigEffEvt: "<<ibin<<endl;
-            float eff = 1.0 - (1.0 - getTriggerEff3D(pt1, mass1, PNetXbb1, variation, ibin))*(1.0 - getTriggerEff3D(pt2, mass2, PNetXbb2, variation, ibin));
+
+	  int category =-1;
+	  if(isHH){
+	    if(bdt > 0.43 && PNetXbb2 > 0.980) category = 1;
+	    else{
+	      if((bdt > 0.11 && PNetXbb2 > 0.980)||(bdt > 0.43 && PNetXbb2 > 0.950)) category = 2;
+	      else{
+		if(bdt > 0.03 && PNetXbb2 > 0.950) category = 3;
+	      }
+	    }
+	  }
+	  float eff = 1.0 - (1.0 - getTriggerEff3D(pt1, mass1, PNetXbb1, variation, ibin))*(1.0 - getTriggerEff3D(pt2, mass2, PNetXbb2, variation, ibin));
 	    if(isHH && category!=-1){
-	      //cout<<"Trig corr for year"<< year<<":type:signal- "<<year<<","<<type<<","<<isHH<<","<<getTriggerCorrection(pt1, category, year, type)<<endl;
+	      //if(type=="up" || type =="down")cout<<"Trig corr for cat:type:"<<category<<","<<type<<","<<getTriggerCorrection(pt1, category, year, type)<<endl;
 	      eff = eff*getTriggerCorrection(pt1, category, year, type); }
             return eff;
         }
@@ -279,12 +290,12 @@ class TrigEffScaleFactors
             return Nbins;
         }
         //get the SF ratio of variation/nominal 
-        float get_unc_ratio(float pt1, float mass1, float PNetXbb1, float pt2, float mass2, float PNetXbb2, int variation, int itrig_unc, int category, string year, bool isHH, string type){           
+        float get_unc_ratio(float pt1, float mass1, float PNetXbb1, float pt2, float mass2, float PNetXbb2, int variation, int itrig_unc, float bdt, string year, bool isHH, string type){           
             float tmp = 0;
             //cout <<"ibin in get_unc_ratio: "<<itrig_unc<<endl;           
-            float nominal = getTrigEffEvt(pt1, mass1, PNetXbb1, pt2, mass2, PNetXbb2, 0, 0, category, year, isHH, type);     
-            if( nominal!=0 ){
-	      tmp = getTrigEffEvt(pt1, mass1, PNetXbb1, pt2, mass2, PNetXbb2, variation, itrig_unc, category, year, isHH, type)/nominal;   
+            float nominal = getTrigEffEvt(pt1, mass1, PNetXbb1, pt2, mass2, PNetXbb2, 0, 0, bdt, year, isHH, "nom");     
+	    if( nominal!=0 ){
+	      tmp = getTrigEffEvt(pt1, mass1, PNetXbb1, pt2, mass2, PNetXbb2, variation, itrig_unc, bdt, year, isHH, type)/nominal;   
                 //if (tmp!=1) cout <<" ratio for itrig_unc: "<< itrig_unc<<" "<<tmp<< endl;
             } 
             return tmp;
