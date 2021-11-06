@@ -5,8 +5,6 @@ Input =
 Output = condor_output/condor_logs/condor_JOBNAME.out
 Error  = condor_output/condor_logs/condor_JOBNAME.err
 Log    = condor_output/condor_logs/condor_JOBNAME.log
-Requirements = (TARGET.OpSysAndVer=="CentOS7" && regexp("blade-6.*", TARGET.Machine))
-
 
 #This is necessary to choose either rhel7 (slc7) or rhel6 (slc6) as needed
 +RunAsOwner = True
