@@ -13,15 +13,16 @@ Requirements = (TARGET.OpSysAndVer=="CentOS7" && regexp("blade-6.*", TARGET.Mach
 +InteractiveUser = true
 +SingularityImage = "/cvmfs/singularity.opensciencegrid.org/cmssw/cms:rhel7"
 +SingularityBindCVMFS = True
++JobQueue="Normal"
 run_as_owner = True
 
 #Don't request more than needed, otherwise your job will wait longer in queue
 RequestDisk = 4
 RequestMemory = 2000
 RequestCpus = 1
-
 notification=never
 should_transfer_files=YES
 when_to_transfer_output = ON_EXIT
 use_x509userproxy = true
+
 queue
