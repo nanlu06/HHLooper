@@ -35,7 +35,7 @@ if __name__ == "__main__":
                   "qqHH_CV_1_C2V_1_kl_2_boost4b", "qqHH_CV_1_C2V_2_kl_1_boost4b", "qqHH_CV_1_C2V_0_kl_1_boost4b"]
 
     #source of weight systematics name here should match that in the histogram name
-    systs_weight = ["pileupWeight","PNetShape","ttJetsCorr","BDT"+vbdt+"Shape", "triggerEffSF",
+    systs_weight = ["trigCorrHH2016", "trigCorrHH2017", "trigCorrHH2018", "pileupWeight","PNetShape","ttJetsCorr","BDT"+vbdt+"Shape", "triggerEffSF",
     "PNetHbbScaleFactors","FSRPartonShower","ISRPartonShower","ggHHPDFacc","ggHHQCDacc"]
     
     #source of shape systematics 
@@ -174,11 +174,20 @@ if __name__ == "__main__":
                         hist_Up.SetBinContent(ibin+1,hist_nominal.GetBinContent(ibin+1)+np.sqrt(tmp_bin_up_sq)) 
                         hist_Down.SetBinContent(ibin+1,hist_nominal.GetBinContent(ibin+1)-np.sqrt(tmp_bin_up_sq))
                     
-                elif "PartonShower" in sys:
+                elif "PartonShower" in sys or "trigCorrHH" in sys:
                     #if "HH" in proc[idx]:
                     if ("HH" in proc[idx]):
                         hist_Up = inFile_this.Get(region+sys+"Up"+obs)
-                        hist_Down = inFile_this.Get(region+sys+"Down"+obs)   
+                        hist_Down = inFile_this.Get(region+sys+"Down"+obs)
+                        if "trigCorrHH" in sys:
+                            downdiff = np.abs(hist_Down.Integral()-hist_nominal.Integral())
+                            updiff = np.abs(hist_Up.Integral()-hist_nominal.Integral())
+                            if (downdiff<updiff):
+                                for ibin in range(hist_nominal.GetNbinsX()):
+                                    hist_Down.SetBinContent(ibin+1, 2.*hist_nominal.GetBinContent(ibin+1)-hist_Up.GetBinContent(ibin+1))
+                            else:
+                                for ibin in range(hist_nominal.GetNbinsX()):
+                                    hist_Up.SetBinContent(ibin+1, 2.*hist_nominal.GetBinContent(ibin+1)-hist_Down.GetBinContent(ibin+1))
                     else:
                         #print("debug PartonShower:", sys,proc[idx])
                         hist_Up = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Up")
