@@ -1,9 +1,10 @@
-#weight sys, trigger sys, spectral treatment for the ttbar bkg in BDT bin1
-#python prepare_card_SR_final.py yield_AN_sr_sys_0830oldVJetsXS yield_AN_sr_sys_0819_trig v8p2 /storage/af/user/nlu/hh/looper_output/hists/ PNetp9
+#weight sys, trigger sys, spectral treatment for the ttbar bkg in BDT bin1, isblinded?
 
-#python prepare_card_SR_final_ntuple0403.py yield_AN_sr_sys_0824_ntuple_20210403_HHLooper_sysTest_pT300_ttbarbin1PNet9 yield_AN_sr_sys_0819_trig v8p2 /storage/af/user/nlu/hh/looper_output/hists/ PNetp9
+#preapproval final trig SF  in 2017
+python prepare_card_SR_final.py yield_AN_sr_sys_0830 yield_AN_sr_sys_0830_trig v8p2 /storage/af/user/nlu/hh/looper_output/hists/result0908/ PNetp9 yes
 
-#final trig SF  in 2017
-python prepare_card_SR_final.py yield_AN_sr_sys_0830 yield_AN_sr_sys_0830_trig v8p2 /storage/af/user/nlu/hh/looper_output/hists/result0908/ PNetp9
+#new trig SF in 2016
+python prepare_card_SR_final.py yield_AN_sr_sys_0830 yield_AN_sr_sys_0830_trig v8p2 /storage/af/user/nlu/hh/looper_output/hists/result1027/ PNetp9 no
 
-#python prepare_card_SR_final.py yield_AN_sr_sys_0830 yield_AN_sr_sys_0830_trig v8p2 /storage/af/user/nlu/hh/looper_output/hists/ PNetp9
+#new trig correction and uncertainty, new ttbar recoil correction
+python prepare_card_SR_final.py yield_AN_sr_sys_0830 yield_AN_sr_sys_0830_trig v8p2 /storage/af/user/nlu/hh/looper_output/hists/result1105/ PNetp9 no

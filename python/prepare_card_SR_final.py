@@ -4,7 +4,6 @@ import math
 import numpy as np
 
 def checkbin(hist):
-
     for ibin in range(hist.GetNbinsX()):
         ibinv = hist.GetBinContent(ibin+1)
         if math.isnan(ibinv):
@@ -22,6 +21,7 @@ if __name__ == "__main__":
     ttbar_bin1 = sys.argv[5]
     ttbar_bin1_up = "PNetp92"
     ttbar_bin1_down = "PNetp2"
+    isblind = sys.argv[6]
 
     #obs = "__fatJet2MassSD"
     obs = "__fatJet2MassRegressed" #Regressed
@@ -35,7 +35,7 @@ if __name__ == "__main__":
                   "qqHH_CV_1_C2V_1_kl_2_boost4b", "qqHH_CV_1_C2V_2_kl_1_boost4b", "qqHH_CV_1_C2V_0_kl_1_boost4b"]
 
     #source of weight systematics name here should match that in the histogram name
-    systs_weight = ["pileupWeight","PNetShape","ttJetsCorr","BDT"+vbdt+"Shape", "triggerEffSF",
+    systs_weight = ["trigCorrHH2016", "trigCorrHH2017", "trigCorrHH2018", "pileupWeight","PNetShape","ttJetsCorr","BDT"+vbdt+"Shape", "triggerEffSF",
     "PNetHbbScaleFactors","FSRPartonShower","ISRPartonShower","ggHHPDFacc","ggHHQCDacc"]
     
     #source of shape systematics 
@@ -71,7 +71,7 @@ if __name__ == "__main__":
                 inFile_systs_shape.append(r.TFile(histdir+tag+"_nominal_nosys/combine/"+proc_file[idx]+".root",  "READ"))
          
         #names of the analysis categories (3 BDT bins + 1 fail region for QCD fit)
-        region_list = ["SRv8p2Bin1", "SRv8p2Bin2",  "SRv8p2Bin3", "FailSRv8p2"] #, "FitCRv8p2", "FailFitCRv8p2"]
+        region_list = ["SRv8p2Bin1", "SRv8p2Bin2",  "SRv8p2Bin3", "FailSRv8p2"]
         
         #loop over analysis categories
         for iregion in region_list:
@@ -83,6 +83,7 @@ if __name__ == "__main__":
             else:
                 region = iregion
                 
+            print("hist name debug: ", region+obs)
             hist_nominal = inFile_this.Get(region+obs)
             outBinName=region.replace("SR",  "").replace("Fail", "fail").replace(vbdt, "").replace(ttbar_bin1,"")
             hist_nominal.SetName("histJet2Mass_"+outBinName+"_"+proc[idx])
@@ -173,11 +174,20 @@ if __name__ == "__main__":
                         hist_Up.SetBinContent(ibin+1,hist_nominal.GetBinContent(ibin+1)+np.sqrt(tmp_bin_up_sq)) 
                         hist_Down.SetBinContent(ibin+1,hist_nominal.GetBinContent(ibin+1)-np.sqrt(tmp_bin_up_sq))
                     
-                elif "PartonShower" in sys:
+                elif "PartonShower" in sys or "trigCorrHH" in sys:
                     #if "HH" in proc[idx]:
-                    if ("HH" in proc[idx]) and ("qqHH" not in proc[idx]):
+                    if ("HH" in proc[idx]):
                         hist_Up = inFile_this.Get(region+sys+"Up"+obs)
-                        hist_Down = inFile_this.Get(region+sys+"Down"+obs)   
+                        hist_Down = inFile_this.Get(region+sys+"Down"+obs)
+                        if "trigCorrHH" in sys:
+                            downdiff = np.abs(hist_Down.Integral()-hist_nominal.Integral())
+                            updiff = np.abs(hist_Up.Integral()-hist_nominal.Integral())
+                            if (downdiff<updiff):
+                                for ibin in range(hist_nominal.GetNbinsX()):
+                                    hist_Down.SetBinContent(ibin+1, 2.*hist_nominal.GetBinContent(ibin+1)-hist_Up.GetBinContent(ibin+1))
+                            else:
+                                for ibin in range(hist_nominal.GetNbinsX()):
+                                    hist_Up.SetBinContent(ibin+1, 2.*hist_nominal.GetBinContent(ibin+1)-hist_Down.GetBinContent(ibin+1))
                     else:
                         #print("debug PartonShower:", sys,proc[idx])
                         hist_Up = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Up")
@@ -284,7 +294,7 @@ if __name__ == "__main__":
 
             outFile.cd()
             checkbin(hist_nominal)
-            if (idx==0) and (region != "FailSRv8p2") and (region != "FailSRv24") :
+            if (idx==0) and (region != "FailSRv8p2") and (region != "FailSRv24") and (isblind=="yes"):
                 if(debug): print("debug blind data: ",region, " hist name ", hist_nominal.GetName())
                 nx = hist_nominal.FindBin(125.0)
                 hist_nominal.SetBinContent(nx,0.0)
@@ -294,6 +304,8 @@ if __name__ == "__main__":
                 hist_nominal.SetBinContent(nx-1,0.0)
                 hist_nominal.SetBinError(nx-1,0.0)
             hist_nominal.Write()
+            
+            #_Blind histogram is the sideband region
             hist_nominal_Blind =  hist_nominal.Clone(hist_nominal.GetName().replace("histJet2Mass", "histJet2MassBlind"))
             checkbin(hist_nominal_Blind)
             nx = hist_nominal_Blind.FindBin(125.0)
@@ -305,9 +317,11 @@ if __name__ == "__main__":
             hist_nominal_Blind.SetBinError(nx-1,0.0)
             hist_nominal_Blind.Write()
             
+            #_SR is just three bins around the 125 GeV. We don't use it for datacards though
             hist_nominal_SR =  hist_nominal.Clone(hist_nominal.GetName().replace("histJet2Mass", "histJet2MassSR"))
             hist_nominal_SR.SetName(hist_nominal.GetName().replace("histJet2Mass", "histJet2MassSR")) 
 
+            #_fit histJet2Massfit is a duplication of histJet2Mass for the fail region only. just a convention in the datacard, we can use histJet2Mass as well.
             if((region == "FailSRv8p2") or (region == "FailSRv24")):
                 hist_nominal_fit =  hist_nominal.Clone(hist_nominal.GetName().replace("histJet2Mass", "histJet2Massfit"))
                 checkbin(hist_nominal_fit)
@@ -317,14 +331,6 @@ if __name__ == "__main__":
                     hist_fit.SetName(hist.GetName().replace("histJet2Mass", "histJet2Massfit"))
                     checkbin(hist_fit)      
                     hist_fit.Write()            
-
-            #hist_nominal_SR = r.TH1F(hist_nominal.GetName().replace("histJet2Mass", "histJet2MassSR"), hist_nominal.GetName().replace("histJet2Mass", "histJet2MassSR"), 3, hist_nominal.GetBinLowEdge(nx-1), hist_nominal.GetBinLowEdge(nx+1) )
-            #hist_nominal_SR.SetBinContent(2,hist_nominal.GetBinContent(nx))
-            #hist_nominal_SR.SetBinError(2,hist_nominal.GetBinError(nx))
-            #hist_nominal_SR.SetBinContent(3,hist_nominal.GetBinContent(nx+1))
-            #hist_nominal_SR.SetBinError(3,hist_nominal.GetBinError(nx+1))
-            #hist_nominal_SR.SetBinContent(1,hist_nominal.GetBinContent(nx-1))
-            #hist_nominal_SR.SetBinError(1,hist_nominal.GetBinError(nx-1))
             
             #make a separate histogram for the signal region
             if (idx==0) and (region != "FailSRv8p2") and (region != "FailSRv24") :
@@ -342,8 +348,7 @@ if __name__ == "__main__":
                         hist_nominal_SR.SetBinContent(ibin+1,0)
                         hist_nominal_SR.SetBinError(ibin+1,0)
                                
-            checkbin(hist_nominal_SR)
-                            
+            checkbin(hist_nominal_SR)                            
             hist_nominal_SR.Write() 
             
             ij=0
@@ -386,4 +391,3 @@ if __name__ == "__main__":
 
         inFile_this.Close()
     outFile.Close()
-
