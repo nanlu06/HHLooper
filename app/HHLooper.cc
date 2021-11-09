@@ -22,7 +22,7 @@
 
 using namespace std;
 
-int lumi = 137000.0;
+int lumi = 137650.0;
 TTJetsScaleFactors ttjets_sf;
 TRandom3* r_nominal = new TRandom3(1);
 const float pi = 3.141592653;
