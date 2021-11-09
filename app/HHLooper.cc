@@ -170,9 +170,9 @@ system("mkdir -p hists");
 system(("mkdir -p hists/"+label).c_str());
 
 std::string year_ = "2016";
-if(input.find("2016") != std::string::npos) {year_ = "2016"; lumi = 35922.0;}
+if(input.find("2016") != std::string::npos) {year_ = "2016"; lumi = 36330.0;}
 if(input.find("2017") != std::string::npos) {year_ = "2017"; lumi = 41480.0;}
-if(input.find("2018") != std::string::npos) {year_ = "2018"; lumi = 59741.0;}
+if(input.find("2018") != std::string::npos) {year_ = "2018"; lumi = 59830.0;}
 system(("mkdir -p hists/"+label+"/"+year_).c_str());
 
 //trigger efficiency scale factors
@@ -959,8 +959,12 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
  
     if(isHH){    
         //trigger eff correction uncertainty
-        cutflow.addWgtSyst("trigCorrHH"+year_+"Up", [&](){return trig_sf.get_unc_ratio(hh.fatJet1Pt(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0,  hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"up");});
-        cutflow.addWgtSyst("trigCorrHH"+year_+"Down", [&](){return trig_sf.get_unc_ratio(hh.fatJet1Pt(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0, hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"down");});   
+        cutflow.addWgtSyst("trigCorrHH2016Up", [&](){return year_ == "2016" ? trig_sf.get_unc_ratio(hh.fatJet1Pt(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0,  hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"up") : 1.0;});
+        cutflow.addWgtSyst("trigCorrHH2016Down", [&](){return year_ == "2016" ? trig_sf.get_unc_ratio(hh.fatJet1Pt(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0, hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"down") : 1.0;});   
+        cutflow.addWgtSyst("trigCorrHH2017Up", [&](){return year_ == "2017" ? trig_sf.get_unc_ratio(hh.fatJet1Pt(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0,  hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"up") : 1.0;});
+        cutflow.addWgtSyst("trigCorrHH2017Down", [&](){return year_ == "2017" ? trig_sf.get_unc_ratio(hh.fatJet1Pt(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0, hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"down") : 1.0;}); 
+        cutflow.addWgtSyst("trigCorrHH2018Up", [&](){return year_ == "2018" ? trig_sf.get_unc_ratio(hh.fatJet1Pt(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0,  hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"up") : 1.0;});
+        cutflow.addWgtSyst("trigCorrHH2018Down", [&](){return year_ == "2018" ? trig_sf.get_unc_ratio(hh.fatJet1Pt(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0, hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"down") : 1.0;}); 
         //parton shower uncertainty for the gluon fusion and VBF HH signal yield (ISR and FSR)
         cutflow.addWgtSyst("ISRPartonShowerUp",  [&](){ return (isHH && fabs(hh.PSWeight()[0])< 20) ? hh.PSWeight()[0] : 1.0;}); //ISR=2 FSR=1
         cutflow.addWgtSyst("ISRPartonShowerDown",  [&](){ return (isHH && fabs(hh.PSWeight()[2])< 20) ? hh.PSWeight()[2] : 1.0;}); //ISR=0.5 FSR=1
