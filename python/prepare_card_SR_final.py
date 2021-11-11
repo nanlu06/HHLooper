@@ -47,10 +47,10 @@ if __name__ == "__main__":
 
     #ttbar yield: scale PNet9 yield to the actual yield with PNet>0.98
     inFile_this_ttbar_loose = r.TFile(histdir+tag+"_nominal/combine/ttbar.root",  "READ")
-    ttbar_bin1_yield = inFile_this_ttbar_loose.Get("SRv8p2Bin1"+obs).Integral()
+    ttbar_bin1_yield = inFile_this_ttbar_loose.Get("SRv8p2Bin1"+obs).Integral(2,18)
     print("ttbar yields nominal", ttbar_bin1_yield)
-    print("ttbar yields loose nominal", inFile_this_ttbar_loose.Get("SRv8p2Bin1"+ttbar_bin1+obs).Integral())
-    ratio_yield_ttbar = ttbar_bin1_yield/inFile_this_ttbar_loose.Get("SRv8p2Bin1"+ttbar_bin1+obs).Integral()
+    print("ttbar yields loose nominal", inFile_this_ttbar_loose.Get("SRv8p2Bin1"+ttbar_bin1+obs).Integral(2,18))
+    ratio_yield_ttbar = ttbar_bin1_yield/inFile_this_ttbar_loose.Get("SRv8p2Bin1"+ttbar_bin1+obs).Integral(2,18)
     print("ratio for ttbar yield", ratio_yield_ttbar)
                 
     for idx in range(len(proc)):
@@ -277,15 +277,15 @@ if __name__ == "__main__":
                 
                 if proc[idx]=="TTJets" and ("SRv8p2Bin1" in region):
                     
-                    hist_up_total = hist_Up.Integral();
+                    hist_up_total = hist_Up.Integral(2,18);#[50-220 GeV]
                     hist_Up.Scale(ttbar_bin1_yield/hist_up_total);
-                    print("ttbar hist up integral ",hist_Up.Integral())
+                    print("ttbar hist up integral ",hist_Up.Integral(2,18))
                     
-                    hist_down_total = hist_Down.Integral();
+                    hist_down_total = hist_Down.Integral(2,18);
                     hist_Down.Scale(ttbar_bin1_yield/hist_down_total); 
-                    print("ttbar hist down integral ",hist_Down.Integral())
+                    print("ttbar hist down integral ",hist_Down.Integral(2,18))
                 
-                    hist_nominal_total = hist_nominal.Integral();
+                    hist_nominal_total = hist_nominal.Integral(2,18);
                     hist_nominal.Scale(ttbar_bin1_yield/hist_nominal_total)
                     
                 hists_sys.append(hist_Up)
