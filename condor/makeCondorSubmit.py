@@ -41,6 +41,8 @@ for data in datasets:
         for tag in Tags:
             condorout = "mkdir /storage/af/user/idutta/HH/CMSSW_9_4_2/src/V2/HHLooper/condor/condor_output/"+tag[0]+"_"+data
             os.system(condorout)
+            condorout = "mkdir /storage/af/user/idutta/HH/CMSSW_9_4_2/src/V2/HHLooper/condor/condor_output/"+tag[0]+"_"+data+"/"+year
+            os.system(condorout)
             cpdata = "cp -r /storage/af/user/idutta/HH/CMSSW_9_4_2/src/V2/HHLooper/data /storage/af/user/idutta/HH/CMSSW_9_4_2/src/V2/HHLooper/condor/condor_output/"+tag[0]+"_"+data
             cppro = "cp /storage/af/user/idutta/HH/CMSSW_9_4_2/src/V2/HHLooper/HHLooper /storage/af/user/idutta/HH/CMSSW_9_4_2/src/V2/HHLooper/condor/condor_output/"+tag[0]+"_"+data
             os.system(cpdata)
@@ -69,6 +71,7 @@ for data in datasets:
                 line=line.replace("DOSHAPESYST",tag[2])
                 line=line.replace("DOTRIGSYST",tag[3])
                 line=line.replace("DOPNETSFSYST",tag[4])
+                line=line.replace("YEAR",year)
                 print line.rstrip()
                         
             submitCommand = "condor_submit "+condorSubmit
