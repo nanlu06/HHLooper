@@ -515,12 +515,12 @@ cutflow.addCutToLastActiveCut("CutfatJetsPt",       [&](){
     else return hh.isVBFtag() < 1 && hh.fatJet1Pt() > 300.0 && hh.fatJet2Pt() > 300.0;
 },   UNITY);
 cutflow.addCutToLastActiveCut("CutfatJetsMassSD",       [&](){ 
-    if(isData || syst_name.find("nominal") != std::string::npos) return hh.fatJet1MassSD() > 50.0 && hh.fatJet2MassSD() > 50.0; 
-    else if(syst_name.find("JMS_Up") != std::string::npos) return hh.fatJet1MassSD_JMS_Up() > 50.0 && hh.fatJet2MassSD_JMS_Up() > 50.0; 
-    else if(syst_name.find("JMS_Down") != std::string::npos) return hh.fatJet1MassSD_JMS_Down() > 50.0 && hh.fatJet2MassSD_JMS_Down() > 50.0; 
-    else if(syst_name.find("JMR_Up") != std::string::npos) return hh.fatJet1MassSD_JMR_Up() > 50.0 && hh.fatJet2MassSD_JMR_Up() > 50.0; 
-    else if(syst_name.find("JMR_Down") != std::string::npos) return hh.fatJet1MassSD_JMR_Down() > 50.0 && hh.fatJet2MassSD_JMR_Down() > 50.0;
-    else return hh.fatJet1MassSD() > 50.0 && hh.fatJet2MassSD() > 50.0;
+    if(isData || syst_name.find("nominal") != std::string::npos) return hh.fatJet1MassSD() > 50.0 && hh.fatJet2MassRegressed() > 50.0; 
+    else if(syst_name.find("JMS_Up") != std::string::npos) return hh.fatJet1MassSD_JMS_Up() > 50.0 && hh.fatJet2MassRegressed_JMS_Up() > 50.0; 
+    else if(syst_name.find("JMS_Down") != std::string::npos) return hh.fatJet1MassSD_JMS_Down() > 50.0 && hh.fatJet2MassRegressed_JMS_Down() > 50.0; 
+    else if(syst_name.find("JMR_Up") != std::string::npos) return hh.fatJet1MassSD_JMR_Up() > 50.0 && hh.fatJet2MassRegressed_JMR_Up() > 50.0; 
+    else if(syst_name.find("JMR_Down") != std::string::npos) return hh.fatJet1MassSD_JMR_Down() > 50.0 && hh.fatJet2MassRegressed_JMR_Down() > 50.0;
+    else return hh.fatJet1MassSD() > 50.0 && hh.fatJet2MassRegressed() > 50.0;
 },   UNITY);
 
   
