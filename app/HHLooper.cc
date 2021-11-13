@@ -215,7 +215,7 @@ bool isH = false;
 if(outputFileName.find("VH") != std::string::npos || outputFileName.find("ttH") != std::string::npos) isH = true;
  
 bool isZJets = false;
-if(outputFileName.find("others") != std::string::npos) isZJets = true;  
+if(outputFileName.find("ZJets") != std::string::npos) isZJets = true;  
     
 std::vector<std::string> list_chain;
 
