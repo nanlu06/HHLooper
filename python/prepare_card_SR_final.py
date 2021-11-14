@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     #source of weight systematics name here should match that in the histogram name
     systs_weight = ["trigCorrHH2016", "trigCorrHH2017", "trigCorrHH2018", "pileupWeight","PNetShape","ttJetsCorr","BDT"+vbdt+"Shape", "triggerEffSF",
-    "PNetHbbScaleFactors","FSRPartonShower","ISRPartonShower","ggHHPDFacc","ggHHQCDacc"]
+                    "PNetHbbScaleFactors","FSRPartonShower","ISRPartonShower","ggHHPDFacc","ggHHQCDacc","othersQCD"]
     
     #source of shape systematics 
     systs_shape = ["JER","JES","JMS","JMR","ttbarBin1Jet2PNetCut"]
@@ -188,6 +188,9 @@ if __name__ == "__main__":
                             else:
                                 for ibin in range(hist_nominal.GetNbinsX()):
                                     hist_Up.SetBinContent(ibin+1, 2.*hist_nominal.GetBinContent(ibin+1)-hist_Down.GetBinContent(ibin+1))
+                    elif("others"  in proc[idx] and "PartonShower" in sys):
+                        hist_Up = inFile_this.Get(region+sys+"Up"+obs)
+                        hist_Down = inFile_this.Get(region+sys+"Down"+obs)
                     else:
                         #print("debug PartonShower:", sys,proc[idx])
                         hist_Up = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Up")
@@ -214,6 +217,8 @@ if __name__ == "__main__":
                             hist_Up.SetBinContent(ibin, nom_bin_content+np.sqrt(sq_tmp));
                             hist_Down.SetBinContent(ibin, nom_bin_content-np.sqrt(sq_tmp));                  
                             
+
+                
                 elif "ggHHQCDacc" in sys:
                     print("starting to cal ggHHQCDacc unc for ", proc[idx])
                     hist_Up = hist_nominal.Clone(region+sys+"Up"+obs)
@@ -239,7 +244,34 @@ if __name__ == "__main__":
                                     elif tmp < down_bin_content:
                                         down_bin_content = tmp
                             hist_Up.SetBinContent(ibin, up_bin_content)
-                            hist_Down.SetBinContent(ibin, down_bin_content)                       
+                            hist_Down.SetBinContent(ibin, down_bin_content)
+
+                elif "othersQCD" in sys:
+                    print("starting to cal othersQCD unc for ", proc[idx])
+                    hist_Up = hist_nominal.Clone(region+sys+"Up"+obs)
+                    hist_Up.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Up") 
+
+                    hist_Down = hist_nominal.Clone(region+sys+"Down"+obs)
+                    hist_Down.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Down") 
+
+                    if ("others" in proc[idx]): 
+
+                        for ibin in range(hist_nominal.GetNbinsX()):
+                            nom_bin_content = hist_nominal.GetBinContent(ibin)
+                            up_bin_content = nom_bin_content
+                            down_bin_content = nom_bin_content
+                            #take the envelope for weights [0,1,3,4,5,8,9]
+                            for iqcd in range(9):
+                                if iqcd == 2 or iqcd == 6:
+                                    continue
+                                else:
+                                    tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin)
+                                    if tmp > up_bin_content:
+                                        up_bin_content = tmp
+                                    elif tmp < down_bin_content:
+                                        down_bin_content = tmp
+                            hist_Up.SetBinContent(ibin, up_bin_content)
+                            hist_Down.SetBinContent(ibin, down_bin_content)
                     
                 #weight sys which are not PNet, trig eff SF, HH theory acceptance uncertainties
                 else:   
