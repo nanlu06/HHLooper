@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     #source of weight systematics name here should match that in the histogram name
     systs_weight = ["trigCorrHH2016", "trigCorrHH2017", "trigCorrHH2018", "pileupWeight","PNetShape","ttJetsCorr","BDT"+vbdt+"Shape", "triggerEffSF",
-                    "PNetHbbScaleFactors","FSRPartonShower","ISRPartonShower","ggHHPDFacc","ggHHQCDacc","othersQCD"]
+                    "PNetHbbScaleFactors","FSRPartonShower","ISRPartonShower","FSRPartonShower_Vjets","ISRPartonShower_Vjets","ggHHPDFacc","ggHHQCDacc","othersQCD"]
     
     #source of shape systematics 
     systs_shape = ["JER","JES","JMS","JMR","ttbarBin1Jet2PNetCut"]
@@ -173,7 +173,22 @@ if __name__ == "__main__":
                                 
                         hist_Up.SetBinContent(ibin+1,hist_nominal.GetBinContent(ibin+1)+np.sqrt(tmp_bin_up_sq)) 
                         hist_Down.SetBinContent(ibin+1,hist_nominal.GetBinContent(ibin+1)-np.sqrt(tmp_bin_up_sq))
-                    
+
+                elif("PartonShower_Vjets" in sys):
+                    sys_m = sys.replace("_Vjets","")
+                    if ("others" in proc[idx]):
+                        hist_Up = inFile_this.Get(region+sys_m+"Up"+obs)
+                        hist_Up.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Up")
+                        hist_Down = inFile_this.Get(region+sys_m+"Down"+obs)
+                        hist_Down.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Down")
+                    else:
+                        #print("debug PartonShower:", sys,proc[idx])
+                        hist_Up = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Up")
+                        hist_Up.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Up") 
+
+                        hist_Down = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Down")               
+                        hist_Down.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Down")
+                        
                 elif "PartonShower" in sys or "trigCorrHH" in sys:
                     #if "HH" in proc[idx]:
                     if ("HH" in proc[idx]):
@@ -188,9 +203,6 @@ if __name__ == "__main__":
                             else:
                                 for ibin in range(hist_nominal.GetNbinsX()):
                                     hist_Up.SetBinContent(ibin+1, 2.*hist_nominal.GetBinContent(ibin+1)-hist_Down.GetBinContent(ibin+1))
-                    elif("others"  in proc[idx] and "PartonShower" in sys):
-                        hist_Up = inFile_this.Get(region+sys+"Up"+obs)
-                        hist_Down = inFile_this.Get(region+sys+"Down"+obs)
                     else:
                         #print("debug PartonShower:", sys,proc[idx])
                         hist_Up = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Up")
