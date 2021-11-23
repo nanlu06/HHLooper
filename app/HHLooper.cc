@@ -3020,8 +3020,9 @@ if(saveSkim) outfile_skim->cd();
 TTree *tree_out;
     
 int BDTcat_index;
-int run;
-long int event;
+UInt_t run;
+UInt_t luminosityBlock;
+ULong64_t event;
 float weight;
 float fatJet1MassSD;
 float fatJet2MassSD;
@@ -3055,40 +3056,41 @@ float gen_hh_mass;
 
 if(saveSkim)
 { 
-tree_out = new TTree("hh", "output skim tree");
-tree_out->Branch("BDTcat_index", &BDTcat_index, "BDTcat_index/I");
-tree_out->Branch("run", &run, "run/I");
-tree_out->Branch("event", &event, "event/l");
-tree_out->Branch("weight", &weight, "weight/F");
-tree_out->Branch("fatJet1MassSD", &fatJet1MassSD, "fatJet1MassSD/F");
- tree_out->Branch("fatJet1MassRegressed", &fatJet1MassRegressed, "fatJet1MassRegressed/F");
-tree_out->Branch("fatJet1PNetXbb", &fatJet1PNetXbb, "fatJet1PNetXbb/F");
-tree_out->Branch("fatJet1Pt", &fatJet1Pt, "fatJet1Pt/F");
-tree_out->Branch("fatJet1Eta", &fatJet1Eta, "fatJet1Eta/F");
-tree_out->Branch("fatJet1Phi", &fatJet1Phi, "fatJet1Phi/F");
-tree_out->Branch("fatJet1PtOverMHH", &fatJet1PtOverMHH, "fatJet1PtOverMHH/F");
-tree_out->Branch("fatJet1PtOverMSD", &fatJet1PtOverMSD, "fatJet1PtOverMSD/F");
- tree_out->Branch("fatJet1PtOverMRegressed", &fatJet1PtOverMRegressed, "fatJet1PtOverMRegressed/F");
-tree_out->Branch("fatJet2MassSD", &fatJet2MassSD, "fatJet2MassSD/F");
-tree_out->Branch("fatJet2MassRegressed", &fatJet2MassRegressed, "fatJet2MassRegressed/F");
-tree_out->Branch("fatJet2PNetXbb", &fatJet2PNetXbb, "fatJet2PNetXbb/F");
-tree_out->Branch("fatJet2Pt", &fatJet2Pt, "fatJet2Pt/F");
-tree_out->Branch("fatJet2Eta", &fatJet2Eta, "fatJet2Eta/F");
-tree_out->Branch("fatJet2Phi", &fatJet2Phi, "fatJet2Phi/F");
-tree_out->Branch("fatJet2PtOverMHH", &fatJet2PtOverMHH, "fatJet2PtOverMHH/F");
-tree_out->Branch("fatJet2PtOverMSD", &fatJet2PtOverMSD, "fatJet2PtOverMSD/F");
- tree_out->Branch("fatJet2PtOverMRegressed", &fatJet2PtOverMRegressed, "fatJet2PtOverMRegressed/F");
-tree_out->Branch("abs_dEta_j1j2", &abs_dEta_j1j2, "abs_dEta_j1j2/F");
-tree_out->Branch("abs_dPhi_j1j2", &abs_dPhi_j1j2, "abs_dPhi_j1j2/F");
-tree_out->Branch("abs_dR_j1j2", &abs_dR_j1j2, "abs_dR_j1j2/F");
-tree_out->Branch("ptj2_over_ptj1", &ptj2_over_ptj1, "ptj2_over_ptj1/F");
-tree_out->Branch("mj2_over_mj1", &mj2_over_mj1, "mj2_over_mj1/F");
- tree_out->Branch("mregj2_over_mregj1", &mregj2_over_mregj1, "mj2_over_mregj1/F");
-tree_out->Branch("hh_pt", &hh_pt, "hh_pt/F");
-tree_out->Branch("hh_eta", &hh_eta, "hh_eta/F");
-tree_out->Branch("hh_phi", &hh_phi, "hh_phi/F");
-tree_out->Branch("hh_mass", &hh_mass, "hh_mass/F");
- tree_out->Branch("gen_hh_mass", &gen_hh_mass, "gen_hh_mass/F");
+    tree_out = new TTree("hh", "output skim tree");
+    tree_out->Branch("BDTcat_index", &BDTcat_index, "BDTcat_index/I");
+    tree_out->Branch("run", &run, "run/I");
+    tree_out->Branch("luminosityBlock", &luminosityBlock, "luminosityBlock/I");
+    tree_out->Branch("event", &event, "event/l");
+    tree_out->Branch("weight", &weight, "weight/F");
+    tree_out->Branch("fatJet1MassSD", &fatJet1MassSD, "fatJet1MassSD/F");
+    tree_out->Branch("fatJet1MassRegressed", &fatJet1MassRegressed, "fatJet1MassRegressed/F");
+    tree_out->Branch("fatJet1PNetXbb", &fatJet1PNetXbb, "fatJet1PNetXbb/F");
+    tree_out->Branch("fatJet1Pt", &fatJet1Pt, "fatJet1Pt/F");
+    tree_out->Branch("fatJet1Eta", &fatJet1Eta, "fatJet1Eta/F");
+    tree_out->Branch("fatJet1Phi", &fatJet1Phi, "fatJet1Phi/F");
+    tree_out->Branch("fatJet1PtOverMHH", &fatJet1PtOverMHH, "fatJet1PtOverMHH/F");
+    tree_out->Branch("fatJet1PtOverMSD", &fatJet1PtOverMSD, "fatJet1PtOverMSD/F");
+    tree_out->Branch("fatJet1PtOverMRegressed", &fatJet1PtOverMRegressed, "fatJet1PtOverMRegressed/F");
+    tree_out->Branch("fatJet2MassSD", &fatJet2MassSD, "fatJet2MassSD/F");
+    tree_out->Branch("fatJet2MassRegressed", &fatJet2MassRegressed, "fatJet2MassRegressed/F");
+    tree_out->Branch("fatJet2PNetXbb", &fatJet2PNetXbb, "fatJet2PNetXbb/F");
+    tree_out->Branch("fatJet2Pt", &fatJet2Pt, "fatJet2Pt/F");
+    tree_out->Branch("fatJet2Eta", &fatJet2Eta, "fatJet2Eta/F");
+    tree_out->Branch("fatJet2Phi", &fatJet2Phi, "fatJet2Phi/F");
+    tree_out->Branch("fatJet2PtOverMHH", &fatJet2PtOverMHH, "fatJet2PtOverMHH/F");
+    tree_out->Branch("fatJet2PtOverMSD", &fatJet2PtOverMSD, "fatJet2PtOverMSD/F");
+    tree_out->Branch("fatJet2PtOverMRegressed", &fatJet2PtOverMRegressed, "fatJet2PtOverMRegressed/F");
+    tree_out->Branch("abs_dEta_j1j2", &abs_dEta_j1j2, "abs_dEta_j1j2/F");
+    tree_out->Branch("abs_dPhi_j1j2", &abs_dPhi_j1j2, "abs_dPhi_j1j2/F");
+    tree_out->Branch("abs_dR_j1j2", &abs_dR_j1j2, "abs_dR_j1j2/F");
+    tree_out->Branch("ptj2_over_ptj1", &ptj2_over_ptj1, "ptj2_over_ptj1/F");
+    tree_out->Branch("mj2_over_mj1", &mj2_over_mj1, "mj2_over_mj1/F");
+    tree_out->Branch("mregj2_over_mregj1", &mregj2_over_mregj1, "mj2_over_mregj1/F");
+    tree_out->Branch("hh_pt", &hh_pt, "hh_pt/F");
+    tree_out->Branch("hh_eta", &hh_eta, "hh_eta/F");
+    tree_out->Branch("hh_phi", &hh_phi, "hh_phi/F");
+    tree_out->Branch("hh_mass", &hh_mass, "hh_mass/F");
+    tree_out->Branch("gen_hh_mass", &gen_hh_mass, "gen_hh_mass/F");
 }
 
 for(int idx = 0; idx < list_chain.size(); idx++)
@@ -3145,6 +3147,7 @@ for(int idx = 0; idx < list_chain.size(); idx++)
 	  gh2.SetPtEtaPhiM(hh.genHiggs2Pt(), hh.genHiggs2Eta(),hh.genHiggs2Phi(),125.0);
 	  gen_hh_mass = (gh1+gh2).M();
 	  run = hh.run();
+	  luminosityBlock = hh.luminosityBlock();
 	  event = hh.event();
 	  tree_out->Fill();
 	}
