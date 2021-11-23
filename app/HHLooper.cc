@@ -215,7 +215,7 @@ bool isH = false;
 if(outputFileName.find("VH") != std::string::npos || outputFileName.find("ttH") != std::string::npos) isH = true;
  
 bool isZJets = false;
-if(outputFileName.find("ZJets") != std::string::npos) isZJets = true;  
+if(outputFileName.find("vjets") != std::string::npos) isZJets = true;  
     
 std::vector<std::string> list_chain;
 
@@ -501,7 +501,6 @@ else
 }); 
  
 cutflow.addCutToLastActiveCut("CutHLT",       [&](){ 
-   //cout <<"test "<<hh.HLT_AK8PFJet330_PFAK8BTagCSV_p17()<<endl;
    return isData ? ((year_ == "2016" && (hh.HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV_p20() || hh.HLT_AK8PFHT600_TrimR0p1PT0p03Mass50_BTagCSV_p20() || hh.HLT_AK8DiPFJet250_200_TrimMass30_BTagCSV_p20() || hh.HLT_AK8PFJet360_TrimMass30() || hh.HLT_AK8PFJet450() || hh.HLT_PFJet450() )) || (year_ == "2017" && (hh.HLT_PFJet450() || hh.HLT_PFJet500() || hh.HLT_AK8PFJet500() || hh.HLT_PFHT1050() || hh.HLT_AK8PFJet360_TrimMass30() || hh.HLT_AK8PFJet380_TrimMass30() || hh.HLT_AK8PFJet400_TrimMass30() || hh.HLT_AK8PFHT800_TrimMass50() || hh.HLT_AK8PFHT750_TrimMass50() || hh.HLT_AK8PFJet330_PFAK8BTagCSV_p17())) || (year_ == "2018" && (hh.HLT_PFHT1050() || hh.HLT_PFJet500() || hh.HLT_AK8PFJet500() || hh.HLT_AK8PFJet400_TrimMass30() || hh.HLT_AK8PFHT800_TrimMass50() || hh.HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np4()))) : 1.0; },   UNITY);
     
 
@@ -3019,12 +3018,15 @@ int iEntry = 0;
 
 if(saveSkim) outfile_skim->cd();
 TTree *tree_out;
-
+    
+int BDTcat_index;
+int run;
+long int event;
 float weight;
 float fatJet1MassSD;
 float fatJet2MassSD;
- float fatJet1MassRegressed;
- float fatJet2MassRegressed;
+float fatJet1MassRegressed;
+float fatJet2MassRegressed;
 float fatJet1PNetXbb;
 float fatJet2PNetXbb;
 float fatJet1Pt;
@@ -3037,23 +3039,26 @@ float fatJet1PtOverMHH;
 float fatJet2PtOverMHH;
 float fatJet1PtOverMSD;
 float fatJet2PtOverMSD;
- float fatJet1PtOverMRegressed;
- float fatJet2PtOverMRegressed;
+float fatJet1PtOverMRegressed;
+float fatJet2PtOverMRegressed;
 float abs_dEta_j1j2;
 float abs_dPhi_j1j2;
 float abs_dR_j1j2;
 float ptj2_over_ptj1;
- float mj2_over_mj1;
- float mregj2_over_mregj1;
+float mj2_over_mj1;
+float mregj2_over_mregj1;
 float hh_pt;
 float hh_eta;
 float hh_phi;
 float hh_mass;
- float gen_hh_mass;
+float gen_hh_mass;
 
 if(saveSkim)
 { 
 tree_out = new TTree("hh", "output skim tree");
+tree_out->Branch("BDTcat_index", &BDTcat_index, "BDTcat_index/I");
+tree_out->Branch("run", &run, "run/I");
+tree_out->Branch("event", &event, "event/l");
 tree_out->Branch("weight", &weight, "weight/F");
 tree_out->Branch("fatJet1MassSD", &fatJet1MassSD, "fatJet1MassSD/F");
  tree_out->Branch("fatJet1MassRegressed", &fatJet1MassRegressed, "fatJet1MassRegressed/F");
@@ -3099,10 +3104,13 @@ for(int idx = 0; idx < list_chain.size(); idx++)
 	hh.GetEntry(iEntry_this);
         if(saveSkim) outfile->cd();
 	cutflow.fill();
-	//if(saveSkim && cutflow.getCut("TwofatJets").pass)
-	if(saveSkim && cutflow.getCut("BDTTrainPreSelection").pass)
+	if(saveSkim && (cutflow.getCut("SRv8p2Bin1").pass || cutflow.getCut("SRv8p2Bin2").pass || cutflow.getCut("SRv8p2Bin3").pass))
 	{
 	  outfile_skim->cd();	
+	  BDTcat_index = -1;
+	  if(cutflow.getCut("SRv8p2Bin1").pass) BDTcat_index = 1;
+	  else if(cutflow.getCut("SRv8p2Bin2").pass) BDTcat_index = 2;
+	  else if(cutflow.getCut("SRv8p2Bin3").pass) BDTcat_index = 3;
 	  weight = isData ?  1.0 : lumi*hh.weight()*hh.triggerEff3DWeight()*hh.puWeight()* hh.l1PreFiringWeight() * hh.xsecWeight()*hh.genWeight();
 	  fatJet1MassSD = hh.fatJet1MassSD();
 	  fatJet1MassRegressed = hh.fatJet1MassRegressed();
@@ -3122,7 +3130,6 @@ for(int idx = 0; idx < list_chain.size(); idx++)
 	  fatJet2PtOverMHH = hh.fatJet2PtOverMHH();
 	  fatJet2PtOverMSD = hh.fatJet2PtOverMSD();
 	  fatJet2PtOverMRegressed = hh.fatJet2PtOverMRegressed();
-
 	  abs_dEta_j1j2 = fabs(hh.fatJet1Eta() - hh.fatJet2Eta());
 	  abs_dPhi_j1j2 = fabs(hh.fatJet1Phi() - hh.fatJet2Phi());
 	  abs_dR_j1j2 = sqrt((hh.fatJet1Eta() - hh.fatJet2Eta())*(hh.fatJet1Eta() - hh.fatJet2Eta())  + (hh.fatJet1Phi() - hh.fatJet2Phi())*(hh.fatJet1Phi() - hh.fatJet2Phi()));
@@ -3137,7 +3144,9 @@ for(int idx = 0; idx < list_chain.size(); idx++)
 	  gh1.SetPtEtaPhiM(hh.genHiggs1Pt(), hh.genHiggs1Eta(),hh.genHiggs1Phi(),125.0);
 	  gh2.SetPtEtaPhiM(hh.genHiggs2Pt(), hh.genHiggs2Eta(),hh.genHiggs2Phi(),125.0);
 	  gen_hh_mass = (gh1+gh2).M();
-      tree_out->Fill();
+	  run = hh.run();
+	  event = hh.event();
+	  tree_out->Fill();
 	}
 	if(iEntry%100000 == 0) cout<<"[INFO] processing event "<<iEntry<<" / "<<nEntries<<endl;
 	iEntry ++;
