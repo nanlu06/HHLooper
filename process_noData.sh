@@ -63,7 +63,8 @@ do
  (set -x ;./HHLooper ${inputBase}/${year}/VH/ VH.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
  (set -x ;./HHLooper ${inputBase}/${year}/Higgs/ Higgs.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
  (set -x ;./HHLooper ${inputBase}/${year}/ttH/ ttH.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
- (set -x ;./HHLooper ${inputBase}/${year}/others/ others.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
+ (set -x ;./HHLooper ${inputBase}/${year}/others/VV/ vv.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
+ (set -x ;./HHLooper ${inputBase}/${year}/others/VJets/ vjets.root ${TAG} 0 ${doSyst} ${doShapeSyst} ${doTrigSyst} ${doPNetSFSyst} >&1) &
 
 done
 
@@ -103,8 +104,10 @@ hadd -k -f hists/${TAG}/combine/HHVBF101.root hists/${TAG}/2016/HHVBF101.root hi
 hadd -k -f hists/${TAG}/combine/VH.root hists/${TAG}/2016/VH.root hists/${TAG}/2017/VH.root hists/${TAG}/2018/VH.root
 hadd -k -f hists/${TAG}/combine/Higgs.root hists/${TAG}/2016/Higgs.root hists/${TAG}/2017/Higgs.root hists/${TAG}/2018/Higgs.root
 hadd -k -f hists/${TAG}/combine/ttH.root hists/${TAG}/2016/ttH.root hists/${TAG}/2017/ttH.root hists/${TAG}/2018/ttH.root
+hadd -k -f hists/${TAG}/2016/others.root hists/${TAG}/2016/vv.root hists/${TAG}/2016/vjets.root 
+hadd -k -f hists/${TAG}/2017/others.root hists/${TAG}/2017/vv.root hists/${TAG}/2017/vjets.root 
+hadd -k -f hists/${TAG}/2018/others.root hists/${TAG}/2018/vv.root hists/${TAG}/2018/vjets.root 
 hadd -k -f hists/${TAG}/combine/others.root hists/${TAG}/2016/others.root hists/${TAG}/2017/others.root hists/${TAG}/2018/others.root
-#hadd -k -f hists/${TAG}/combine/tW.root hists/${TAG}/2016/tW.root hists/${TAG}/2017/tW.root hists/${TAG}/2018/tW.root
 
 hadd -k -f hists/${TAG}/combine/QCDggHVBF.root hists/${TAG}/combine/qcd.root hists/${TAG}/combine/Higgs.root
 

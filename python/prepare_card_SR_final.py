@@ -11,6 +11,7 @@ def checkbin(hist):
         elif(ibinv==0 and ("Data" not in hist.GetName())):
             #print("empty bin, set to 0.000001")
             hist.SetBinContent(ibin+1, 0.000001)
+            hist.SetBinError(ibin+1, 0.000001)
     return;            
                 
 if __name__ == "__main__":

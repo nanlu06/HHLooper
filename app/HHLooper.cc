@@ -216,7 +216,10 @@ if(outputFileName.find("VH") != std::string::npos || outputFileName.find("ttH") 
  
 bool isZJets = false;
 if(outputFileName.find("vjets") != std::string::npos) isZJets = true;  
-    
+
+bool isVV = false;
+if(outputFileName.find("vv") != std::string::npos) isVV = true;  
+   
 std::vector<std::string> list_chain;
 
 if(input.find(".root") != std::string::npos) list_chain.push_back(input);//a file is given
@@ -870,6 +873,22 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         cutflow.addWgtSyst("ISRPartonShowerDown",  [&](){ return (fabs(hh.PSWeight()[2])< 20) ? hh.PSWeight()[2] : 1.0;}); //ISR=0.5 FSR=1
         cutflow.addWgtSyst("FSRPartonShowerUp",  [&](){ return (fabs(hh.PSWeight()[1])< 20) ? hh.PSWeight()[1] : 1.0;}); //ISR=1 FSR=2
         cutflow.addWgtSyst("FSRPartonShowerDown",  [&](){ return (fabs(hh.PSWeight()[3])< 20) ? hh.PSWeight()[3] : 1.0;}); //ISR=1 FSR=0.5
+    }
+    
+    if (isVV){
+        cutflow.addWgtSyst("ISRPartonShowerUp",  [&](){ return 1.0;}); //ISR=2 FSR=1
+        cutflow.addWgtSyst("ISRPartonShowerDown",  [&](){ return 1.0;}); //ISR=0.5 FSR=1
+        cutflow.addWgtSyst("FSRPartonShowerUp",  [&](){ return 1.0;}); //ISR=1 FSR=2
+        cutflow.addWgtSyst("FSRPartonShowerDown",  [&](){ return 1.0;}); //ISR=1 FSR=0.5
+        cutflow.addWgtSyst("QCDscale0",  [&](){return 1.0;});
+        cutflow.addWgtSyst("QCDscale1",  [&](){return 1.0;});
+        cutflow.addWgtSyst("QCDscale2",  [&](){return 1.0;});
+        cutflow.addWgtSyst("QCDscale3",  [&](){return 1.0;});
+        cutflow.addWgtSyst("QCDscale4",  [&](){return 1.0;});
+        cutflow.addWgtSyst("QCDscale5",  [&](){return 1.0;});
+        cutflow.addWgtSyst("QCDscale6",  [&](){return 1.0;});
+        cutflow.addWgtSyst("QCDscale7",  [&](){return 1.0;});
+        cutflow.addWgtSyst("QCDscale8",  [&](){return 1.0;}); 
     }
     
     //BDT modeling uncertainty for ttbar
