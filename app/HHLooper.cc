@@ -867,7 +867,7 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         cutflow.addWgtSyst("trigCorrHH2018Down", [&](){return year_ == "2018" ? trig_sf.get_unc_ratio(hh.fatJet1Pt(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0, hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"down") : 1.0;}); 
     }
     
-    if(isHH || (isZJets && (year != "2017"))){
+    if(isHH || (isZJets && (year_ != "2017"))){
         //parton shower uncertainty for the gluon fusion and VBF HH signal yield (ISR and FSR)
         cutflow.addWgtSyst("ISRPartonShowerUp",  [&](){ return (fabs(hh.PSWeight()[0])< 20) ? hh.PSWeight()[0] : 1.0;}); //ISR=2 FSR=1
         cutflow.addWgtSyst("ISRPartonShowerDown",  [&](){ return (fabs(hh.PSWeight()[2])< 20) ? hh.PSWeight()[2] : 1.0;}); //ISR=0.5 FSR=1
@@ -875,20 +875,22 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
         cutflow.addWgtSyst("FSRPartonShowerDown",  [&](){ return (fabs(hh.PSWeight()[3])< 20) ? hh.PSWeight()[3] : 1.0;}); //ISR=1 FSR=0.5
     }
     
-    if (isVV || (isZJets && (year == "2017"))){
+    if (isVV || (isZJets && (year_ == "2017"))){
         cutflow.addWgtSyst("ISRPartonShowerUp",  [&](){ return 1.0;}); //ISR=2 FSR=1
         cutflow.addWgtSyst("ISRPartonShowerDown",  [&](){ return 1.0;}); //ISR=0.5 FSR=1
         cutflow.addWgtSyst("FSRPartonShowerUp",  [&](){ return 1.0;}); //ISR=1 FSR=2
         cutflow.addWgtSyst("FSRPartonShowerDown",  [&](){ return 1.0;}); //ISR=1 FSR=0.5
-        cutflow.addWgtSyst("QCDscale0",  [&](){return 1.0;});
-        cutflow.addWgtSyst("QCDscale1",  [&](){return 1.0;});
-        cutflow.addWgtSyst("QCDscale2",  [&](){return 1.0;});
-        cutflow.addWgtSyst("QCDscale3",  [&](){return 1.0;});
-        cutflow.addWgtSyst("QCDscale4",  [&](){return 1.0;});
-        cutflow.addWgtSyst("QCDscale5",  [&](){return 1.0;});
-        cutflow.addWgtSyst("QCDscale6",  [&](){return 1.0;});
-        cutflow.addWgtSyst("QCDscale7",  [&](){return 1.0;});
-        cutflow.addWgtSyst("QCDscale8",  [&](){return 1.0;}); 
+        if(isVV){
+            cutflow.addWgtSyst("QCDscale0",  [&](){return 1.0;});
+            cutflow.addWgtSyst("QCDscale1",  [&](){return 1.0;});
+            cutflow.addWgtSyst("QCDscale2",  [&](){return 1.0;});
+            cutflow.addWgtSyst("QCDscale3",  [&](){return 1.0;});
+            cutflow.addWgtSyst("QCDscale4",  [&](){return 1.0;});
+            cutflow.addWgtSyst("QCDscale5",  [&](){return 1.0;});
+            cutflow.addWgtSyst("QCDscale6",  [&](){return 1.0;});
+            cutflow.addWgtSyst("QCDscale7",  [&](){return 1.0;});
+            cutflow.addWgtSyst("QCDscale8",  [&](){return 1.0;}); 
+        }
     }
     
     //BDT modeling uncertainty for ttbar
