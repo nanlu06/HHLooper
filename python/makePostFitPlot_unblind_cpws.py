@@ -339,7 +339,26 @@ def makeplot_single(
     if h1_data:
         text_file.write("-------")
     text_file.write("\n")
-        
+
+    #print yield table for AN
+    text_file.write("print yield table for AN\n")
+    bkg_all = 0
+    bkg_all_errsq = 0
+    allyield = 0
+    allyield_errsq = 0
+    for idx in range(len(h1_bkg)):
+        print(outFile, bkg_legends_[idx], "h1_bkg[idx].GetBinContent(8): ",h1_bkg[idx].GetBinContent(8))
+        bkg_tmp = h1_bkg[idx].GetBinContent(8)+h1_bkg[idx].GetBinContent(9)+h1_bkg[idx].GetBinContent(10)
+        bkg_errsq_tmp = h1_bkg[idx].GetBinError(10)*h1_bkg[idx].GetBinError(10)+h1_bkg[idx].GetBinError(8)*h1_bkg[idx].GetBinError(8)+h1_bkg[idx].GetBinError(9)*h1_bkg[idx].GetBinError(9)
+        if idx<5:
+            bkg_all += bkg_tmp
+            bkg_all_errsq += bkg_errsq_tmp
+        allyield += bkg_tmp
+        allyield_errsq += bkg_errsq_tmp        
+        text_file.write("%s"%(bkg_legends_[idx])+"& %7.2f"%(bkg_tmp)+"$\\pm$"+ "%7.2f"%np.sqrt(bkg_errsq_tmp)+"\n")
+    text_file.write("total background & %7.2f"%(bkg_all)+"$\\pm$"+ "%7.2f"%np.sqrt(bkg_all_errsq)+"\n")
+    text_file.write("total & %7.2f"%(allyield)+"$\\pm$"+ "%7.2f"%np.sqrt(allyield_errsq)+"\n")
+ 
     text_file.close()
     os.system("cp "+outFile+"_linY.txt "+outFile+"_logY.txt")
 
@@ -378,7 +397,7 @@ def main(vbdt, HH_limit):
         pnames_sig = []
         if dirName == "shapes_fit_b":
             HH_limit = 0.0
-        pnames_bkg = ["ttH_hbb", "VH_bb", "bbbb_boosted_ggf_others", "ttbar", "bbbb_boosted_ggf_qcd_datadriven","qqHH_CV_1_C2V_1_kl_1_hbbhbb","ggHH_kl_1_kt_1_hbbhbb"]
+        pnames_bkg = ["ttH_hbb", "VH_hbb", "bbbb_boosted_ggf_others", "ttbar", "bbbb_boosted_ggf_qcd_datadriven","qqHH_CV_1_C2V_1_kl_1_hbbhbb","ggHH_kl_1_kt_1_hbbhbb"]
         bkg_legends = ["t#bar{t}H", "VH", "V+jets,VV", "t#bar{t}+jets", "QCD+ggH+VBFH", "VBFHH #mu = {:1.2}".format(HH_limit) ,"ggHH #mu = {:1.2}".format(HH_limit)]
         sig_legends = []
         pname_data = "data"
@@ -477,8 +496,8 @@ def main(vbdt, HH_limit):
                 )
 
 if __name__ == "__main__":
-    vbdt = "v8p2yield_AN_sr_sys_1111v1_kl"
+    vbdt = "v8p2yield_AN_sr_sys_1123v1_kl"
     #"v8p2yield_AN_sr_sys_0830_fix2017trigSF0908_SDv1"
     #"v8p2yield_AN_sr_sys_0830_fix2017trigSF0908"
-    mu_HH = 2.8;
+    mu_HH = 3.0;
     main(vbdt,mu_HH)
