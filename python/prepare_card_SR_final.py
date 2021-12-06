@@ -36,11 +36,10 @@ if __name__ == "__main__":
                   "qqHH_CV_1_C2V_1_kl_2_boost4b", "qqHH_CV_1_C2V_2_kl_1_boost4b", "qqHH_CV_1_C2V_0_kl_1_boost4b"]
 
     #source of weight systematics name here should match that in the histogram name
-    systs_weight = ["trigCorrHH2016", "trigCorrHH2017", "trigCorrHH2018", "pileupWeight","PNetShape","ttJetsCorr","BDT"+vbdt+"Shape", "triggerEffSF",
-                    "PNetHbbScaleFactors","FSRPartonShower","ISRPartonShower","FSRPartonShower_Vjets","ISRPartonShower_Vjets","ggHHPDFacc","ggHHQCDacc","othersQCD"]
-    
+    systs_weight = ["trigCorrHH2016", "trigCorrHH2017", "trigCorrHH2018", "pileupWeight","PNetShape","ttJetsCorr","BDT"+vbdt+"Shape", "triggerEffSF","PNetHbbScaleFactors","FSRPartonShower","ISRPartonShower","FSRPartonShower_Vjets","ISRPartonShower_Vjets","ggHHPDFacc","ggHHQCDacc","othersQCD"]
+        
     #source of shape systematics 
-    systs_shape = ["JER","JES","JMS","JMR","ttbarBin1Jet2PNetCut"]
+    systs_shape = ["JER","JES","JMS","JMR","ttbarBin1Jet2PNetCut"] 
     
     outName = "HHTo4BPlots_Run2_BDT"+vbdt+tag+".root"
     
@@ -55,6 +54,9 @@ if __name__ == "__main__":
     print("ratio for ttbar yield", ratio_yield_ttbar)
                 
     for idx in range(len(proc)):
+        if proc[idx]=="Data" or proc[idx]=="QCD":
+                if(debug): print("proc: ",proc[idx], "continue")
+                continue                    
         print("study process: ",proc_file[idx])
         
         #read histogram with nominal and weight syst
@@ -63,13 +65,29 @@ if __name__ == "__main__":
         
         #read histogram for shape syst (jet related syst)
         inFile_systs_shape = []
+        inFile2016_systs_shape = []
+        inFile2017_systs_shape = []
+        inFile2018_systs_shape = []
         for isysts_shape in systs_shape:
             if isysts_shape != "ttbarBin1Jet2PNetCut":
                 inFile_systs_shape.append(r.TFile(histdir+tag+"_"+isysts_shape+"_Up/combine/"+proc_file[idx]+".root",  "READ"))
                 inFile_systs_shape.append(r.TFile(histdir+tag+"_"+isysts_shape+"_Down/combine/"+proc_file[idx]+".root",  "READ"))
+                inFile2016_systs_shape.append(r.TFile(histdir+tag+"_"+isysts_shape+"_Up/2016/"+proc_file[idx]+".root",  "READ"))
+                inFile2016_systs_shape.append(r.TFile(histdir+tag+"_"+isysts_shape+"_Down/2016/"+proc_file[idx]+".root",  "READ"))
+                inFile2017_systs_shape.append(r.TFile(histdir+tag+"_"+isysts_shape+"_Up/2017/"+proc_file[idx]+".root",  "READ"))
+                inFile2017_systs_shape.append(r.TFile(histdir+tag+"_"+isysts_shape+"_Down/2017/"+proc_file[idx]+".root",  "READ"))
+                inFile2018_systs_shape.append(r.TFile(histdir+tag+"_"+isysts_shape+"_Up/2018/"+proc_file[idx]+".root",  "READ"))
+                inFile2018_systs_shape.append(r.TFile(histdir+tag+"_"+isysts_shape+"_Down/2018/"+proc_file[idx]+".root",  "READ"))
             else:
                 inFile_systs_shape.append(r.TFile(histdir+tag+"_nominal_nosys/combine/"+proc_file[idx]+".root",  "READ"))
                 inFile_systs_shape.append(r.TFile(histdir+tag+"_nominal_nosys/combine/"+proc_file[idx]+".root",  "READ"))
+                inFile2016_systs_shape.append(r.TFile(histdir+tag+"_nominal_nosys/2016/"+proc_file[idx]+".root",  "READ"))
+                inFile2016_systs_shape.append(r.TFile(histdir+tag+"_nominal_nosys/2016/"+proc_file[idx]+".root",  "READ"))
+                inFile2017_systs_shape.append(r.TFile(histdir+tag+"_nominal_nosys/2017/"+proc_file[idx]+".root",  "READ"))
+                inFile2017_systs_shape.append(r.TFile(histdir+tag+"_nominal_nosys/2017/"+proc_file[idx]+".root",  "READ"))
+                inFile2018_systs_shape.append(r.TFile(histdir+tag+"_nominal_nosys/2018/"+proc_file[idx]+".root",  "READ"))
+                inFile2018_systs_shape.append(r.TFile(histdir+tag+"_nominal_nosys/2018/"+proc_file[idx]+".root",  "READ"))
+                
          
         #names of the analysis categories (3 BDT bins + 1 fail region for QCD fit)
         region_list = ["SRv8p2Bin1", "SRv8p2Bin2",  "SRv8p2Bin3", "FailSRv8p2"]
@@ -191,7 +209,6 @@ if __name__ == "__main__":
                         hist_Down.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"Down")
                         
                 elif "PartonShower" in sys or "trigCorrHH" in sys:
-                    #if "HH" in proc[idx]:
                     if ("HH" in proc[idx]):
                         hist_Up = inFile_this.Get(region+sys+"Up"+obs)
                         hist_Down = inFile_this.Get(region+sys+"Down"+obs)
@@ -229,8 +246,6 @@ if __name__ == "__main__":
                                 
                             hist_Up.SetBinContent(ibin, nom_bin_content+np.sqrt(sq_tmp));
                             hist_Down.SetBinContent(ibin, nom_bin_content-np.sqrt(sq_tmp));                  
-                            
-
                 
                 elif "ggHHQCDacc" in sys:
                     print("starting to cal ggHHQCDacc unc for ", proc[idx])
@@ -285,7 +300,76 @@ if __name__ == "__main__":
                                         down_bin_content = tmp
                             hist_Up.SetBinContent(ibin, up_bin_content)
                             hist_Down.SetBinContent(ibin, down_bin_content)
+                
+                elif "pileupWeight" in sys:
                     
+                    hist_Up = inFile_this.Get(region+sys+"Up"+obs)
+                    hist_Down = inFile_this.Get(region+sys+"Down"+obs)
+                    
+                    inFile2016_pileup = r.TFile(histdir+tag+"_nominal/2016/"+proc_file[idx]+".root",  "READ")
+                    inFile2017_pileup = r.TFile(histdir+tag+"_nominal/2017/"+proc_file[idx]+".root",  "READ")
+                    inFile2018_pileup = r.TFile(histdir+tag+"_nominal/2018/"+proc_file[idx]+".root",  "READ")
+                  
+                    hist_2016_pileup = inFile2016_pileup.Get(region+obs)
+                    hist_2017_pileup = inFile2017_pileup.Get(region+obs)
+                    hist_2018_pileup = inFile2018_pileup.Get(region+obs)
+                    
+                    hist_Up_2016_pileup = inFile2016_pileup.Get(region+sys+"Up"+obs)
+                    hist_Up_2017_pileup = inFile2017_pileup.Get(region+sys+"Up"+obs)
+                    hist_Up_2018_pileup = inFile2018_pileup.Get(region+sys+"Up"+obs)
+                    hist_Down_2016_pileup = inFile2016_pileup.Get(region+sys+"Down"+obs)
+                    hist_Down_2017_pileup = inFile2017_pileup.Get(region+sys+"Down"+obs)
+                    hist_Down_2018_pileup = inFile2018_pileup.Get(region+sys+"Down"+obs)
+                    
+                    #print("full run 2: ", hist_nominal.Integral())
+                    #print("2016: ", hist_2016_pileup.Integral(), " ", hist_Up_2016_pileup.Integral(), " ", hist_Down_2016_pileup.Integral())
+                    #print("2017: ", hist_2017_pileup.Integral(), " ", hist_Up_2017_pileup.Integral(), " ", hist_Down_2017_pileup.Integral())
+                    #print("2018: ", hist_2018_pileup.Integral(), " ", hist_Up_2018_pileup.Integral(), " ", hist_Down_2018_pileup.Integral())
+                    
+                    hist_Up_2016 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"2016Up")
+                    hist_Up_2016.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"2016Up") 
+
+                    hist_Down_2016 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"2016Down")
+                    hist_Down_2016.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"2016Down") 
+                    
+                    hist_Up_2017 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"2017Up")
+                    hist_Up_2017.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"2017Up") 
+
+                    hist_Down_2017 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"2017Down")
+                    hist_Down_2017.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"2017Down") 
+                    
+                    hist_Up_2018 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"2018Up")
+                    hist_Up_2018.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"2018Up") 
+
+                    hist_Down_2018 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"2018Down")
+                    hist_Down_2018.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+sys.replace(vbdt,"")+"2018Down") 
+
+                    for ibin in range(hist_Up.GetNbinsX()): 
+                        #print("hist_Up_2016_pileup.GetBinContent(ibin+1) bin",ibin,hist_Up_2016_pileup.GetBinContent(ibin+1))
+                        hist_Up_2016.SetBinContent(ibin+1,hist_Up_2016_pileup.GetBinContent(ibin+1) + hist_2017_pileup.GetBinContent(ibin+1)+hist_2018_pileup.GetBinContent(ibin+1)) 
+                        hist_Down_2016.SetBinContent(ibin+1,hist_Down_2016_pileup.GetBinContent(ibin+1) + hist_2017_pileup.GetBinContent(ibin+1)+hist_2018_pileup.GetBinContent(ibin+1)) 
+                        
+                        hist_Up_2017.SetBinContent(ibin+1,hist_Up_2017_pileup.GetBinContent(ibin+1) + hist_2016_pileup.GetBinContent(ibin+1)+hist_2018_pileup.GetBinContent(ibin+1)) 
+                        hist_Down_2017.SetBinContent(ibin+1,hist_Down_2017_pileup.GetBinContent(ibin+1) + hist_2016_pileup.GetBinContent(ibin+1)+hist_2018_pileup.GetBinContent(ibin+1))
+                        
+                        hist_Up_2018.SetBinContent(ibin+1,hist_Up_2018_pileup.GetBinContent(ibin+1) + hist_2016_pileup.GetBinContent(ibin+1)+hist_2017_pileup.GetBinContent(ibin+1)) 
+                        hist_Down_2018.SetBinContent(ibin+1,hist_Down_2018_pileup.GetBinContent(ibin+1) + hist_2016_pileup.GetBinContent(ibin+1)+hist_2017_pileup.GetBinContent(ibin+1)) 
+                    
+                    if proc[idx]=="TTJets" and ("SRv8p2Bin1" in region):
+                        hist_Up_2016.Scale(ratio_yield_ttbar)
+                        hist_Down_2016.Scale(ratio_yield_ttbar) 
+                        hist_Up_2017.Scale(ratio_yield_ttbar)
+                        hist_Down_2017.Scale(ratio_yield_ttbar)
+                        hist_Up_2018.Scale(ratio_yield_ttbar)
+                        hist_Down_2018.Scale(ratio_yield_ttbar)
+                    
+                    hists_sys.append(hist_Up_2016)
+                    hists_sys.append(hist_Down_2016)
+                    hists_sys.append(hist_Up_2017)
+                    hists_sys.append(hist_Down_2017)
+                    hists_sys.append(hist_Up_2018)
+                    hists_sys.append(hist_Down_2018)
+                        
                 #weight sys which are not PNet, trig eff SF, HH theory acceptance uncertainties
                 else:   
                     hist_Up = inFile_this.Get(region+sys+"Up"+obs)
@@ -301,11 +385,69 @@ if __name__ == "__main__":
                 hists_sys.append(hist_Down)
 
             #loop over shape syst unc
+            inFile2016 = r.TFile(histdir+tag+"_nominal_nosys/2016/"+proc_file[idx]+".root",  "READ")                                               
+            inFile2017 = r.TFile(histdir+tag+"_nominal_nosys/2017/"+proc_file[idx]+".root",  "READ")                                               
+            inFile2018 = r.TFile(histdir+tag+"_nominal_nosys/2018/"+proc_file[idx]+".root",  "READ")
+                                  
             for isysts_shape in range(len(systs_shape)):
                 if proc_file[idx]=="data" or proc_file[idx]=="QCDggHVBF":
                     continue
                 if(debug): print("studying systs_shape for proc:",systs_shape[isysts_shape], proc_file[idx])
+                                       
+                hist_JERUp_2016 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JER2016Up")
+                hist_JERUp_2016.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JER2016Up")
+                
+                hist_JERDown_2016 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JER2016Down")
+                hist_JERDown_2016.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JER2016Down")
                     
+                hist_JERUp_2017 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JER2017Up")
+                hist_JERUp_2017.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JER2017Up") 
+
+                hist_JERDown_2017 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JER2017Down")
+                hist_JERDown_2017.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JER2017Down") 
+                
+                hist_JERUp_2018 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JER2018Up")
+                hist_JERUp_2018.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JER2018Up") 
+
+                hist_JERDown_2018 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JER2018Down")
+                hist_JERDown_2018.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JER2018Down") 
+            
+                hist_JMSUp_2016 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMS2016Up")
+                hist_JMSUp_2016.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMS2016Up")
+                
+                hist_JMSDown_2016 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMS2016Down")
+                hist_JMSDown_2016.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMS2016Down")
+                    
+                hist_JMSUp_2017 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMS2017Up")
+                hist_JMSUp_2017.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMS2017Up") 
+
+                hist_JMSDown_2017 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMS2017Down")
+                hist_JMSDown_2017.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMS2017Down") 
+                
+                hist_JMSUp_2018 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMS2018Up")
+                hist_JMSUp_2018.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMS2018Up") 
+
+                hist_JMSDown_2018 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMS2018Down")
+                hist_JMSDown_2018.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMS2018Down") 
+
+                hist_JMRUp_2016 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMR2016Up")
+                hist_JMRUp_2016.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMR2016Up")
+                
+                hist_JMRDown_2016 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMR2016Down")
+                hist_JMRDown_2016.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMR2016Down")
+                    
+                hist_JMRUp_2017 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMR2017Up")
+                hist_JMRUp_2017.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMR2017Up") 
+
+                hist_JMRDown_2017 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMR2017Down")
+                hist_JMRDown_2017.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMR2017Down") 
+                
+                hist_JMRUp_2018 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMR2018Up")
+                hist_JMRUp_2018.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMR2018Up") 
+
+                hist_JMRDown_2018 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMR2018Down")
+                hist_JMRDown_2018.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_JMR2018Down") 
+                
                 #ttbar bin 1 PNet cut uncertainty for the ttbar Jet 2 mass shape
                 if (proc[idx]=='TTJets') and ('Bin1' in region) and systs_shape[isysts_shape] == "ttbarBin1Jet2PNetCut": 
                     print("debug ttbarBin1Jet2PNetCut")
@@ -315,6 +457,138 @@ if __name__ == "__main__":
                     hist_Up =  inFile_systs_shape[isysts_shape*2].Get(region+obs)
                     hist_Down =  inFile_systs_shape[isysts_shape*2+1].Get(region+obs) 
                     
+                    #split JMS, JMR into three years
+                    if systs_shape[isysts_shape] == "JMR" or systs_shape[isysts_shape] == "JMS" or systs_shape[isysts_shape] == "JER":
+
+                        print("splitted: ",systs_shape[isysts_shape])
+                                                
+                        hist_y2016 = inFile2016.Get(region+obs)
+                        hist_y2016.SetName("y2016")
+                        hist_y2017 = inFile2017.Get(region+obs)
+                        hist_y2016.SetName("y2017")
+                        hist_y2018 = inFile2018.Get(region+obs)
+                        hist_y2016.SetName("y2018")
+                        hist_Up_y2016 = inFile2016_systs_shape[isysts_shape*2].Get(region+obs)
+                        hist_Up_y2016.SetName("hist_Up_y2016")
+                        hist_Up_y2017 = inFile2017_systs_shape[isysts_shape*2].Get(region+obs)
+                        hist_Up_y2016.SetName("hist_Up_y2017")
+                        hist_Up_y2018 = inFile2018_systs_shape[isysts_shape*2].Get(region+obs)
+                        hist_Up_y2016.SetName("hist_Up_y2018")
+                        hist_Down_y2016 =  inFile2016_systs_shape[isysts_shape*2+1].Get(region+obs) 
+                        hist_Down_y2016.SetName("hist_Down_y2016")
+                        hist_Down_y2017 =  inFile2017_systs_shape[isysts_shape*2+1].Get(region+obs) 
+                        hist_Down_y2016.SetName("hist_Down_y2017")
+                        hist_Down_y2018 =  inFile2018_systs_shape[isysts_shape*2+1].Get(region+obs) 
+                        hist_Down_y2018.SetName("hist_Down_y2018")
+     
+                        print("full run 2: ", hist_nominal.Integral())
+                        print("2016: ", hist_y2016.Integral(), " ", hist_Up_y2016.Integral(), " ", hist_Down_y2016.Integral())
+                        print("2017: ", hist_y2017.Integral(), " ", hist_Up_y2017.Integral(), " ", hist_Down_y2017.Integral())
+                        print("2018: ", hist_y2018.Integral(), " ", hist_Up_y2018.Integral(), " ", hist_Down_y2018.Integral())
+
+                        for ibin in range(hist_nominal.GetNbinsX()): 
+                            #print("hist_Up_2016.GetBinContent(ibin+1) bin",ibin,hist_Up_y2016.GetBinContent(ibin+1))
+                            
+                            if systs_shape[isysts_shape] == "JMR":                                 
+                                hist_JMRUp_2016.SetBinContent(ibin+1,hist_Up_y2016.GetBinContent(ibin+1) + hist_y2017.GetBinContent(ibin+1)+hist_y2018.GetBinContent(ibin+1)) 
+                                hist_JMRDown_2016.SetBinContent(ibin+1,hist_Down_y2016.GetBinContent(ibin+1) + hist_y2017.GetBinContent(ibin+1)+hist_y2018.GetBinContent(ibin+1)) 
+                        
+                                hist_JMRUp_2017.SetBinContent(ibin+1,hist_Up_y2017.GetBinContent(ibin+1) + hist_y2016.GetBinContent(ibin+1)+hist_y2018.GetBinContent(ibin+1)) 
+                                hist_JMRDown_2017.SetBinContent(ibin+1,hist_Down_y2017.GetBinContent(ibin+1) + hist_y2016.GetBinContent(ibin+1)+hist_y2018.GetBinContent(ibin+1))
+                        
+                                hist_JMRUp_2018.SetBinContent(ibin+1,hist_Up_y2018.GetBinContent(ibin+1) + hist_y2016.GetBinContent(ibin+1)+hist_y2017.GetBinContent(ibin+1)) 
+                                hist_JMSDown_2018.SetBinContent(ibin+1,hist_Down_y2018.GetBinContent(ibin+1) + hist_y2016.GetBinContent(ibin+1)+hist_y2017.GetBinContent(ibin+1)) 
+                            
+                            elif systs_shape[isysts_shape] == "JMS":
+                                hist_JMSUp_2016.SetBinContent(ibin+1,hist_Up_y2016.GetBinContent(ibin+1) + hist_y2017.GetBinContent(ibin+1)+hist_y2018.GetBinContent(ibin+1)) 
+                                hist_JMSDown_2016.SetBinContent(ibin+1,hist_Down_y2016.GetBinContent(ibin+1) + hist_y2017.GetBinContent(ibin+1)+hist_y2018.GetBinContent(ibin+1)) 
+                        
+                                hist_JMSUp_2017.SetBinContent(ibin+1,hist_Up_y2017.GetBinContent(ibin+1) + hist_y2016.GetBinContent(ibin+1)+hist_y2018.GetBinContent(ibin+1)) 
+                                hist_JMSDown_2017.SetBinContent(ibin+1,hist_Down_y2017.GetBinContent(ibin+1) + hist_y2016.GetBinContent(ibin+1)+hist_y2018.GetBinContent(ibin+1))
+                        
+                                hist_JMSUp_2018.SetBinContent(ibin+1,hist_Up_y2018.GetBinContent(ibin+1) + hist_y2016.GetBinContent(ibin+1)+hist_y2017.GetBinContent(ibin+1)) 
+                                hist_JMSDown_2018.SetBinContent(ibin+1,hist_Down_y2018.GetBinContent(ibin+1) + hist_y2016.GetBinContent(ibin+1)+hist_y2017.GetBinContent(ibin+1)) 
+                            
+                            elif systs_shape[isysts_shape] == "JER":
+                                hist_JERUp_2016.SetBinContent(ibin+1,hist_Up_y2016.GetBinContent(ibin+1) + hist_y2017.GetBinContent(ibin+1)+hist_y2018.GetBinContent(ibin+1)) 
+                                hist_JERDown_2016.SetBinContent(ibin+1,hist_Down_y2016.GetBinContent(ibin+1) + hist_y2017.GetBinContent(ibin+1)+hist_y2018.GetBinContent(ibin+1)) 
+                        
+                                hist_JERUp_2017.SetBinContent(ibin+1,hist_Up_y2017.GetBinContent(ibin+1) + hist_y2016.GetBinContent(ibin+1)+hist_y2018.GetBinContent(ibin+1)) 
+                                hist_JERDown_2017.SetBinContent(ibin+1,hist_Down_y2017.GetBinContent(ibin+1) + hist_y2016.GetBinContent(ibin+1)+hist_y2018.GetBinContent(ibin+1))
+                        
+                                hist_JERUp_2018.SetBinContent(ibin+1,hist_Up_y2018.GetBinContent(ibin+1) + hist_y2016.GetBinContent(ibin+1)+hist_y2017.GetBinContent(ibin+1)) 
+                                hist_JERDown_2018.SetBinContent(ibin+1,hist_Down_y2018.GetBinContent(ibin+1) + hist_y2016.GetBinContent(ibin+1)+hist_y2017.GetBinContent(ibin+1))                             
+                                
+                        if proc[idx]=="TTJets" and ("SRv8p2Bin1" in region):
+                    
+                            hist_up_total = hist_JERUp_2016.Integral(2,18)#[50-220 GeV]
+                            hist_JERUp_2016.Scale(ttbar_bin1_yield/hist_up_total)
+                            hist_down_total = hist_JERDown_2016.Integral(2,18)
+                            hist_JERDown_2016.Scale(ttbar_bin1_yield/hist_down_total) 
+                            
+                            hist_up_total = hist_JERUp_2017.Integral(2,18)
+                            hist_JERUp_2017.Scale(ttbar_bin1_yield/hist_up_total)
+                            hist_down_total = hist_JERDown_2017.Integral(2,18)
+                            hist_JERDown_2017.Scale(ttbar_bin1_yield/hist_down_total)
+                            
+                            hist_up_total = hist_JERUp_2018.Integral(2,18)
+                            hist_JERUp_2018.Scale(ttbar_bin1_yield/hist_up_total)
+                            hist_down_total = hist_JERDown_2018.Integral(2,18)
+                            hist_JERDown_2018.Scale(ttbar_bin1_yield/hist_down_total)
+                            
+                            hist_up_total = hist_JMSUp_2016.Integral(2,18)#[50-220 GeV]
+                            hist_JMSUp_2016.Scale(ttbar_bin1_yield/hist_up_total)
+                            hist_down_total = hist_JMSDown_2016.Integral(2,18)
+                            hist_JMSDown_2016.Scale(ttbar_bin1_yield/hist_down_total)
+
+                            hist_up_total = hist_JMSUp_2017.Integral(2,18)
+                            hist_JMSUp_2017.Scale(ttbar_bin1_yield/hist_up_total)
+                            hist_down_total = hist_JMSDown_2017.Integral(2,18)
+                            hist_JMSDown_2017.Scale(ttbar_bin1_yield/hist_down_total)
+
+                            hist_up_total = hist_JMSUp_2018.Integral(2,18)
+                            hist_JMSUp_2018.Scale(ttbar_bin1_yield/hist_up_total)
+                            hist_down_total = hist_JMSDown_2018.Integral(2,18)
+                            hist_JMSDown_2018.Scale(ttbar_bin1_yield/hist_down_total)
+                            
+                            hist_up_total = hist_JMRUp_2016.Integral(2,18)#[50-220 GeV]
+                            hist_JMRUp_2016.Scale(ttbar_bin1_yield/hist_up_total)
+                            hist_down_total = hist_JMRDown_2016.Integral(2,18)
+                            hist_JMRDown_2016.Scale(ttbar_bin1_yield/hist_down_total)
+
+                            hist_up_total = hist_JMRUp_2017.Integral(2,18)
+                            hist_JMRUp_2017.Scale(ttbar_bin1_yield/hist_up_total)
+                            hist_down_total = hist_JMRDown_2017.Integral(2,18)
+                            hist_JMRDown_2017.Scale(ttbar_bin1_yield/hist_down_total)
+
+                            hist_up_total = hist_JMRUp_2018.Integral(2,18)
+                            hist_JMRUp_2018.Scale(ttbar_bin1_yield/hist_up_total)
+                            hist_down_total = hist_JMRDown_2018.Integral(2,18)
+                            hist_JMRDown_2018.Scale(ttbar_bin1_yield/hist_down_total)
+                    
+                        print("splitted shape sys integral 2016 2017 2018")
+                        print(hist_JERUp_2016.Integral(), hist_JERDown_2016.Integral())
+                        print(hist_JERUp_2017.Integral(), hist_JERDown_2017.Integral())
+                        print(hist_JERUp_2018.Integral(), hist_JERDown_2018.Integral())
+                        hists_sys.append(hist_JERUp_2016)
+                        hists_sys.append(hist_JERDown_2016)
+                        hists_sys.append(hist_JERUp_2017)
+                        hists_sys.append(hist_JERDown_2017)
+                        hists_sys.append(hist_JERUp_2018)
+                        hists_sys.append(hist_JERDown_2018)
+                        hists_sys.append(hist_JMRUp_2016)
+                        hists_sys.append(hist_JMRDown_2016)
+                        hists_sys.append(hist_JMRUp_2017)
+                        hists_sys.append(hist_JMRDown_2017)
+                        hists_sys.append(hist_JMRUp_2018)
+                        hists_sys.append(hist_JMRDown_2018)
+                        hists_sys.append(hist_JMSUp_2016)
+                        hists_sys.append(hist_JMSDown_2016)
+                        hists_sys.append(hist_JMSUp_2017)
+                        hists_sys.append(hist_JMSDown_2017)
+                        hists_sys.append(hist_JMSUp_2018)
+                        hists_sys.append(hist_JMSDown_2018)
+                        
                 hist_Up.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+systs_shape[isysts_shape]+"Up")
                 hist_Down.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+systs_shape[isysts_shape]+"Down")
                 
@@ -323,14 +597,14 @@ if __name__ == "__main__":
                 if proc[idx]=="TTJets" and ("SRv8p2Bin1" in region):
                     
                     hist_up_total = hist_Up.Integral(2,18);#[50-220 GeV]
-                    hist_Up.Scale(ttbar_bin1_yield/hist_up_total);
+                    hist_Up.Scale(ttbar_bin1_yield/hist_up_total)
                     print("ttbar hist up integral ",hist_Up.Integral(2,18))
                     
-                    hist_down_total = hist_Down.Integral(2,18);
-                    hist_Down.Scale(ttbar_bin1_yield/hist_down_total); 
+                    hist_down_total = hist_Down.Integral(2,18)
+                    hist_Down.Scale(ttbar_bin1_yield/hist_down_total)
                     print("ttbar hist down integral ",hist_Down.Integral(2,18))
                 
-                    hist_nominal_total = hist_nominal.Integral(2,18);
+                    hist_nominal_total = hist_nominal.Integral(2,18)
                     hist_nominal.Scale(ttbar_bin1_yield/hist_nominal_total)
                     
                 hists_sys.append(hist_Up)
