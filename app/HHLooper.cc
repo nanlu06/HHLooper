@@ -858,15 +858,15 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
     }
     
     if(isZJets){  
-        cutflow.addWgtSyst("QCDscale0",  [&](){return isHH ?  hh.LHEScaleWeight()[0] : 1.0;});
-        cutflow.addWgtSyst("QCDscale1",  [&](){return isHH ?  hh.LHEScaleWeight()[1] : 1.0;});
-        cutflow.addWgtSyst("QCDscale2",  [&](){return isHH ?  hh.LHEScaleWeight()[2] : 1.0;});
-        cutflow.addWgtSyst("QCDscale3",  [&](){return isHH ?  hh.LHEScaleWeight()[3] : 1.0;});
-        cutflow.addWgtSyst("QCDscale4",  [&](){return isHH ?  hh.LHEScaleWeight()[4] : 1.0;});
-        cutflow.addWgtSyst("QCDscale5",  [&](){return isHH ?  hh.LHEScaleWeight()[5] : 1.0;});
-        cutflow.addWgtSyst("QCDscale6",  [&](){return isHH ?  hh.LHEScaleWeight()[6] : 1.0;});
-        cutflow.addWgtSyst("QCDscale7",  [&](){return isHH ?  hh.LHEScaleWeight()[7] : 1.0;});
-        cutflow.addWgtSyst("QCDscale8",  [&](){return isHH ?  hh.LHEScaleWeight()[8] : 1.0;});
+        cutflow.addWgtSyst("QCDscale0",  [&](){return hh.LHEScaleWeight()[0];});
+        cutflow.addWgtSyst("QCDscale1",  [&](){return hh.LHEScaleWeight()[1];});
+        cutflow.addWgtSyst("QCDscale2",  [&](){return hh.LHEScaleWeight()[2];});
+        cutflow.addWgtSyst("QCDscale3",  [&](){return hh.LHEScaleWeight()[3];});
+        cutflow.addWgtSyst("QCDscale4",  [&](){return hh.LHEScaleWeight()[4];});
+        cutflow.addWgtSyst("QCDscale5",  [&](){return hh.LHEScaleWeight()[5];});
+        cutflow.addWgtSyst("QCDscale6",  [&](){return hh.LHEScaleWeight()[6];});
+        cutflow.addWgtSyst("QCDscale7",  [&](){return hh.LHEScaleWeight()[7];});
+        cutflow.addWgtSyst("QCDscale8",  [&](){return hh.LHEScaleWeight()[8];});
     }
  
     if(isHH){    
