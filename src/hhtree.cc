@@ -231,276 +231,703 @@ void hhtree::Init(TTree *tree)
  if(fatJet1Pt_JESDown_branch) fatJet1Pt_JESDown_branch->SetAddress(&fatJet1Pt_JESDown_);
  fatJet1PtOverMHH_JESDown_branch = tree->GetBranch("fatJet1PtOverMHH_JESDown");
  if(fatJet1PtOverMHH_JESDown_branch) fatJet1PtOverMHH_JESDown_branch->SetAddress(&fatJet1PtOverMHH_JESDown_);
+  fatJet1Pt_JESUp_Abs_branch = tree->GetBranch("fatJet1Pt_JESUp_Abs");
+  if(fatJet1Pt_JESUp_Abs_branch) fatJet1Pt_JESUp_Abs_branch->SetAddress(&fatJet1Pt_JESUp_Abs_);
+  fatJet1PtOverMHH_JESUp_Abs_branch = tree->GetBranch("fatJet1PtOverMHH_JESUp_Abs");
+  if(fatJet1PtOverMHH_JESUp_Abs_branch) _branch->SetAddress(&fatJet1PtOverMHH_JESUp_Abs_);
+  fatJet1Pt_JESDown_Abs_branch = tree->GetBranch("fatJet1Pt_JESDown_Abs");
+  if(fatJet1Pt_JESDown_Abs_branch) fatJet1Pt_JESDown_Abs_branch->SetAddress(&fatJet1Pt_JESDown_Abs_);
+  fatJet1PtOverMHH_JESDown_Abs_branch = tree->GetBranch("fatJet1PtOverMHH_JESDown_Abs");
+  if(fatJet1PtOverMHH_JESDown_Abs_branch) fatJet1PtOverMHH_JESDown_Abs_branch->SetAddress(&fatJet1PtOverMHH_JESDown_Abs_);
+  fatJet1Pt_JESUp_Abs_2016_branch = tree->GetBranch("fatJet1Pt_JESUp_Abs_2016");
+  if(fatJet1Pt_JESUp_Abs_2016_branch) fatJet1Pt_JESUp_Abs_2016_branch->SetAddress(&fatJet1Pt_JESUp_Abs_2016_);
+  fatJet1PtOverMHH_JESUp_Abs_2016_branch = tree->GetBranch("fatJet1PtOverMHH_JESUp_Abs_2016");
+  if(fatJet1PtOverMHH_JESUp_Abs_2016_branch) fatJet1PtOverMHH_JESUp_Abs_2016_branch->SetAddress(&fatJet1PtOverMHH_JESUp_Abs_2016_);
+  fatJet1Pt_JESDowb_Abs_2016_branch = tree->GetBranch("fatJet1Pt_JESDowb_Abs_2016");
+  if(fatJet1Pt_JESDowb_Abs_2016_branch) fatJet1Pt_JESDowb_Abs_2016_branch->SetAddress(&fatJet1Pt_JESDowb_Abs_2016_);
+  fatJet1PtOverMHH_JESDowb_Abs_2016_branch = tree->GetBranch("fatJet1PtOverMHH_JESDowb_Abs_2016");
+  if(fatJet1PtOverMHH_JESDowb_Abs_2016_branch) fatJet1PtOverMHH_JESDowb_Abs_2016_branch->SetAddress(&fatJet1PtOverMHH_JESDowb_Abs_2016_);
+  fatJet1Pt_JESUp_BBEC1_branch = tree->GetBranch("fatJet1Pt_JESUp_BBEC1");
+  if(fatJet1Pt_JESUp_BBEC1_branch) fatJet1Pt_JESUp_BBEC1_branch->SetAddress(&fatJet1Pt_JESUp_BBEC1_);
+  fatJet1PtOverMHH_JESUp_BBEC1_branch = tree->GetBranch("fatJet1PtOverMHH_JESUp_BBEC1");
+  if(fatJet1PtOverMHH_JESUp_BBEC1_branch) fatJet1PtOverMHH_JESUp_BBEC1_branch->SetAddress(&fatJet1PtOverMHH_JESUp_BBEC1_);
+  fatJet1Pt_JESDown_BBEC1_branch = tree->GetBranch("fatJet1Pt_JESDown_BBEC1");
+  if(fatJet1Pt_JESDown_BBEC1_branch) fatJet1Pt_JESDown_BBEC1_branch->SetAddress(&fatJet1Pt_JESDown_BBEC1_);
+  fatJet1PtOverMHH_JESDown_BBEC1_branch = tree->GetBranch("fatJet1PtOverMHH_JESDown_BBEC1");
+  if(fatJet1PtOverMHH_JESDown_BBEC1_branch) fatJet1PtOverMHH_JESDown_BBEC1_branch->SetAddress(&fatJet1PtOverMHH_JESDown_BBEC1_);
+  fatJet1Pt_JESUp_BBEC1_2016_branch = tree->GetBranch("fatJet1Pt_JESUp_BBEC1_2016");
+  if(fatJet1Pt_JESUp_BBEC1_2016_branch) fatJet1Pt_JESUp_BBEC1_2016_branch->SetAddress(&fatJet1Pt_JESUp_BBEC1_2016_);
+  fatJet1PtOverMHH_JESUp_BBEC1_2016_branch = tree->GetBranch("fatJet1PtOverMHH_JESUp_BBEC1_2016");
+  if(fatJet1PtOverMHH_JESUp_BBEC1_2016_branch) fatJet1PtOverMHH_JESUp_BBEC1_2016_branch->SetAddress(&fatJet1PtOverMHH_JESUp_BBEC1_2016_);
+  fatJet1Pt_JESDown_BBEC1_2016_branch = tree->GetBranch("fatJet1Pt_JESDown_BBEC1_2016");
+  if(fatJet1Pt_JESDown_BBEC1_2016_branch) fatJet1Pt_JESDown_BBEC1_2016_branch->SetAddress(&fatJet1Pt_JESDown_BBEC1_2016_);
+  fatJet1PtOverMHH_JESDown_BBEC1_2016_branch = tree->GetBranch("fatJet1PtOverMHH_JESDown_BBEC1_2016");
+  if(fatJet1PtOverMHH_JESDown_BBEC1_2016_branch) fatJet1PtOverMHH_JESDown_BBEC1_2016_branch->SetAddress(&fatJet1PtOverMHH_JESDown_BBEC1_2016_);
+  fatJet1Pt_JESUp_EC2_branch = tree->GetBranch("fatJet1Pt_JESUp_EC2");
+  if(fatJet1Pt_JESUp_EC2_branch) fatJet1Pt_JESUp_EC2_branch->SetAddress(&fatJet1Pt_JESUp_EC2_);
+  fatJet1PtOverMHH_JESUp_EC2_branch = tree->GetBranch("fatJet1PtOverMHH_JESUp_EC2");
+  if(fatJet1PtOverMHH_JESUp_EC2_branch) fatJet1PtOverMHH_JESUp_EC2_branch->SetAddress(&fatJet1PtOverMHH_JESUp_EC2_);
+  fatJet1Pt_JESDown_EC2_branch = tree->GetBranch("fatJet1Pt_JESDown_EC2");
+  if(fatJet1Pt_JESDown_EC2_branch) fatJet1Pt_JESDown_EC2_branch->SetAddress(&fatJet1Pt_JESDown_EC2_);
+  fatJet1PtOverMHH_JESDown_EC2_branch = tree->GetBranch("fatJet1PtOverMHH_JESDown_EC2");
+  if(fatJet1PtOverMHH_JESDown_EC2_branch) fatJet1PtOverMHH_JESDown_EC2_branch->SetAddress(&fatJet1PtOverMHH_JESDown_EC2_);
+  fatJet1Pt_JESUp_EC2_2016_branch = tree->GetBranch("fatJet1Pt_JESUp_EC2_2016");
+  if(fatJet1Pt_JESUp_EC2_2016_branch) fatJet1Pt_JESUp_EC2_2016_branch->SetAddress(&fatJet1Pt_JESUp_EC2_2016_);
+  fatJet1PtOverMHH_JESUp_EC2_2016_branch = tree->GetBranch("fatJet1PtOverMHH_JESUp_EC2_2016");
+  if(fatJet1PtOverMHH_JESUp_EC2_2016_branch) fatJet1PtOverMHH_JESUp_EC2_2016_branch->SetAddress(&fatJet1PtOverMHH_JESUp_EC2_2016_);
+  fatJet1Pt_JESDown_EC2_2016_branch = tree->GetBranch("fatJet1Pt_JESDown_EC2_2016");
+  if(fatJet1Pt_JESDown_EC2_2016_branch) fatJet1Pt_JESDown_EC2_2016_branch->SetAddress(&fatJet1Pt_JESDown_EC2_2016_);
+  fatJet1PtOverMHH_JESDown_EC2_2016_branch = tree->GetBranch("fatJet1PtOverMHH_JESDown_EC2_2016");
+  if(fatJet1PtOverMHH_JESDown_EC2_2016_branch) fatJet1PtOverMHH_JESDown_EC2_2016_branch->SetAddress(&fatJet1PtOverMHH_JESDown_EC2_2016_);
+  fatJet1Pt_JESUp_FlavQCD_branch = tree->GetBranch("fatJet1Pt_JESUp_FlavQCD");
+  if(fatJet1Pt_JESUp_FlavQCD_branch) fatJet1Pt_JESUp_FlavQCD_branch->SetAddress(&fatJet1Pt_JESUp_FlavQCD_);
+  fatJet1PtOverMHH_JESUp_FlavQCD_branch = tree->GetBranch("fatJet1PtOverMHH_JESUp_FlavQCD");
+  if(fatJet1PtOverMHH_JESUp_FlavQCD_branch) fatJet1PtOverMHH_JESUp_FlavQCD_branch->SetAddress(&fatJet1PtOverMHH_JESUp_FlavQCD_);
+  fatJet1Pt_JESDown_FlavQCD_branch = tree->GetBranch("fatJet1Pt_JESDown_FlavQCD");
+  if(fatJet1Pt_JESDown_FlavQCD_branch) fatJet1Pt_JESDown_FlavQCD_branch->SetAddress(&fatJet1Pt_JESDown_FlavQCD_);
+  fatJet1PtOverMHH_JESDown_FlavQCD_branch = tree->GetBranch("fatJet1PtOverMHH_JESDown_FlavQCD");
+  if(fatJet1PtOverMHH_JESDown_FlavQCD_branch) fatJet1PtOverMHH_JESDown_FlavQCD_branch->SetAddress(&fatJet1PtOverMHH_JESDown_FlavQCD_);
+  fatJet1Pt_JESUp_HF_branch = tree->GetBranch("fatJet1Pt_JESUp_HF");
+  if(fatJet1Pt_JESUp_HF_branch) fatJet1Pt_JESUp_HF_branch->SetAddress(&fatJet1Pt_JESUp_HF_);
+  fatJet1PtOverMHH_JESUp_HF_branch = tree->GetBranch("fatJet1PtOverMHH_JESUp_HF");
+  if(fatJet1PtOverMHH_JESUp_HF_branch) fatJet1PtOverMHH_JESUp_HF_branch->SetAddress(&fatJet1PtOverMHH_JESUp_HF_);
+  fatJet1Pt_JESDown_HF_branch = tree->GetBranch("fatJet1Pt_JESDown_HF");
+  if(fatJet1Pt_JESDown_HF_branch) fatJet1Pt_JESDown_HF_branch->SetAddress(&fatJet1Pt_JESDown_HF_);
+  fatJet1PtOverMHH_JESDown_HF_branch = tree->GetBranch("fatJet1PtOverMHH_JESDown_HF");
+  if(fatJet1PtOverMHH_JESDown_HF_branch) fatJet1PtOverMHH_JESDown_HF_branch->SetAddress(&fatJet1PtOverMHH_JESDown_HF_);
+  fatJet1Pt_JESUp_HF_2016_branch = tree->GetBranch("fatJet1Pt_JESUp_HF_2016");
+  if(fatJet1Pt_JESUp_HF_2016_branch) fatJet1Pt_JESUp_HF_2016_branch->SetAddress(&fatJet1Pt_JESUp_HF_2016_);//fatJet1Pt_JESUp_HF_2016);
+  fatJet1PtOverMHH_JESUp_HF_2016_branch = tree->GetBranch("fatJet1PtOverMHH_JESUp_HF_2016");
+  if(fatJet1PtOverMHH_JESUp_HF_2016_branch) fatJet1PtOverMHH_JESUp_HF_2016_branch->SetAddress(&fatJet1PtOverMHH_JESUp_HF_2016_);//fatJet1PtOverMHH_JESUp_HF_2016);
+  fatJet1Pt_JESDown_HF_2016_branch = tree->GetBranch("fatJet1Pt_JESDown_HF_2016");
+  if(fatJet1Pt_JESDown_HF_2016_branch) fatJet1Pt_JESDown_HF_2016_branch->SetAddress(&fatJet1Pt_JESDown_HF_2016_);//fatJet1Pt_JESDown_HF_2016);
+  fatJet1PtOverMHH_JESDown_HF_2016_branch = tree->GetBranch("fatJet1PtOverMHH_JESDown_HF_2016");
+  if(fatJet1PtOverMHH_JESDown_HF_2016_branch) fatJet1PtOverMHH_JESDown_HF_2016_branch->SetAddress(&fatJet1PtOverMHH_JESDown_HF_2016_);//fatJet1PtOverMHH_JESDown_HF_2016);
+  fatJet1Pt_JESUp_RelBal_branch = tree->GetBranch("fatJet1Pt_JESUp_RelBal");
+  if(fatJet1Pt_JESUp_RelBal_branch) fatJet1Pt_JESUp_RelBal_branch->SetAddress(&fatJet1Pt_JESUp_RelBal_);//fatJet1Pt_JESUp_RelBal);
+  fatJet1PtOverMHH_JESUp_RelBal_branch = tree->GetBranch("fatJet1PtOverMHH_JESUp_RelBal");
+  if(fatJet1PtOverMHH_JESUp_RelBal_branch) fatJet1PtOverMHH_JESUp_RelBal_branch->SetAddress(&fatJet1PtOverMHH_JESUp_RelBal_);//fatJet1PtOverMHH_JESUp_RelBal);
+  fatJet1Pt_JESDown_RelBal_branch = tree->GetBranch("fatJet1Pt_JESDown_RelBal");
+  if(fatJet1Pt_JESDown_RelBal_branch) fatJet1Pt_JESDown_RelBal_branch->SetAddress(&fatJet1Pt_JESDown_RelBal_);//fatJet1Pt_JESDown_RelBal);
+ fatJet1PtOverMHH_JESDown_RelBal_branch = tree->GetBranch("fatJet1PtOverMHH_JESDown_RelBal");
+ if(fatJet1PtOverMHH_JESDown_RelBal_branch) fatJet1PtOverMHH_JESDown_RelBal_branch->SetAddress(&fatJet1PtOverMHH_JESDown_RelBal_);//fatJet1PtOverMHH_JESDown_RelBal);
+ fatJet1Pt_JESUp_RelSample_2016_branch = tree->GetBranch("fatJet1Pt_JESUp_RelSample_2016");
+ if(fatJet1Pt_JESUp_RelSample_2016_branch) fatJet1Pt_JESUp_RelSample_2016_branch->SetAddress(&fatJet1Pt_JESUp_RelSample_2016_);//fatJet1Pt_JESUp_RelSample_2016);
+ fatJet1PtOverMHH_JESUp_RelSample_2016_branch = tree->GetBranch("fatJet1PtOverMHH_JESUp_RelSample_2016");
+ if(fatJet1PtOverMHH_JESUp_RelSample_2016_branch) fatJet1PtOverMHH_JESUp_RelSample_2016_branch->SetAddress(&fatJet1PtOverMHH_JESUp_RelSample_2016_);//fatJet1PtOverMHH_JESUp_RelSample_2016);
+ fatJet1Pt_JESDown_RelSample_2016_branch = tree->GetBranch("fatJet1Pt_JESDown_RelSample_2016");
+ if(fatJet1Pt_JESDown_RelSample_2016_branch) fatJet1Pt_JESDown_RelSample_2016_branch->SetAddress(&fatJet1Pt_JESDown_RelSample_2016_);//fatJet1Pt_JESDown_RelSample_2016);
+ fatJet1PtOverMHH_JESDown_RelSample_2016_branch = tree->GetBranch("fatJet1PtOverMHH_JESDown_RelSample_2016");
+ if(fatJet1PtOverMHH_JESDown_RelSample_2016_branch) fatJet1PtOverMHH_JESDown_RelSample_2016_branch->SetAddress(&fatJet1PtOverMHH_JESDown_RelSample_2016_);//fatJet1PtOverMHH_JESDown_RelSample_2016);
+
+
+
+
  fatJet2Pt_branch = tree->GetBranch("fatJet2Pt");
- if(fatJet2Pt_branch) fatJet2Pt_branch->SetAddress(&fatJet2Pt_);
+ if(fatJet2Pt_branch) fatJet2Pt_branch->SetAddress(&fatJet2Pt_);//
  fatJet2Eta_branch = tree->GetBranch("fatJet2Eta");
- if(fatJet2Eta_branch) fatJet2Eta_branch->SetAddress(&fatJet2Eta_);
+ if(fatJet2Eta_branch) fatJet2Eta_branch->SetAddress(&fatJet2Eta_);//
  fatJet2Phi_branch = tree->GetBranch("fatJet2Phi");
- if(fatJet2Phi_branch) fatJet2Phi_branch->SetAddress(&fatJet2Phi_);
+ if(fatJet2Phi_branch) fatJet2Phi_branch->SetAddress(&fatJet2Phi_);//
  fatJet2Mass_branch = tree->GetBranch("fatJet2Mass");
- if(fatJet2Mass_branch) fatJet2Mass_branch->SetAddress(&fatJet2Mass_);
+ if(fatJet2Mass_branch) fatJet2Mass_branch->SetAddress(&fatJet2Mass_);//
  fatJet2MassSD_branch = tree->GetBranch("fatJet2MassSD");
- if(fatJet2MassSD_branch) fatJet2MassSD_branch->SetAddress(&fatJet2MassSD_);
+ if(fatJet2MassSD_branch) fatJet2MassSD_branch->SetAddress(&fatJet2MassSD_);//
  fatJet2MassSD_UnCorrected_branch = tree->GetBranch("fatJet2MassSD_UnCorrected");
- if(fatJet2MassSD_UnCorrected_branch) fatJet2MassSD_UnCorrected_branch->SetAddress(&fatJet2MassSD_UnCorrected_);
+ if(fatJet2MassSD_UnCorrected_branch) fatJet2MassSD_UnCorrected_branch->SetAddress(&fatJet2MassSD_UnCorrected_);//
  fatJet2MassRegressed_branch = tree->GetBranch("fatJet2MassRegressed");
- if(fatJet2MassRegressed_branch) fatJet2MassRegressed_branch->SetAddress(&fatJet2MassRegressed_);
+ if(fatJet2MassRegressed_branch) fatJet2MassRegressed_branch->SetAddress(&fatJet2MassRegressed_);//
  fatJet2MassRegressed_UnCorrected_branch = tree->GetBranch("fatJet2MassRegressed_UnCorrected");
- if(fatJet2MassRegressed_UnCorrected_branch) fatJet2MassRegressed_UnCorrected_branch->SetAddress(&fatJet2MassRegressed_UnCorrected_);
+ if(fatJet2MassRegressed_UnCorrected_branch) fatJet2MassRegressed_UnCorrected_branch->SetAddress(&fatJet2MassRegressed_UnCorrected_);//
  fatJet2PNetXbb_branch = tree->GetBranch("fatJet2PNetXbb");
- if(fatJet2PNetXbb_branch) fatJet2PNetXbb_branch->SetAddress(&fatJet2PNetXbb_);
+ if(fatJet2PNetXbb_branch) fatJet2PNetXbb_branch->SetAddress(&fatJet2PNetXbb_);//
  fatJet2PNetQCDb_branch = tree->GetBranch("fatJet2PNetQCDb");
- if(fatJet2PNetQCDb_branch) fatJet2PNetQCDb_branch->SetAddress(&fatJet2PNetQCDb_);
+ if(fatJet2PNetQCDb_branch) fatJet2PNetQCDb_branch->SetAddress(&fatJet2PNetQCDb_);//
  fatJet2PNetQCDbb_branch = tree->GetBranch("fatJet2PNetQCDbb");
- if(fatJet2PNetQCDbb_branch) fatJet2PNetQCDbb_branch->SetAddress(&fatJet2PNetQCDbb_);
+ if(fatJet2PNetQCDbb_branch) fatJet2PNetQCDbb_branch->SetAddress(&fatJet2PNetQCDbb_);//
  fatJet2PNetQCDc_branch = tree->GetBranch("fatJet2PNetQCDc");
- if(fatJet2PNetQCDc_branch) fatJet2PNetQCDc_branch->SetAddress(&fatJet2PNetQCDc_);
+ if(fatJet2PNetQCDc_branch) fatJet2PNetQCDc_branch->SetAddress(&fatJet2PNetQCDc_);//
  fatJet2PNetQCDcc_branch = tree->GetBranch("fatJet2PNetQCDcc");
- if(fatJet2PNetQCDcc_branch) fatJet2PNetQCDcc_branch->SetAddress(&fatJet2PNetQCDcc_);
+ if(fatJet2PNetQCDcc_branch) fatJet2PNetQCDcc_branch->SetAddress(&fatJet2PNetQCDcc_);//
  fatJet2PNetQCDothers_branch = tree->GetBranch("fatJet2PNetQCDothers");
- if(fatJet2PNetQCDothers_branch) fatJet2PNetQCDothers_branch->SetAddress(&fatJet2PNetQCDothers_);
+ if(fatJet2PNetQCDothers_branch) fatJet2PNetQCDothers_branch->SetAddress(&fatJet2PNetQCDothers_);//
  fatJet2Tau3OverTau2_branch = tree->GetBranch("fatJet2Tau3OverTau2");
- if(fatJet2Tau3OverTau2_branch) fatJet2Tau3OverTau2_branch->SetAddress(&fatJet2Tau3OverTau2_);
+ if(fatJet2Tau3OverTau2_branch) fatJet2Tau3OverTau2_branch->SetAddress(&fatJet2Tau3OverTau2_);//
  fatJet2GenMatchIndex_branch = tree->GetBranch("fatJet2GenMatchIndex");
- if(fatJet2GenMatchIndex_branch) fatJet2GenMatchIndex_branch->SetAddress(&fatJet2GenMatchIndex_);
+ if(fatJet2GenMatchIndex_branch) fatJet2GenMatchIndex_branch->SetAddress(&fatJet2GenMatchIndex_);//
  fatJet2HasMuon_branch = tree->GetBranch("fatJet2HasMuon");
- if(fatJet2HasMuon_branch) fatJet2HasMuon_branch->SetAddress(&fatJet2HasMuon_);
+ if(fatJet2HasMuon_branch) fatJet2HasMuon_branch->SetAddress(&fatJet2HasMuon_);//
  fatJet2HasElectron_branch = tree->GetBranch("fatJet2HasElectron");
- if(fatJet2HasElectron_branch) fatJet2HasElectron_branch->SetAddress(&fatJet2HasElectron_);
+ if(fatJet2HasElectron_branch) fatJet2HasElectron_branch->SetAddress(&fatJet2HasElectron_);//
  fatJet2HasBJetCSVLoose_branch = tree->GetBranch("fatJet2HasBJetCSVLoose");
- if(fatJet2HasBJetCSVLoose_branch) fatJet2HasBJetCSVLoose_branch->SetAddress(&fatJet2HasBJetCSVLoose_);
+ if(fatJet2HasBJetCSVLoose_branch) fatJet2HasBJetCSVLoose_branch->SetAddress(&fatJet2HasBJetCSVLoose_);//
  fatJet2HasBJetCSVMedium_branch = tree->GetBranch("fatJet2HasBJetCSVMedium");
- if(fatJet2HasBJetCSVMedium_branch) fatJet2HasBJetCSVMedium_branch->SetAddress(&fatJet2HasBJetCSVMedium_);
+ if(fatJet2HasBJetCSVMedium_branch) fatJet2HasBJetCSVMedium_branch->SetAddress(&fatJet2HasBJetCSVMedium_);//
  fatJet2HasBJetCSVTight_branch = tree->GetBranch("fatJet2HasBJetCSVTight");
- if(fatJet2HasBJetCSVTight_branch) fatJet2HasBJetCSVTight_branch->SetAddress(&fatJet2HasBJetCSVTight_);
+ if(fatJet2HasBJetCSVTight_branch) fatJet2HasBJetCSVTight_branch->SetAddress(&fatJet2HasBJetCSVTight_);//
  fatJet2OppositeHemisphereHasBJet_branch = tree->GetBranch("fatJet2OppositeHemisphereHasBJet");
- if(fatJet2OppositeHemisphereHasBJet_branch) fatJet2OppositeHemisphereHasBJet_branch->SetAddress(&fatJet2OppositeHemisphereHasBJet_);
+ if(fatJet2OppositeHemisphereHasBJet_branch) fatJet2OppositeHemisphereHasBJet_branch->SetAddress(&fatJet2OppositeHemisphereHasBJet_);//
  fatJet2PtOverMHH_branch = tree->GetBranch("fatJet2PtOverMHH");
- if(fatJet2PtOverMHH_branch) fatJet2PtOverMHH_branch->SetAddress(&fatJet2PtOverMHH_);
+ if(fatJet2PtOverMHH_branch) fatJet2PtOverMHH_branch->SetAddress(&fatJet2PtOverMHH_);//
  fatJet2PtOverMSD_branch = tree->GetBranch("fatJet2PtOverMSD");
- if(fatJet2PtOverMSD_branch) fatJet2PtOverMSD_branch->SetAddress(&fatJet2PtOverMSD_);
+ if(fatJet2PtOverMSD_branch) fatJet2PtOverMSD_branch->SetAddress(&fatJet2PtOverMSD_);//
  fatJet2PtOverMRegressed_branch = tree->GetBranch("fatJet2PtOverMRegressed");
- if(fatJet2PtOverMRegressed_branch) fatJet2PtOverMRegressed_branch->SetAddress(&fatJet2PtOverMRegressed_);
+ if(fatJet2PtOverMRegressed_branch) fatJet2PtOverMRegressed_branch->SetAddress(&fatJet2PtOverMRegressed_);//
  fatJet2MassSD_JMS_Down_branch = tree->GetBranch("fatJet2MassSD_JMS_Down");
- if(fatJet2MassSD_JMS_Down_branch) fatJet2MassSD_JMS_Down_branch->SetAddress(&fatJet2MassSD_JMS_Down_);
+ if(fatJet2MassSD_JMS_Down_branch) fatJet2MassSD_JMS_Down_branch->SetAddress(&fatJet2MassSD_JMS_Down_);//
  fatJet2MassSD_JMS_Up_branch = tree->GetBranch("fatJet2MassSD_JMS_Up");
- if(fatJet2MassSD_JMS_Up_branch) fatJet2MassSD_JMS_Up_branch->SetAddress(&fatJet2MassSD_JMS_Up_);
+ if(fatJet2MassSD_JMS_Up_branch) fatJet2MassSD_JMS_Up_branch->SetAddress(&fatJet2MassSD_JMS_Up_);//
  fatJet2MassSD_JMR_Down_branch = tree->GetBranch("fatJet2MassSD_JMR_Down");
- if(fatJet2MassSD_JMR_Down_branch) fatJet2MassSD_JMR_Down_branch->SetAddress(&fatJet2MassSD_JMR_Down_);
+ if(fatJet2MassSD_JMR_Down_branch) fatJet2MassSD_JMR_Down_branch->SetAddress(&fatJet2MassSD_JMR_Down_);//
  fatJet2MassSD_JMR_Up_branch = tree->GetBranch("fatJet2MassSD_JMR_Up");
- if(fatJet2MassSD_JMR_Up_branch) fatJet2MassSD_JMR_Up_branch->SetAddress(&fatJet2MassSD_JMR_Up_);
+ if(fatJet2MassSD_JMR_Up_branch) fatJet2MassSD_JMR_Up_branch->SetAddress(&fatJet2MassSD_JMR_Up_);//
  fatJet2MassRegressed_JMS_Down_branch = tree->GetBranch("fatJet2MassRegressed_JMS_Down");
- if(fatJet2MassRegressed_JMS_Down_branch) fatJet2MassRegressed_JMS_Down_branch->SetAddress(&fatJet2MassRegressed_JMS_Down_);
+ if(fatJet2MassRegressed_JMS_Down_branch) fatJet2MassRegressed_JMS_Down_branch->SetAddress(&fatJet2MassRegressed_JMS_Down_);//
  fatJet2MassRegressed_JMS_Up_branch = tree->GetBranch("fatJet2MassRegressed_JMS_Up");
- if(fatJet2MassRegressed_JMS_Up_branch) fatJet2MassRegressed_JMS_Up_branch->SetAddress(&fatJet2MassRegressed_JMS_Up_);
+ if(fatJet2MassRegressed_JMS_Up_branch) fatJet2MassRegressed_JMS_Up_branch->SetAddress(&fatJet2MassRegressed_JMS_Up_);//
  fatJet2MassRegressed_JMR_Down_branch = tree->GetBranch("fatJet2MassRegressed_JMR_Down");
- if(fatJet2MassRegressed_JMR_Down_branch) fatJet2MassRegressed_JMR_Down_branch->SetAddress(&fatJet2MassRegressed_JMR_Down_);
+ if(fatJet2MassRegressed_JMR_Down_branch) fatJet2MassRegressed_JMR_Down_branch->SetAddress(&fatJet2MassRegressed_JMR_Down_);//
  fatJet2MassRegressed_JMR_Up_branch = tree->GetBranch("fatJet2MassRegressed_JMR_Up");
- if(fatJet2MassRegressed_JMR_Up_branch) fatJet2MassRegressed_JMR_Up_branch->SetAddress(&fatJet2MassRegressed_JMR_Up_);
+ if(fatJet2MassRegressed_JMR_Up_branch) fatJet2MassRegressed_JMR_Up_branch->SetAddress(&fatJet2MassRegressed_JMR_Up_);//
  fatJet2PtOverMHH_JMS_Down_branch = tree->GetBranch("fatJet2PtOverMHH_JMS_Down");
- if(fatJet2PtOverMHH_JMS_Down_branch) fatJet2PtOverMHH_JMS_Down_branch->SetAddress(&fatJet2PtOverMHH_JMS_Down_);
+ if(fatJet2PtOverMHH_JMS_Down_branch) fatJet2PtOverMHH_JMS_Down_branch->SetAddress(&fatJet2PtOverMHH_JMS_Down_);//
  fatJet2PtOverMHH_JMS_Up_branch = tree->GetBranch("fatJet2PtOverMHH_JMS_Up");
- if(fatJet2PtOverMHH_JMS_Up_branch) fatJet2PtOverMHH_JMS_Up_branch->SetAddress(&fatJet2PtOverMHH_JMS_Up_);
+ if(fatJet2PtOverMHH_JMS_Up_branch) fatJet2PtOverMHH_JMS_Up_branch->SetAddress(&fatJet2PtOverMHH_JMS_Up_);//
  fatJet2PtOverMHH_JMR_Down_branch = tree->GetBranch("fatJet2PtOverMHH_JMR_Down");
- if(fatJet2PtOverMHH_JMR_Down_branch) fatJet2PtOverMHH_JMR_Down_branch->SetAddress(&fatJet2PtOverMHH_JMR_Down_);
+ if(fatJet2PtOverMHH_JMR_Down_branch) fatJet2PtOverMHH_JMR_Down_branch->SetAddress(&fatJet2PtOverMHH_JMR_Down_);//
  fatJet2PtOverMHH_JMR_Up_branch = tree->GetBranch("fatJet2PtOverMHH_JMR_Up");
- if(fatJet2PtOverMHH_JMR_Up_branch) fatJet2PtOverMHH_JMR_Up_branch->SetAddress(&fatJet2PtOverMHH_JMR_Up_);
+ if(fatJet2PtOverMHH_JMR_Up_branch) fatJet2PtOverMHH_JMR_Up_branch->SetAddress(&fatJet2PtOverMHH_JMR_Up_);//
  fatJet2Pt_JERUp_branch = tree->GetBranch("fatJet2Pt_JERUp");
- if(fatJet2Pt_JERUp_branch) fatJet2Pt_JERUp_branch->SetAddress(&fatJet2Pt_JERUp_);
+ if(fatJet2Pt_JERUp_branch) fatJet2Pt_JERUp_branch->SetAddress(&fatJet2Pt_JERUp_);//
  fatJet2PtOverMHH_JERUp_branch = tree->GetBranch("fatJet2PtOverMHH_JERUp");
- if(fatJet2PtOverMHH_JERUp_branch) fatJet2PtOverMHH_JERUp_branch->SetAddress(&fatJet2PtOverMHH_JERUp_);
+ if(fatJet2PtOverMHH_JERUp_branch) fatJet2PtOverMHH_JERUp_branch->SetAddress(&fatJet2PtOverMHH_JERUp_);//
  fatJet2Pt_JERDown_branch = tree->GetBranch("fatJet2Pt_JERDown");
- if(fatJet2Pt_JERDown_branch) fatJet2Pt_JERDown_branch->SetAddress(&fatJet2Pt_JERDown_);
+ if(fatJet2Pt_JERDown_branch) fatJet2Pt_JERDown_branch->SetAddress(&fatJet2Pt_JERDown_);//
  fatJet2PtOverMHH_JERDown_branch = tree->GetBranch("fatJet2PtOverMHH_JERDown");
- if(fatJet2PtOverMHH_JERDown_branch) fatJet2PtOverMHH_JERDown_branch->SetAddress(&fatJet2PtOverMHH_JERDown_);
+ if(fatJet2PtOverMHH_JERDown_branch) fatJet2PtOverMHH_JERDown_branch->SetAddress(&fatJet2PtOverMHH_JERDown_);//
  fatJet2Pt_JESUp_branch = tree->GetBranch("fatJet2Pt_JESUp");
- if(fatJet2Pt_JESUp_branch) fatJet2Pt_JESUp_branch->SetAddress(&fatJet2Pt_JESUp_);
+ if(fatJet2Pt_JESUp_branch) fatJet2Pt_JESUp_branch->SetAddress(&fatJet2Pt_JESUp_);//
  fatJet2PtOverMHH_JESUp_branch = tree->GetBranch("fatJet2PtOverMHH_JESUp");
- if(fatJet2PtOverMHH_JESUp_branch) fatJet2PtOverMHH_JESUp_branch->SetAddress(&fatJet2PtOverMHH_JESUp_);
+ if(fatJet2PtOverMHH_JESUp_branch) fatJet2PtOverMHH_JESUp_branch->SetAddress(&fatJet2PtOverMHH_JESUp_);//
  fatJet2Pt_JESDown_branch = tree->GetBranch("fatJet2Pt_JESDown");
- if(fatJet2Pt_JESDown_branch) fatJet2Pt_JESDown_branch->SetAddress(&fatJet2Pt_JESDown_);
+ if(fatJet2Pt_JESDown_branch) fatJet2Pt_JESDown_branch->SetAddress(&fatJet2Pt_JESDown_);//
  fatJet2PtOverMHH_JESDown_branch = tree->GetBranch("fatJet2PtOverMHH_JESDown");
- if(fatJet2PtOverMHH_JESDown_branch) fatJet2PtOverMHH_JESDown_branch->SetAddress(&fatJet2PtOverMHH_JESDown_);
+ if(fatJet2PtOverMHH_JESDown_branch) fatJet2PtOverMHH_JESDown_branch->SetAddress(&fatJet2PtOverMHH_JESDown_);//
+fatJet2Pt_JESUp_Abs_branch = tree->GetBranch("fatJet2Pt_JESUp_Abs");
+if(fatJet2Pt_JESUp_Abs_branch) fatJet2Pt_JESUp_Abs_branch->SetAddress(&fatJet2Pt_JESUp_Abs_);//
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESUp_Abs_);//fatJet2PtOverMHH_JESUp_Abs);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESDown_Abs_);//fatJet2Pt_JESDown_Abs);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESDown_Abs_);//fatJet2PtOverMHH_JESDown_Abs);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESUp_Abs_2016_);//fatJet2Pt_JESUp_Abs_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESUp_Abs_2016_);//fatJet2PtOverMHH_JESUp_Abs_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESDowb_Abs_2016_);//fatJet2Pt_JESDowb_Abs_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESDowb_Abs_2016_);//fatJet2PtOverMHH_JESDowb_Abs_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESUp_BBEC1_);//fatJet2Pt_JESUp_BBEC1);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESUp_BBEC1_);//fatJet2PtOverMHH_JESUp_BBEC1);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESDown_BBEC1_);//fatJet2Pt_JESDown_BBEC1);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESDown_BBEC1_);//fatJet2PtOverMHH_JESDown_BBEC1);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESUp_BBEC1_2016_);//fatJet2Pt_JESUp_BBEC1_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESUp_BBEC1_2016_);//fatJet2PtOverMHH_JESUp_BBEC1_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESDown_BBEC1_2016_);//fatJet2Pt_JESDown_BBEC1_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESDown_BBEC1_2016_);//fatJet2PtOverMHH_JESDown_BBEC1_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESUp_EC2_);//fatJet2Pt_JESUp_EC2);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESUp_EC2_);//fatJet2PtOverMHH_JESUp_EC2);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESDown_EC2_);//fatJet2Pt_JESDown_EC2);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESDown_EC2_);//fatJet2PtOverMHH_JESDown_EC2);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESUp_EC2_2016_);//fatJet2Pt_JESUp_EC2_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESUp_EC2_2016_);//fatJet2PtOverMHH_JESUp_EC2_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESDown_EC2_2016_);//fatJet2Pt_JESDown_EC2_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESDown_EC2_2016_);//fatJet2PtOverMHH_JESDown_EC2_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESUp_FlavQCD_);//fatJet2Pt_JESUp_FlavQCD);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESUp_FlavQCD_);//fatJet2PtOverMHH_JESUp_FlavQCD);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESDown_FlavQCD_);//fatJet2Pt_JESDown_FlavQCD);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESDown_FlavQCD_);//fatJet2PtOverMHH_JESDown_FlavQCD);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESUp_HF_);//fatJet2Pt_JESUp_HF);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESUp_HF_);//fatJet2PtOverMHH_JESUp_HF);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESDown_HF_);//fatJet2Pt_JESDown_HF);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESDown_HF_);//fatJet2PtOverMHH_JESDown_HF);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(_&fatJet2Pt_JESUp_HF_2016_);//fatJet2Pt_JESUp_HF_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(_&fatJet2PtOverMHH_JESUp_HF_2016_);//fatJet2PtOverMHH_JESUp_HF_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESDown_HF_2016_);//fatJet2Pt_JESDown_HF_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESDown_HF_2016_);//fatJet2PtOverMHH_JESDown_HF_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESUp_RelBal_);//fatJet2Pt_JESUp_RelBal);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESUp_RelBal_);//fatJet2PtOverMHH_JESUp_RelBal);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESDown_RelBal_);//fatJet2Pt_JESDown_RelBal);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESDown_RelBal_);//fatJet2PtOverMHH_JESDown_RelBal);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESUp_RelSample_2016_);//fatJet2Pt_JESUp_RelSample_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESUp_RelSample_2016_);//fatJet2PtOverMHH_JESUp_RelSample_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2Pt_JESDown_RelSample_2016_);//fatJet2Pt_JESDown_RelSample_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&fatJet2PtOverMHH_JESDown_RelSample_2016_);//fatJet2PtOverMHH_JESDown_RelSample_2016);
+
+
+
+
  hh_pt_branch = tree->GetBranch("hh_pt");
- if(hh_pt_branch) hh_pt_branch->SetAddress(&hh_pt_);
+ if(hh_pt_branch) hh_pt_branch->SetAddress(&hh_pt_);//
  hh_eta_branch = tree->GetBranch("hh_eta");
- if(hh_eta_branch) hh_eta_branch->SetAddress(&hh_eta_);
+ if(hh_eta_branch) hh_eta_branch->SetAddress(&hh_eta_);//
  hh_phi_branch = tree->GetBranch("hh_phi");
- if(hh_phi_branch) hh_phi_branch->SetAddress(&hh_phi_);
+ if(hh_phi_branch) hh_phi_branch->SetAddress(&hh_phi_);//
  hh_mass_branch = tree->GetBranch("hh_mass");
- if(hh_mass_branch) hh_mass_branch->SetAddress(&hh_mass_);
+ if(hh_mass_branch) hh_mass_branch->SetAddress(&hh_mass_);//
  hh_pt_JMS_Down_branch = tree->GetBranch("hh_pt_JMS_Down");
- if(hh_pt_JMS_Down_branch) hh_pt_JMS_Down_branch->SetAddress(&hh_pt_JMS_Down_);
+ if(hh_pt_JMS_Down_branch) hh_pt_JMS_Down_branch->SetAddress(&hh_pt_JMS_Down_);//
  hh_pt_JMS_Up_branch = tree->GetBranch("hh_pt_JMS_Up");
- if(hh_pt_JMS_Up_branch) hh_pt_JMS_Up_branch->SetAddress(&hh_pt_JMS_Up_);
+ if(hh_pt_JMS_Up_branch) hh_pt_JMS_Up_branch->SetAddress(&hh_pt_JMS_Up_);//
  hh_eta_JMS_Down_branch = tree->GetBranch("hh_eta_JMS_Down");
- if(hh_eta_JMS_Down_branch) hh_eta_JMS_Down_branch->SetAddress(&hh_eta_JMS_Down_);
+ if(hh_eta_JMS_Down_branch) hh_eta_JMS_Down_branch->SetAddress(&hh_eta_JMS_Down_);//
  hh_eta_JMS_Up_branch = tree->GetBranch("hh_eta_JMS_Up");
- if(hh_eta_JMS_Up_branch) hh_eta_JMS_Up_branch->SetAddress(&hh_eta_JMS_Up_);
+ if(hh_eta_JMS_Up_branch) hh_eta_JMS_Up_branch->SetAddress(&hh_eta_JMS_Up_);//
  hh_mass_JMS_Down_branch = tree->GetBranch("hh_mass_JMS_Down");
- if(hh_mass_JMS_Down_branch) hh_mass_JMS_Down_branch->SetAddress(&hh_mass_JMS_Down_);
+ if(hh_mass_JMS_Down_branch) hh_mass_JMS_Down_branch->SetAddress(&hh_mass_JMS_Down_);//
  hh_mass_JMS_Up_branch = tree->GetBranch("hh_mass_JMS_Up");
- if(hh_mass_JMS_Up_branch) hh_mass_JMS_Up_branch->SetAddress(&hh_mass_JMS_Up_);
+ if(hh_mass_JMS_Up_branch) hh_mass_JMS_Up_branch->SetAddress(&hh_mass_JMS_Up_);//
  hh_pt_JMR_Down_branch = tree->GetBranch("hh_pt_JMR_Down");
- if(hh_pt_JMR_Down_branch) hh_pt_JMR_Down_branch->SetAddress(&hh_pt_JMR_Down_);
+ if(hh_pt_JMR_Down_branch) hh_pt_JMR_Down_branch->SetAddress(&hh_pt_JMR_Down_);//
  hh_pt_JMR_Up_branch = tree->GetBranch("hh_pt_JMR_Up");
- if(hh_pt_JMR_Up_branch) hh_pt_JMR_Up_branch->SetAddress(&hh_pt_JMR_Up_);
+ if(hh_pt_JMR_Up_branch) hh_pt_JMR_Up_branch->SetAddress(&hh_pt_JMR_Up_);//
  hh_eta_JMR_Down_branch = tree->GetBranch("hh_eta_JMR_Down");
- if(hh_eta_JMR_Down_branch) hh_eta_JMR_Down_branch->SetAddress(&hh_eta_JMR_Down_);
+ if(hh_eta_JMR_Down_branch) hh_eta_JMR_Down_branch->SetAddress(&hh_eta_JMR_Down_);//
  hh_eta_JMR_Up_branch = tree->GetBranch("hh_eta_JMR_Up");
- if(hh_eta_JMR_Up_branch) hh_eta_JMR_Up_branch->SetAddress(&hh_eta_JMR_Up_);
+ if(hh_eta_JMR_Up_branch) hh_eta_JMR_Up_branch->SetAddress(&hh_eta_JMR_Up_);//
  hh_mass_JMR_Down_branch = tree->GetBranch("hh_mass_JMR_Down");
- if(hh_mass_JMR_Down_branch) hh_mass_JMR_Down_branch->SetAddress(&hh_mass_JMR_Down_);
+ if(hh_mass_JMR_Down_branch) hh_mass_JMR_Down_branch->SetAddress(&hh_mass_JMR_Down_);//
  hh_mass_JMR_Up_branch = tree->GetBranch("hh_mass_JMR_Up");
- if(hh_mass_JMR_Up_branch) hh_mass_JMR_Up_branch->SetAddress(&hh_mass_JMR_Up_);
+ if(hh_mass_JMR_Up_branch) hh_mass_JMR_Up_branch->SetAddress(&hh_mass_JMR_Up_);//
  hh_pt_JERUp_branch = tree->GetBranch("hh_pt_JERUp");
- if(hh_pt_JERUp_branch) hh_pt_JERUp_branch->SetAddress(&hh_pt_JERUp_);
+ if(hh_pt_JERUp_branch) hh_pt_JERUp_branch->SetAddress(&hh_pt_JERUp_);//
  hh_eta_JERUp_branch = tree->GetBranch("hh_eta_JERUp");
- if(hh_eta_JERUp_branch) hh_eta_JERUp_branch->SetAddress(&hh_eta_JERUp_);
+ if(hh_eta_JERUp_branch) hh_eta_JERUp_branch->SetAddress(&hh_eta_JERUp_);//
  hh_mass_JERUp_branch = tree->GetBranch("hh_mass_JERUp");
- if(hh_mass_JERUp_branch) hh_mass_JERUp_branch->SetAddress(&hh_mass_JERUp_);
+ if(hh_mass_JERUp_branch) hh_mass_JERUp_branch->SetAddress(&hh_mass_JERUp_);//
  hh_pt_JERDown_branch = tree->GetBranch("hh_pt_JERDown");
- if(hh_pt_JERDown_branch) hh_pt_JERDown_branch->SetAddress(&hh_pt_JERDown_);
+ if(hh_pt_JERDown_branch) hh_pt_JERDown_branch->SetAddress(&hh_pt_JERDown_);//
  hh_eta_JERDown_branch = tree->GetBranch("hh_eta_JERDown");
- if(hh_eta_JERDown_branch) hh_eta_JERDown_branch->SetAddress(&hh_eta_JERDown_);
+ if(hh_eta_JERDown_branch) hh_eta_JERDown_branch->SetAddress(&hh_eta_JERDown_);//
  hh_mass_JERDown_branch = tree->GetBranch("hh_mass_JERDown");
- if(hh_mass_JERDown_branch) hh_mass_JERDown_branch->SetAddress(&hh_mass_JERDown_);
+ if(hh_mass_JERDown_branch) hh_mass_JERDown_branch->SetAddress(&hh_mass_JERDown_);//
  hh_pt_JESUp_branch = tree->GetBranch("hh_pt_JESUp");
- if(hh_pt_JESUp_branch) hh_pt_JESUp_branch->SetAddress(&hh_pt_JESUp_);
+ if(hh_pt_JESUp_branch) hh_pt_JESUp_branch->SetAddress(&hh_pt_JESUp_);//
  hh_eta_JESUp_branch = tree->GetBranch("hh_eta_JESUp");
- if(hh_eta_JESUp_branch) hh_eta_JESUp_branch->SetAddress(&hh_eta_JESUp_);
+ if(hh_eta_JESUp_branch) hh_eta_JESUp_branch->SetAddress(&hh_eta_JESUp_);//
  hh_mass_JESUp_branch = tree->GetBranch("hh_mass_JESUp");
- if(hh_mass_JESUp_branch) hh_mass_JESUp_branch->SetAddress(&hh_mass_JESUp_);
+ if(hh_mass_JESUp_branch) hh_mass_JESUp_branch->SetAddress(&hh_mass_JESUp_);//
  hh_pt_JESDown_branch = tree->GetBranch("hh_pt_JESDown");
- if(hh_pt_JESDown_branch) hh_pt_JESDown_branch->SetAddress(&hh_pt_JESDown_);
+ if(hh_pt_JESDown_branch) hh_pt_JESDown_branch->SetAddress(&hh_pt_JESDown_);//
  hh_eta_JESDown_branch = tree->GetBranch("hh_eta_JESDown");
- if(hh_eta_JESDown_branch) hh_eta_JESDown_branch->SetAddress(&hh_eta_JESDown_);
+ if(hh_eta_JESDown_branch) hh_eta_JESDown_branch->SetAddress(&hh_eta_JESDown_);//
  hh_mass_JESDown_branch = tree->GetBranch("hh_mass_JESDown");
- if(hh_mass_JESDown_branch) hh_mass_JESDown_branch->SetAddress(&hh_mass_JESDown_);
+ if(hh_mass_JESDown_branch) hh_mass_JESDown_branch->SetAddress(&hh_mass_JESDown_);//
+    _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESUp_Abs_);//hh_pt_JESUp_Abs);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESUp_Abs_);//hh_eta_JESUp_Abs);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESUp_Abs_);//hh_mass_JESUp_Abs);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESDown_Abs_);//hh_pt_JESDown_Abs);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESDown_Abs_);//hh_eta_JESDown_Abs);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESDown_Abs_);//hh_mass_JESDown_Abs);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESUp_Abs_2016_);//hh_pt_JESUp_Abs_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESUp_Abs_2016_);//hh_eta_JESUp_Abs_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESUp_Abs_2016_);//hh_mass_JESUp_Abs_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESDowb_Abs_2016_);//hh_pt_JESDowb_Abs_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESDowb_Abs_2016_);//hh_eta_JESDowb_Abs_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESDowb_Abs_2016_);//hh_mass_JESDowb_Abs_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESUp_BBEC1_);//hh_pt_JESUp_BBEC1);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESUp_BBEC1_);//hh_eta_JESUp_BBEC1);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESUp_BBEC1_);//hh_mass_JESUp_BBEC1);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESDown_BBEC1_);//hh_pt_JESDown_BBEC1);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESDown_BBEC1_);//hh_eta_JESDown_BBEC1);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESDown_BBEC1_);//hh_mass_JESDown_BBEC1);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESUp_BBEC1_2016_);//hh_pt_JESUp_BBEC1_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESUp_BBEC1_2016_);//hh_eta_JESUp_BBEC1_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESUp_BBEC1_2016_);//hh_mass_JESUp_BBEC1_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESDown_BBEC1_2016_);//hh_pt_JESDown_BBEC1_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESDown_BBEC1_2016_);//hh_eta_JESDown_BBEC1_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESDown_BBEC1_2016_);//hh_mass_JESDown_BBEC1_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESUp_EC2_);//hh_pt_JESUp_EC2);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESUp_EC2_);//hh_eta_JESUp_EC2);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESUp_EC2_);//hh_mass_JESUp_EC2);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESDown_EC2_);//hh_pt_JESDown_EC2);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESDown_EC2_);//hh_eta_JESDown_EC2);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESDown_EC2_);//hh_mass_JESDown_EC2);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESUp_EC2_2016_);//hh_pt_JESUp_EC2_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESUp_EC2_2016_);//hh_eta_JESUp_EC2_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESUp_EC2_2016_);//hh_mass_JESUp_EC2_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESDown_EC2_2016_);//hh_pt_JESDown_EC2_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESDown_EC2_2016_);//hh_eta_JESDown_EC2_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESDown_EC2_2016_);//hh_mass_JESDown_EC2_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESUp_FlavQCD_);//hh_pt_JESUp_FlavQCD);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESUp_FlavQCD_);//hh_eta_JESUp_FlavQCD);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESUp_FlavQCD_);//hh_mass_JESUp_FlavQCD);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESDown_FlavQCD_);//hh_pt_JESDown_FlavQCD);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESDown_FlavQCD_);//hh_eta_JESDown_FlavQCD);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESDown_FlavQCD_);//hh_mass_JESDown_FlavQCD);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESUp_HF_);//hh_pt_JESUp_HF);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESUp_HF_);//hh_eta_JESUp_HF);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESUp_HF_);//hh_mass_JESUp_HF);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESDown_HF_);//hh_pt_JESDown_HF);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESDown_HF_);//hh_eta_JESDown_HF);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESDown_HF_);//hh_mass_JESDown_HF);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(_&hh_pt_JESUp_HF_2016_);//hh_pt_JESUp_HF_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(_&hh_eta_JESUp_HF_2016_);//hh_eta_JESUp_HF_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(_&hh_mass_JESUp_HF_2016_);//hh_mass_JESUp_HF_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESDown_HF_2016_);//hh_pt_JESDown_HF_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESDown_HF_2016_);//hh_eta_JESDown_HF_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESDown_HF_2016_);//hh_mass_JESDown_HF_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESUp_RelBal_);//hh_pt_JESUp_RelBal);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESUp_RelBal_);//hh_eta_JESUp_RelBal);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESUp_RelBal_);//hh_mass_JESUp_RelBal);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESDown_RelBal_);//hh_pt_JESDown_RelBal);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESDown_RelBal_);//hh_eta_JESDown_RelBal);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESDown_RelBal_);//hh_mass_JESDown_RelBal);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESUp_RelSample_2016_);//hh_pt_JESUp_RelSample_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESUp_RelSample_2016_);//hh_eta_JESUp_RelSample_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESUp_RelSample_2016_);//hh_mass_JESUp_RelSample_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_pt_JESDown_RelSample_2016_);//hh_pt_JESDown_RelSample_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_eta_JESDown_RelSample_2016_);//hh_eta_JESDown_RelSample_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&hh_mass_JESDown_RelSample_2016_);//hh_mass_JESDown_RelSample_2016);
+
+
+
  deltaEta_j1j2_branch = tree->GetBranch("deltaEta_j1j2");
- if(deltaEta_j1j2_branch) deltaEta_j1j2_branch->SetAddress(&deltaEta_j1j2_);
+ if(deltaEta_j1j2_branch) deltaEta_j1j2_branch->SetAddress(&deltaEta_j1j2_);//
  deltaPhi_j1j2_branch = tree->GetBranch("deltaPhi_j1j2");
- if(deltaPhi_j1j2_branch) deltaPhi_j1j2_branch->SetAddress(&deltaPhi_j1j2_);
+ if(deltaPhi_j1j2_branch) deltaPhi_j1j2_branch->SetAddress(&deltaPhi_j1j2_);//
  deltaR_j1j2_branch = tree->GetBranch("deltaR_j1j2");
- if(deltaR_j1j2_branch) deltaR_j1j2_branch->SetAddress(&deltaR_j1j2_);
+ if(deltaR_j1j2_branch) deltaR_j1j2_branch->SetAddress(&deltaR_j1j2_);//
  ptj2_over_ptj1_branch = tree->GetBranch("ptj2_over_ptj1");
- if(ptj2_over_ptj1_branch) ptj2_over_ptj1_branch->SetAddress(&ptj2_over_ptj1_);
+ if(ptj2_over_ptj1_branch) ptj2_over_ptj1_branch->SetAddress(&ptj2_over_ptj1_);//
  mj2_over_mj1_branch = tree->GetBranch("mj2_over_mj1");
- if(mj2_over_mj1_branch) mj2_over_mj1_branch->SetAddress(&mj2_over_mj1_);
+ if(mj2_over_mj1_branch) mj2_over_mj1_branch->SetAddress(&mj2_over_mj1_);//
  isVBFtag_branch = tree->GetBranch("isVBFtag");
- if(isVBFtag_branch) isVBFtag_branch->SetAddress(&isVBFtag_);
+ if(isVBFtag_branch) isVBFtag_branch->SetAddress(&isVBFtag_);//
+_branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JERUp_);//isVBFtag_JERUp);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JERDown_);//isVBFtag_JERDown);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESUp_);//isVBFtag_JESUp);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESDown_);//isVBFtag_JESDown);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESUp_Abs_);//isVBFtag_JESUp_Abs);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESDown_Abs_);//isVBFtag_JESDown_Abs);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESUp_Abs_2016_);//isVBFtag_JESUp_Abs_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESDowb_Abs_2016_);//isVBFtag_JESDowb_Abs_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESUp_BBEC1_);//isVBFtag_JESUp_BBEC1);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESDown_BBEC1_);//isVBFtag_JESDown_BBEC1);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESUp_BBEC1_2016_);//isVBFtag_JESUp_BBEC1_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESDown_BBEC1_2016_);//isVBFtag_JESDown_BBEC1_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESUp_EC2_);//isVBFtag_JESUp_EC2);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESDown_EC2_);//isVBFtag_JESDown_EC2);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESUp_EC2_2016_);//isVBFtag_JESUp_EC2_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESDown_EC2_2016_);//isVBFtag_JESDown_EC2_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESUp_FlavQCD_);//isVBFtag_JESUp_FlavQCD);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESDown_FlavQCD_);//isVBFtag_JESDown_FlavQCD);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESUp_HF_);//isVBFtag_JESUp_HF);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESDown_HF_);//isVBFtag_JESDown_HF);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(_&isVBFtag_JESUp_HF_2016_);//isVBFtag_JESUp_HF_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESDown_HF_2016_);//isVBFtag_JESDown_HF_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESUp_RelBal_);//isVBFtag_JESUp_RelBal);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESDown_RelBal_);//isVBFtag_JESDown_RelBal);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESUp_RelSample_2016_);//isVBFtag_JESUp_RelSample_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&isVBFtag_JESDown_RelSample_2016_);//isVBFtag_JESDown_RelSample_2016);
+
+
+
+
+
  dijetmass_branch = tree->GetBranch("dijetmass");
- if(dijetmass_branch) dijetmass_branch->SetAddress(&dijetmass_);
+ if(dijetmass_branch) dijetmass_branch->SetAddress(&dijetmass_);//
  vbfjet1Pt_branch = tree->GetBranch("vbfjet1Pt");
- if(vbfjet1Pt_branch) vbfjet1Pt_branch->SetAddress(&vbfjet1Pt_);
+ if(vbfjet1Pt_branch) vbfjet1Pt_branch->SetAddress(&vbfjet1Pt_);//
  vbfjet1Eta_branch = tree->GetBranch("vbfjet1Eta");
- if(vbfjet1Eta_branch) vbfjet1Eta_branch->SetAddress(&vbfjet1Eta_);
+ if(vbfjet1Eta_branch) vbfjet1Eta_branch->SetAddress(&vbfjet1Eta_);//
  vbfjet1Phi_branch = tree->GetBranch("vbfjet1Phi");
- if(vbfjet1Phi_branch) vbfjet1Phi_branch->SetAddress(&vbfjet1Phi_);
+ if(vbfjet1Phi_branch) vbfjet1Phi_branch->SetAddress(&vbfjet1Phi_);//
  vbfjet1Mass_branch = tree->GetBranch("vbfjet1Mass");
- if(vbfjet1Mass_branch) vbfjet1Mass_branch->SetAddress(&vbfjet1Mass_);
+ if(vbfjet1Mass_branch) vbfjet1Mass_branch->SetAddress(&vbfjet1Mass_);//
  vbffatJet1Pt_branch = tree->GetBranch("vbffatJet1Pt");
- if(vbffatJet1Pt_branch) vbffatJet1Pt_branch->SetAddress(&vbffatJet1Pt_);
+ if(vbffatJet1Pt_branch) vbffatJet1Pt_branch->SetAddress(&vbffatJet1Pt_);//
  vbffatJet1Eta_branch = tree->GetBranch("vbffatJet1Eta");
- if(vbffatJet1Eta_branch) vbffatJet1Eta_branch->SetAddress(&vbffatJet1Eta_);
+ if(vbffatJet1Eta_branch) vbffatJet1Eta_branch->SetAddress(&vbffatJet1Eta_);//
  vbffatJet1Phi_branch = tree->GetBranch("vbffatJet1Phi");
- if(vbffatJet1Phi_branch) vbffatJet1Phi_branch->SetAddress(&vbffatJet1Phi_);
+ if(vbffatJet1Phi_branch) vbffatJet1Phi_branch->SetAddress(&vbffatJet1Phi_);//
  vbffatJet1PNetXbb_branch = tree->GetBranch("vbffatJet1PNetXbb");
- if(vbffatJet1PNetXbb_branch) vbffatJet1PNetXbb_branch->SetAddress(&vbffatJet1PNetXbb_);
+ if(vbffatJet1PNetXbb_branch) vbffatJet1PNetXbb_branch->SetAddress(&vbffatJet1PNetXbb_);//
  vbfjet2Pt_branch = tree->GetBranch("vbfjet2Pt");
- if(vbfjet2Pt_branch) vbfjet2Pt_branch->SetAddress(&vbfjet2Pt_);
+ if(vbfjet2Pt_branch) vbfjet2Pt_branch->SetAddress(&vbfjet2Pt_);//
  vbfjet2Eta_branch = tree->GetBranch("vbfjet2Eta");
- if(vbfjet2Eta_branch) vbfjet2Eta_branch->SetAddress(&vbfjet2Eta_);
+ if(vbfjet2Eta_branch) vbfjet2Eta_branch->SetAddress(&vbfjet2Eta_);//
  vbfjet2Phi_branch = tree->GetBranch("vbfjet2Phi");
- if(vbfjet2Phi_branch) vbfjet2Phi_branch->SetAddress(&vbfjet2Phi_);
+ if(vbfjet2Phi_branch) vbfjet2Phi_branch->SetAddress(&vbfjet2Phi_);//
  vbfjet2Mass_branch = tree->GetBranch("vbfjet2Mass");
- if(vbfjet2Mass_branch) vbfjet2Mass_branch->SetAddress(&vbfjet2Mass_);
+ if(vbfjet2Mass_branch) vbfjet2Mass_branch->SetAddress(&vbfjet2Mass_);//
  vbffatJet2Pt_branch = tree->GetBranch("vbffatJet2Pt");
- if(vbffatJet2Pt_branch) vbffatJet2Pt_branch->SetAddress(&vbffatJet2Pt_);
+ if(vbffatJet2Pt_branch) vbffatJet2Pt_branch->SetAddress(&vbffatJet2Pt_);//
  vbffatJet2Eta_branch = tree->GetBranch("vbffatJet2Eta");
- if(vbffatJet2Eta_branch) vbffatJet2Eta_branch->SetAddress(&vbffatJet2Eta_);
+ if(vbffatJet2Eta_branch) vbffatJet2Eta_branch->SetAddress(&vbffatJet2Eta_);//
  vbffatJet2Phi_branch = tree->GetBranch("vbffatJet2Phi");
- if(vbffatJet2Phi_branch) vbffatJet2Phi_branch->SetAddress(&vbffatJet2Phi_);
+ if(vbffatJet2Phi_branch) vbffatJet2Phi_branch->SetAddress(&vbffatJet2Phi_);//
  vbffatJet2PNetXbb_branch = tree->GetBranch("vbffatJet2PNetXbb");
- if(vbffatJet2PNetXbb_branch) vbffatJet2PNetXbb_branch->SetAddress(&vbffatJet2PNetXbb_);
+ if(vbffatJet2PNetXbb_branch) vbffatJet2PNetXbb_branch->SetAddress(&vbffatJet2PNetXbb_);//
  jet1Pt_branch = tree->GetBranch("jet1Pt");
- if(jet1Pt_branch) jet1Pt_branch->SetAddress(&jet1Pt_);
+ if(jet1Pt_branch) jet1Pt_branch->SetAddress(&jet1Pt_);//
  jet1Eta_branch = tree->GetBranch("jet1Eta");
- if(jet1Eta_branch) jet1Eta_branch->SetAddress(&jet1Eta_);
+ if(jet1Eta_branch) jet1Eta_branch->SetAddress(&jet1Eta_);//
  jet1Phi_branch = tree->GetBranch("jet1Phi");
- if(jet1Phi_branch) jet1Phi_branch->SetAddress(&jet1Phi_);
+ if(jet1Phi_branch) jet1Phi_branch->SetAddress(&jet1Phi_);//
  jet2Pt_branch = tree->GetBranch("jet2Pt");
- if(jet2Pt_branch) jet2Pt_branch->SetAddress(&jet2Pt_);
+ if(jet2Pt_branch) jet2Pt_branch->SetAddress(&jet2Pt_);//
  jet2Eta_branch = tree->GetBranch("jet2Eta");
- if(jet2Eta_branch) jet2Eta_branch->SetAddress(&jet2Eta_);
+ if(jet2Eta_branch) jet2Eta_branch->SetAddress(&jet2Eta_);//
  jet2Phi_branch = tree->GetBranch("jet2Phi");
- if(jet2Phi_branch) jet2Phi_branch->SetAddress(&jet2Phi_);
+ if(jet2Phi_branch) jet2Phi_branch->SetAddress(&jet2Phi_);//
  jet3Pt_branch = tree->GetBranch("jet3Pt");
- if(jet3Pt_branch) jet3Pt_branch->SetAddress(&jet3Pt_);
+ if(jet3Pt_branch) jet3Pt_branch->SetAddress(&jet3Pt_);//
  jet3Eta_branch = tree->GetBranch("jet3Eta");
- if(jet3Eta_branch) jet3Eta_branch->SetAddress(&jet3Eta_);
+ if(jet3Eta_branch) jet3Eta_branch->SetAddress(&jet3Eta_);//
  jet3Phi_branch = tree->GetBranch("jet3Phi");
- if(jet3Phi_branch) jet3Phi_branch->SetAddress(&jet3Phi_);
+ if(jet3Phi_branch) jet3Phi_branch->SetAddress(&jet3Phi_);//
  jet4Pt_branch = tree->GetBranch("jet4Pt");
- if(jet4Pt_branch) jet4Pt_branch->SetAddress(&jet4Pt_);
+ if(jet4Pt_branch) jet4Pt_branch->SetAddress(&jet4Pt_);//
  jet4Eta_branch = tree->GetBranch("jet4Eta");
- if(jet4Eta_branch) jet4Eta_branch->SetAddress(&jet4Eta_);
+ if(jet4Eta_branch) jet4Eta_branch->SetAddress(&jet4Eta_);//
  jet4Phi_branch = tree->GetBranch("jet4Phi");
- if(jet4Phi_branch) jet4Phi_branch->SetAddress(&jet4Phi_);
+ if(jet4Phi_branch) jet4Phi_branch->SetAddress(&jet4Phi_);//
  lep1Pt_branch = tree->GetBranch("lep1Pt");
- if(lep1Pt_branch) lep1Pt_branch->SetAddress(&lep1Pt_);
+ if(lep1Pt_branch) lep1Pt_branch->SetAddress(&lep1Pt_);//
  lep1Eta_branch = tree->GetBranch("lep1Eta");
- if(lep1Eta_branch) lep1Eta_branch->SetAddress(&lep1Eta_);
+ if(lep1Eta_branch) lep1Eta_branch->SetAddress(&lep1Eta_);//
  lep1Phi_branch = tree->GetBranch("lep1Phi");
- if(lep1Phi_branch) lep1Phi_branch->SetAddress(&lep1Phi_);
+ if(lep1Phi_branch) lep1Phi_branch->SetAddress(&lep1Phi_);//
  lep1Id_branch = tree->GetBranch("lep1Id");
- if(lep1Id_branch) lep1Id_branch->SetAddress(&lep1Id_);
+ if(lep1Id_branch) lep1Id_branch->SetAddress(&lep1Id_);//
  lep2Pt_branch = tree->GetBranch("lep2Pt");
- if(lep2Pt_branch) lep2Pt_branch->SetAddress(&lep2Pt_);
+ if(lep2Pt_branch) lep2Pt_branch->SetAddress(&lep2Pt_);//
  lep2Eta_branch = tree->GetBranch("lep2Eta");
- if(lep2Eta_branch) lep2Eta_branch->SetAddress(&lep2Eta_);
+ if(lep2Eta_branch) lep2Eta_branch->SetAddress(&lep2Eta_);//
  lep2Phi_branch = tree->GetBranch("lep2Phi");
- if(lep2Phi_branch) lep2Phi_branch->SetAddress(&lep2Phi_);
+ if(lep2Phi_branch) lep2Phi_branch->SetAddress(&lep2Phi_);//
  lep2Id_branch = tree->GetBranch("lep2Id");
- if(lep2Id_branch) lep2Id_branch->SetAddress(&lep2Id_);
+ if(lep2Id_branch) lep2Id_branch->SetAddress(&lep2Id_);//
  genHiggs1Pt_branch = tree->GetBranch("genHiggs1Pt");
- if(genHiggs1Pt_branch) genHiggs1Pt_branch->SetAddress(&genHiggs1Pt_);
+ if(genHiggs1Pt_branch) genHiggs1Pt_branch->SetAddress(&genHiggs1Pt_);//
  genHiggs1Eta_branch = tree->GetBranch("genHiggs1Eta");
- if(genHiggs1Eta_branch) genHiggs1Eta_branch->SetAddress(&genHiggs1Eta_);
+ if(genHiggs1Eta_branch) genHiggs1Eta_branch->SetAddress(&genHiggs1Eta_);//
  genHiggs1Phi_branch = tree->GetBranch("genHiggs1Phi");
- if(genHiggs1Phi_branch) genHiggs1Phi_branch->SetAddress(&genHiggs1Phi_);
+ if(genHiggs1Phi_branch) genHiggs1Phi_branch->SetAddress(&genHiggs1Phi_);//
  genHiggs2Pt_branch = tree->GetBranch("genHiggs2Pt");
- if(genHiggs2Pt_branch) genHiggs2Pt_branch->SetAddress(&genHiggs2Pt_);
+ if(genHiggs2Pt_branch) genHiggs2Pt_branch->SetAddress(&genHiggs2Pt_);//
  genHiggs2Eta_branch = tree->GetBranch("genHiggs2Eta");
- if(genHiggs2Eta_branch) genHiggs2Eta_branch->SetAddress(&genHiggs2Eta_);
+ if(genHiggs2Eta_branch) genHiggs2Eta_branch->SetAddress(&genHiggs2Eta_);//
  genHiggs2Phi_branch = tree->GetBranch("genHiggs2Phi");
- if(genHiggs2Phi_branch) genHiggs2Phi_branch->SetAddress(&genHiggs2Phi_);
+ if(genHiggs2Phi_branch) genHiggs2Phi_branch->SetAddress(&genHiggs2Phi_);//
  puWeight_branch = tree->GetBranch("puWeight");
- if(puWeight_branch) puWeight_branch->SetAddress(&puWeight_);
+ if(puWeight_branch) puWeight_branch->SetAddress(&puWeight_);//
  puWeightUp_branch = tree->GetBranch("puWeightUp");
- if(puWeightUp_branch) puWeightUp_branch->SetAddress(&puWeightUp_);
+ if(puWeightUp_branch) puWeightUp_branch->SetAddress(&puWeightUp_);//
  puWeightDown_branch = tree->GetBranch("puWeightDown");
- if(puWeightDown_branch) puWeightDown_branch->SetAddress(&puWeightDown_);
+ if(puWeightDown_branch) puWeightDown_branch->SetAddress(&puWeightDown_);//
  xsecWeight_branch = tree->GetBranch("xsecWeight");
- if(xsecWeight_branch) xsecWeight_branch->SetAddress(&xsecWeight_);
+ if(xsecWeight_branch) xsecWeight_branch->SetAddress(&xsecWeight_);//
  LHEScaleWeightNorm_branch = tree->GetBranch("LHEScaleWeightNorm");
- if(LHEScaleWeightNorm_branch) LHEScaleWeightNorm_branch->SetAddress(LHEScaleWeightNorm_);
+ if(LHEScaleWeightNorm_branch) LHEScaleWeightNorm_branch->SetAddress(LHEScaleWeightNorm_);//
  LHEPdfWeightNorm_branch = tree->GetBranch("LHEPdfWeightNorm");
- if(LHEPdfWeightNorm_branch) LHEPdfWeightNorm_branch->SetAddress(LHEPdfWeightNorm_);
+ if(LHEPdfWeightNorm_branch) LHEPdfWeightNorm_branch->SetAddress(LHEPdfWeightNorm_);//
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_branch = tree->GetBranch("disc_qcd_and_ttbar_Run2_enhanced_v8p2");
- if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_);
+ if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_);//
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_branch = tree->GetBranch("disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp");
- if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_);
+ if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_);//
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_branch = tree->GetBranch("disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown");
- if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_);
+ if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_);//
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSUp_branch = tree->GetBranch("disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSUp");
- if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSUp_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSUp_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSUp_);
+ if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSUp_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSUp_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSUp_);//
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSDown_branch = tree->GetBranch("disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSDown");
- if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSDown_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSDown_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSDown_);
+ if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSDown_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSDown_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMSDown_);//
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRUp_branch = tree->GetBranch("disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRUp");
- if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRUp_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRUp_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRUp_);
+ if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRUp_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRUp_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRUp_);//
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRDown_branch = tree->GetBranch("disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRDown");
- if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRDown_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRDown_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRDown_);
+ if(disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRDown_branch) disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRDown_branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JMRDown_);//
+
+
+_branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_Abs_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_Abs);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_Abs_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_Abs);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_Abs_2016_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_Abs_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_Abs_2016_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_Abs_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_BBEC1_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_BBEC1);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_BBEC1_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_BBEC1);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_BBEC1_2016_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_BBEC1_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_BBEC1_2016_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_BBEC1_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_EC2_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_EC2);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_EC2_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_EC2);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_EC2_2016_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_EC2_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_EC2_2016_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_EC2_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_HF_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_HF);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_HF_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_HF);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(_&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_HF_2016_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_HF_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_HF_2016_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_HF_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_FlavQCD_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_FlavQCD);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_FlavQCD_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_FlavQCD);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_RelBal_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_RelBal);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_RelBal_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_RelBal);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_RelSample_2016_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_RelSample_2016);
+   _branch = tree->GetBranch("");
+if(_branch) _branch->SetAddress(&disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_RelSample_2016_);//disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESDown_RelSample_2016);
+
+
+
+
+
 }
 
 void hhtree::GetEntry(unsigned int idx)
