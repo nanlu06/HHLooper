@@ -368,8 +368,8 @@ class hhtree{
   TBranch * fatJet1Pt_JESUp_Abs_2016_branch;
   bool fatJet1Pt_JESUp_Abs_2016_isLoaded;
   float fatJet1PtOverMHH_JESUp_Abs_2016_;
-  TBranch * fatJet1PtOverMHH_JESUp_Abs_branch;
-  bool fatJet1PtOverMHH_JESUp_Abs_isLoaded;
+  TBranch * fatJet1PtOverMHH_JESUp_Abs_2016_branch;
+  bool fatJet1PtOverMHH_JESUp_Abs_2016_isLoaded;
   float fatJet1Pt_JESDowb_Abs_2016_;
   TBranch * fatJet1Pt_JESDowb_Abs_2016_branch;
   bool fatJet1Pt_JESDowb_Abs_2016_isLoaded;
