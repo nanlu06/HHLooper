@@ -7389,6 +7389,14 @@ const float &hhtree::fatJet1PtOverMHH_JESDown_EC2_2017(){
 }
 return fatJet1PtOverMHH_JESDown_EC2_2017_;
 }
+const float &hhtree::fatJet1Pt_JESUp_HF_2017(){
+	if(not fatJet1Pt_JESUp_HF_2017_isLoaded){
+		if(fatJet1Pt_JESUp_HF_2017_branch != 0) fatJet1Pt_JESUp_HF_2017_branch->GetEntry(index);
+		else {printf("branch fatJet1Pt_JESUp_HF_2017_branch does not exist!\n");}
+		fatJet1Pt_JESUp_HF_2017_isLoaded = true;
+}
+return fatJet1Pt_JESUp_HF_2017_;
+}
 const float &hhtree::fatJet1PtOverMHH_JESUp_HF_2017(){
 	if(not fatJet1PtOverMHH_JESUp_HF_2017_isLoaded){
 		if(fatJet1PtOverMHH_JESUp_HF_2017_branch != 0) fatJet1PtOverMHH_JESUp_HF_2017_branch->GetEntry(index);
@@ -7543,6 +7551,15 @@ const float &hhtree::fatJet2PtOverMHH_JESDown_EC2_2017(){
 }
 return fatJet2PtOverMHH_JESDown_EC2_2017_;
 }
+const float &hhtree::fatJet2Pt_JESUp_HF_2017(){
+	if(not fatJet2Pt_JESUp_HF_2017_isLoaded){
+		if(fatJet2Pt_JESUp_HF_2017_branch != 0) fatJet2Pt_JESUp_HF_2017_branch->GetEntry(index);
+		else {printf("branch fatJet2Pt_JESUp_HF_2017_branch does not exist!\n");}
+		fatJet2Pt_JESUp_HF_2017_isLoaded = true;
+}
+return fatJet2Pt_JESUp_HF_2017_;
+}
+
 const float &hhtree::fatJet2PtOverMHH_JESUp_HF_2017(){
 	if(not fatJet2PtOverMHH_JESUp_HF_2017_isLoaded){
 		if(fatJet2PtOverMHH_JESUp_HF_2017_branch != 0) fatJet2PtOverMHH_JESUp_HF_2017_branch->GetEntry(index);
@@ -8067,6 +8084,14 @@ const float &hhtree::fatJet1PtOverMHH_JESDown_EC2_2018(){
 }
 return fatJet1PtOverMHH_JESDown_EC2_2018_;
 }
+const float &hhtree::fatJet1Pt_JESUp_HF_2018(){
+	if(not fatJet1Pt_JESUp_HF_2018_isLoaded){
+		if(fatJet1Pt_JESUp_HF_2018_branch != 0) fatJet1Pt_JESUp_HF_2018_branch->GetEntry(index);
+		else {printf("branch fatJet1Pt_JESUp_HF_2018_branch does not exist!\n");}
+		fatJet1Pt_JESUp_HF_2018_isLoaded = true;
+}
+return fatJet1Pt_JESUp_HF_2018_;
+}
 const float &hhtree::fatJet1PtOverMHH_JESUp_HF_2018(){
 	if(not fatJet1PtOverMHH_JESUp_HF_2018_isLoaded){
 		if(fatJet1PtOverMHH_JESUp_HF_2018_branch != 0) fatJet1PtOverMHH_JESUp_HF_2018_branch->GetEntry(index);
@@ -8221,6 +8246,15 @@ const float &hhtree::fatJet2PtOverMHH_JESDown_EC2_2018(){
 }
 return fatJet2PtOverMHH_JESDown_EC2_2018_;
 }
+const float &hhtree::fatJet2Pt_JESUp_HF_2018(){
+	if(not fatJet2Pt_JESUp_HF_2018_isLoaded){
+		if(fatJet2Pt_JESUp_HF_2018_branch != 0) fatJet2Pt_JESUp_HF_2018_branch->GetEntry(index);
+		else {printf("branch fatJet2Pt_JESUp_HF_2018_branch does not exist!\n");}
+		fatJet2Pt_JESUp_HF_2018_isLoaded = true;
+}
+return fatJet2Pt_JESUp_HF_2018_;
+}
+
 const float &hhtree::fatJet2PtOverMHH_JESUp_HF_2018(){
 	if(not fatJet2PtOverMHH_JESUp_HF_2018_isLoaded){
 		if(fatJet2PtOverMHH_JESUp_HF_2018_branch != 0) fatJet2PtOverMHH_JESUp_HF_2018_branch->GetEntry(index);
