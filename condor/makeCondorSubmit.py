@@ -21,19 +21,66 @@ datasets = ["qcd",
 "others"
 ]
 Tags =[
-    #["yield_AN_sr_sys_1111_nominal_nosys","no","nominal","no","no"],
-    #["yield_AN_sr_sys_1111_JER_Up","no","JER_Up","no","no"],
-    #["yield_AN_sr_sys_1111_JER_Down","no","JER_Down","no","no"],
-    #["yield_AN_sr_sys_1111_JES_Up","no","JES_Up","no","no"],
-    #["yield_AN_sr_sys_1111_JES_Down","no","JES_Down","no","no"],
-    #["yield_AN_sr_sys_1111_JMR_Up","no","JMR_Up","no","no"],
-    #["yield_AN_sr_sys_1111_JMR_Down","no","JMR_Down","no","no"],
-    #["yield_AN_sr_sys_1111_JMS_Up","no","JMS_Up","no","no"],
-    #["yield_AN_sr_sys_1111_JMS_Down","no","JMS_Down","no","no"],
-    #["yield_AN_sr_sys_1111_nominal","yes","nominal","no","yes"],
-    ["yield_AN_sr_sys_1111_trig_nominal","yes","nominal","yes","no"],
+    #["yield_AN_sr_sys_1217_nominal_nosys","no","nominal","no","no"],
+    #["yield_AN_sr_sys_1217_JER_Up","no","JER_Up","no","no"],
+    #["yield_AN_sr_sys_1217_JER_Down","no","JER_Down","no","no"],
+    
+    #["yield_AN_sr_sys_1217_JESUp_Abs","no","JESUp_Abs","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_Abs","no","JESDown_Abs","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_Abs_2016","no","JESUp_Abs_2016","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_Abs_2016","no","JESDown_Abs_2016","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_Abs_2017","no","JESUp_Abs_2017","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_Abs_2017","no","JESDown_Abs_2017","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_Abs_2018","no","JESUp_Abs_2018","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_Abs_2018","no","JESDown_Abs_2018","no","no"],
+    
+    #["yield_AN_sr_sys_1217_JESUp_BBEC1","no","JESUp_BBEC1","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_BBEC1","no","JESDown_BBEC1","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_BBEC1_2016","no","JESUp_BBEC1_2016","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_BBEC1_2016","no","JESDown_BBEC1_2016","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_BBEC1_2017","no","JESUp_BBEC1_2017","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_BBEC1_2017","no","JESDown_BBEC1_2017","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_BBEC1_2018","no","JESUp_BBEC1_2018","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_BBEC1_2018","no","JESDown_BBEC1_2018","no","no"],
+
+    #["yield_AN_sr_sys_1217_JESUp_EC2","no","JESUp_EC2","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_EC2","no","JESDown_EC2","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_EC2_2016","no","JESUp_EC2_2016","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_EC2_2016","no","JESDown_EC2_2016","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_EC2_2017","no","JESUp_EC2_2017","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_EC2_2017","no","JESDown_EC2_2017","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_EC2_2018","no","JESUp_EC2_2018","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_EC2_2018","no","JESDown_EC2_2018","no","no"],
+    
+    #["yield_AN_sr_sys_1217_JESUp_FlavQCD","no","JESUp_FlavQCD","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_FlavQCD","no","JESDown_FlavQCD","no","no"],
+
+    #["yield_AN_sr_sys_1217_JESUp_HF","no","JESUp_HF","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_HF","no","JESDown_HF","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_HF_2016","no","JESUp_HF_2016","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_HF_2016","no","JESDown_HF_2016","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_HF_2017","no","JESUp_HF_2017","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_HF_2017","no","JESDown_HF_2017","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_HF_2018","no","JESUp_HF_2018","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_HF_2018","no","JESDown_HF_2018","no","no"],
+
+    #["yield_AN_sr_sys_1217_JESUp_RelBal","no","JESUp_RelBal","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_RelBal","no","JESDown_RelBal","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_RelSample_2016","no","JESUp_RelSample_2016","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_RelSample_2016","no","JESDown_RelSample_2016","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_RelSample_2017","no","JESUp_RelSample_2017","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_RelSample_2017","no","JESDown_RelSample_2017","no","no"],
+    #["yield_AN_sr_sys_1217_JESUp_RelSample_2018","no","JESUp_RelSample_2018","no","no"],
+    #["yield_AN_sr_sys_1217_JESDown_RelSample_2018","no","JESDown_RelSample_2018","no","no"],
+
+    #["yield_AN_sr_sys_1217_JMR_Up","no","JMR_Up","no","no"],
+    #["yield_AN_sr_sys_1217_JMR_Down","no","JMR_Down","no","no"],
+    #["yield_AN_sr_sys_1217_JMS_Up","no","JMS_Up","no","no"],
+    #["yield_AN_sr_sys_1217_JMS_Down","no","JMS_Down","no","no"],
+    #["yield_AN_sr_sys_1217_nominal","yes","nominal","no","yes"],
+    #["yield_AN_sr_sys_1217_trig_nominal","yes","nominal","yes","no"],
 ]
-inputBase = "/storage/af/user/nlu/work/HH/ntuples/20210712_regression_v2/option5/combined/BDT/"
+inputBase = "/storage/af/user/idutta/work/HH/ntuple/20211209_regression/option5/combined/BDT/"
 
 for data in datasets:
     for year in ["2016","2017","2018"]:
@@ -71,22 +118,23 @@ for data in datasets:
             print submitCommand
             os.system(submitCommand)
 
+inputBase_data = "/storage/af/user/nlu/work/HH/ntuples/20210712_regression_v2/option5/combined/BDT/"
 for year in ["2016","2017","2018"]:
-    condorout = "mkdir /storage/af/user/idutta/HH/CMSSW_9_4_2/src/V2/HHLooper/condor/condor_output/"+tag[0]+"_data"
+    condorout = "mkdir /storage/af/user/idutta/HH/CMSSW_9_4_2/src/V2/HHLooper/condor/condor_output/yield_AN_sr_sys_1217_nominal_nosys_data"
     os.system(condorout)
-    condorout = "mkdir /storage/af/user/idutta/HH/CMSSW_9_4_2/src/V2/HHLooper/condor/condor_output/"+tag[0]+"_data/"+year
+    condorout = "mkdir /storage/af/user/idutta/HH/CMSSW_9_4_2/src/V2/HHLooper/condor/condor_output/yield_AN_sr_sys_1217_nominal_nosys_data/"+year
     os.system(condorout)
-    condorSubmit = "condor_submit/submitCondor_data_yield_AN_sr_sys_1111_nominal_nosys_"+year
-    jobName      = str(date.today())+"_data_yield_AN_sr_sys_1111_nominal_nosys_"+year
+    condorSubmit = "condor_submit/submitCondor_data_yield_AN_sr_sys_1217_nominal_nosys_"+year
+    jobName      = str(date.today())+"_data_yield_AN_sr_sys_1217_nominal_nosys_"+year
     outHistFile = "data.root"
     isData       =  "1"
-    inputDir = inputBase+year+"/data"
+    inputDir = inputBase_data+year+"/data"
     shutil.copyfile("proto_condor_submit",condorSubmit)
     for line in fileinput.FileInput(condorSubmit, inplace=1):
         line=line.replace("JOBNAME", jobName)
         line=line.replace("INPUTDIR",inputDir)
         line=line.replace("OUTFILENAME",outHistFile)
-        line=line.replace("TAG","yield_AN_sr_sys_1111_nominal_nosys")
+        line=line.replace("TAG","yield_AN_sr_sys_1217_nominal_nosys")
         line=line.replace("ISDATA",isData)
         line=line.replace("DOSYST","no")
         line=line.replace("DOSHAPESYST","nominal")
