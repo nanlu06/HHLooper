@@ -500,7 +500,7 @@ void hhtree::Init(TTree *tree)
  fatJet2PtOverMHH_JESDown_Abs_branch = tree->GetBranch("fatJet2PtOverMHH_JESDown_Abs");
  if(fatJet2PtOverMHH_JESDown_Abs_branch) fatJet2PtOverMHH_JESDown_Abs_branch->SetAddress(&fatJet2PtOverMHH_JESDown_Abs_);//fatJet2PtOverMHH_JESDown_Abs);
  fatJet2Pt_JESUp_Abs_2016_branch = tree->GetBranch("fatJet2Pt_JESUp_Abs_2016");
-if(fatJet2PtOverMHH_JESUp_Abs_2016_branch) fatJet2PtOverMHH_JESUp_Abs_2016_branch->SetAddress(&fatJet2Pt_JESUp_Abs_2016_);//fatJet2Pt_JESUp_Abs_2016);
+ if(fatJet2Pt_JESUp_Abs_2016_branch) fatJet2Pt_JESUp_Abs_2016_branch->SetAddress(&fatJet2Pt_JESUp_Abs_2016_);//fatJet2Pt_JESUp_Abs_2016);
  fatJet2PtOverMHH_JESUp_Abs_2016_branch = tree->GetBranch("fatJet2PtOverMHH_JESUp_Abs_2016");
  if(fatJet2PtOverMHH_JESUp_Abs_2016_branch) fatJet2PtOverMHH_JESUp_Abs_2016_branch->SetAddress(&fatJet2PtOverMHH_JESUp_Abs_2016_);//fatJet2PtOverMHH_JESUp_Abs_2016);
  fatJet2Pt_JESDowb_Abs_2016_branch = tree->GetBranch("fatJet2Pt_JESDowb_Abs_2016");
