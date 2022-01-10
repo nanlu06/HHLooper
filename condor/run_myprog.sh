@@ -1,6 +1,6 @@
 #!/bin/bash
 v=$2
-proc=${v::-5}
+proc=${10}
 #mkdir /storage/af/user/idutta/HH/CMSSW_9_4_2/src/V2/HHLooper/condor/condor_output/$3_$proc
 cd /storage/af/user/idutta/HH/CMSSW_9_4_2/src/V2/HHLooper/condor/condor_output/$3_$proc
 source /cvmfs/cms.cern.ch/cmsset_default.sh
