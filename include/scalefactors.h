@@ -1,5 +1,6 @@
 #ifndef scalefactors_h
 #define scalefactors_h
+#include <TGraphAsymmErrors.h>
 
 class PNetHbbScaleFactors
 {
@@ -41,6 +42,43 @@ class PNetHbbScaleFactors
                     result = PNetXBBSF->GetBinContent(bin_index_x, bin_index_y) - PNetXBBSF->GetBinError(bin_index_x, bin_index_y);
                 }
                 else result = PNetXBBSF->GetBinContent(bin_index_x, bin_index_y);
+            }   
+ 
+            return result;
+        }
+};
+
+class mHH_THunc_ScaleFactors
+{
+    public: 
+        TFile *file_sf;       
+        TGraphAsymmErrors *mHH_THunc_SF;
+        
+        mHH_THunc_ScaleFactors()
+        {
+            file_sf = new  TFile("data/scale_factor/mHH_THunc.root");
+            mHH_THunc_SF =   (TGraphAsymmErrors*)file_sf->Get("mHH_THunc");  
+            file_sf->Close();               
+        }
+        ~mHH_THunc_ScaleFactors()
+        {
+            delete mHH_THunc_SF;
+        }
+        //get the trigger eff per AK8 jet
+        float getmHHTHuncScaleFactors(float mHH, int variation) 
+        {
+            float result = 1.0;
+
+            int bin_index_x = mHH_THunc_SF->GetXaxis()->FindFixBin(mHH);            
+            
+            if ( bin_index_x>0){
+                if(variation==1){
+		  result = mHH_THunc_SF->GetX()[bin_index_x] + mHH_THunc_SF->GetErrorYhigh(bin_index_x);
+                }
+                else if (variation==-1) {
+		  result = mHH_THunc_SF->GetX()[bin_index_x] - mHH_THunc_SF->GetErrorYlow(bin_index_x);
+                }
+                else result = mHH_THunc_SF->GetX()[bin_index_x];
             }   
  
             return result;

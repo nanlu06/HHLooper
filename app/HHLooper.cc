@@ -176,6 +176,7 @@ if(input.find("2018") != std::string::npos) {year_ = "2018"; lumi = 59830.0;}
 system(("mkdir -p hists/"+label+"/"+year_).c_str());
 
 //trigger efficiency scale factors
+mHH_THunc_ScaleFactors mhh_thunc_sf;
 TrigEffScaleFactors trig_sf(year_);
 miniIsoEleScaleFactors miniIsoEle_sf(year_);
 miniIsoMuScaleFactors miniIsoMu_sf(year_);
@@ -456,8 +457,8 @@ histograms.addHistogram("fatJet1PNetXbb",   "; j_{1} PNet Xbb tagger; Events",  
 histograms.addHistogram("fatJet2PNetXbb",   "; j_{2} PNet Xbb tagger; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet2PNetXbb(); } );
 histograms.addHistogram("fatJet1PNetXbb_Bin1",   "; j_{1} PNet Xbb tagger; Events",    {0.90, 0.95,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet1PNetXbb(); } );
 histograms.addHistogram("fatJet2PNetXbb_Bin1",   "; j_{2} PNet Xbb tagger; Events",    {0.90, 0.95,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet2PNetXbb(); } );
-histograms.addHistogram("fatJet1PNetXbb_Bin2",   "; j_{1} PNet Xbb tagger; Events",    {0.90, 0.945, 0.955,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet1PNetXbb(); } );
-histograms.addHistogram("fatJet2PNetXbb_Bin2",   "; j_{2} PNet Xbb tagger; Events",    {0.90, 0.945, 0.955,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet2PNetXbb(); } );
+ histograms.addHistogram("fatJet1PNetXbb_Bin2",   "; j_{1} PNet Xbb tagger; Events",    {0.0,0.90, 0.945, 0.955,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet1PNetXbb(); } );
+ histograms.addHistogram("fatJet2PNetXbb_Bin2",   "; j_{2} PNet Xbb tagger; Events",    {0.0,0.90, 0.945, 0.955,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet2PNetXbb(); } );
 histograms.addHistogram("fatJet1Eta",          "; #eta^{j1}; Events",                 200,   -2.5,  2.5,  [&]() { return  hh.fatJet1Eta(); } );
 histograms.addHistogram("fatJet1Phi",          "; #Phi^{j1}; Events",                 200,  -3.2,   3.2,  [&]() { return  hh.fatJet1Phi(); } );
 histograms.addHistogram("fatJet2Eta",          "; #eta^{j2}; Events",                 200,   -2.5,  2.5,  [&]() { return  hh.fatJet2Eta(); } );
@@ -1464,9 +1465,12 @@ else{
 
 /****Systematics******/
 if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outputFileName.find("data") == std::string::npos ) && (syst_name.find("nominal") != std::string::npos) )
-{    
-    //pdf uncertainty for the HH signal acceptance
-    if(isHH && (outputFileName.find("VBF") == std::string::npos)){
+{   
+
+  cutflow.addWgtSyst("mHHTHuncUp",  [&](){ return isHH ? mhh_thunc_sf.getmHHTHuncScaleFactors(hh.hh_mass(),1):1.0;});
+  cutflow.addWgtSyst("mHHTHuncDown",  [&](){ return isHH ? mhh_thunc_sf.getmHHTHuncScaleFactors(hh.hh_mass(),-1):1.0;});
+  //pdf uncertainty for the HH signal acceptance
+  if(isHH && (outputFileName.find("VBF") == std::string::npos)){
         
     cutflow.addWgtSyst("LHEPDFEigenv0",  [&](){return isHH ?  hh.LHEPdfWeight()[0]*hh.LHEPdfWeightNorm()[0] : 1.0;});
     cutflow.addWgtSyst("LHEPDFEigenv1",  [&](){return isHH ?  hh.LHEPdfWeight()[1]*hh.LHEPdfWeightNorm()[1] : 1.0;});
