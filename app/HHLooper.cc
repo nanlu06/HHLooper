@@ -456,7 +456,7 @@ histograms.addHistogram("fatJet1PNetXbb",   "; j_{1} PNet Xbb tagger; Events",  
 histograms.addHistogram("fatJet2PNetXbb",   "; j_{2} PNet Xbb tagger; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet2PNetXbb(); } );
 histograms.addHistogram("fatJet1PNetXbb_Bin1",   "; j_{1} PNet Xbb tagger; Events",    {0.90, 0.95,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet1PNetXbb(); } );
 histograms.addHistogram("fatJet2PNetXbb_Bin1",   "; j_{2} PNet Xbb tagger; Events",    {0.90, 0.95,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet2PNetXbb(); } );
-histograms.addHistogram("fatJet1PNetXbb_Bin2",   "; j_{1} PNet Xbb tagger; Events",    {0.90, 0.945, 0.955,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet1PNetXbb(); } );
+ histograms.addHistogram("fatJet1PNetXbb_Bin2",   "; j_{1} PNet Xbb tagger; Events",    {0.90, 0.945, 0.955,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet1PNetXbb(); } );
 histograms.addHistogram("fatJet2PNetXbb_Bin2",   "; j_{2} PNet Xbb tagger; Events",    {0.90, 0.945, 0.955,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet2PNetXbb(); } );
 histograms.addHistogram("fatJet1Eta",          "; #eta^{j1}; Events",                 200,   -2.5,  2.5,  [&]() { return  hh.fatJet1Eta(); } );
 histograms.addHistogram("fatJet1Phi",          "; #Phi^{j1}; Events",                 200,  -3.2,   3.2,  [&]() { return  hh.fatJet1Phi(); } );
@@ -476,6 +476,7 @@ histograms.addHistogram("mj2_over_mj1",      "; m^{j2}/m^{j1}; Events",         
 histograms.addHistogram("mregj2_over_mregj1",      "; Mreg^{j2}/Mreg^{j1}; Events",               200,   0.0,  1.5,   [&]() { return  hh.fatJet2MassRegressed() / hh.fatJet1MassRegressed(); } );
 histograms.addHistogram("fatJet1Tau3OverTau2",   "; j_{1} Tau3/2; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet1Tau3OverTau2(); } );
 histograms.addHistogram("fatJet2Tau3OverTau2",   "; j_{2} Tau3/2; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet2Tau3OverTau2(); } );
+histograms.addHistogram("lep1Pt",          "; #p_{T}^{l1}; Events",                 200,   0.,  500.,  [&]() { return  hh.lep1Pt(); } );
 histograms.addHistogram("lep1Eta",          "; #eta^{j1}; Events",                 200,   -2.5,  2.5,  [&]() { return  hh.lep1Eta(); } );
 histograms.addHistogram("lep1Phi",          "; #Phi^{j1}; Events",                 200,  -3.2,   3.2,  [&]() { return  hh.lep1Phi(); } );
  histograms.addHistogram("gen_mHH",          "; gen m_{HH}; Events",                 200, 0.,   1500.,[&]() {  TLorentzVector gh1,gh2;
@@ -503,7 +504,7 @@ cutflow.setTFile(outfile);
 if(input.find("1LTopSkim") != std::string::npos) // this is 1LTopSkim input
 { 
 //Pre-selection cuts
-  cutflow.addCut("CutWeight", [&](){ return 1; },   [&](){ return isData ?  lumi : lumi * hh.weight() *hh.l1PreFiringWeight()*hh.xsecWeight()* hh.puWeight() * hh.genWeight() * (abs(hh.lep1Id()) == 11 ? miniIsoEle_sf.getminiIsoScaleFactors(hh.lep1Pt(),hh.lep1Eta()) : miniIsoMu_sf.getminiIsoScaleFactors(hh.lep1Pt(),hh.lep1Eta())) * (abs(hh.lep1Id()) == 11 ? elTrig_sf.getScaleFactors(hh.lep1Pt(),hh.lep1Eta()) : muTrig_sf.getTrigScaleFactors(hh.lep1Pt(),hh.lep1Eta(), year_)) * (abs(hh.lep1Id()) == 11 ? elID_sf.getScaleFactors(hh.lep1Pt(),hh.lep1Eta()) : muID_sf.getIDScaleFactors(hh.lep1Pt(),hh.lep1Eta(), year_)) ;}); //before correction
+  cutflow.addCut("CutWeight", [&](){ return 1; },   [&](){ return isData ?  lumi : lumi * hh.weight() *hh.l1PreFiringWeight()*hh.xsecWeight()* hh.puWeight() * hh.genWeight()*(abs(hh.lep1Id()) == 11 ? miniIsoEle_sf.getminiIsoScaleFactors(hh.lep1Pt(),hh.lep1Eta()) : miniIsoMu_sf.getminiIsoScaleFactors(hh.lep1Pt(),hh.lep1Eta())) * (abs(hh.lep1Id()) == 11 ? elTrig_sf.getScaleFactors(hh.lep1Pt(),hh.lep1Eta()) : muTrig_sf.getTrigScaleFactors(hh.lep1Pt(),hh.lep1Eta(), year_)) * (abs(hh.lep1Id()) == 11 ? elID_sf.getScaleFactors(hh.lep1Pt(),hh.lep1Eta()) : muID_sf.getIDScaleFactors(hh.lep1Pt(),hh.lep1Eta(), year_))*(year_ == "2016" ? 0.813367:1.0)*(year_ == "2017" ?0.955044 :1.0)*(year_ == "2018" ?0.950837 :1.0) ;}); //before correction //  * (isTTJets ?ttjets_sf.getScaleFactors_VBF(year_, hh.fatJet1Pt()) :1.0)
 //cutflow.addCut("CutWeight", [&](){ return 1; },   [&](){ return isData ?  lumi : lumi * hh.weight() * hh.puWeight() * (isTTJets  ? ttjets_sf.getPNetXbbShapeScaleFactors(year_, hh.fatJet1PNetXbb(), 0) : 1.0); });//after correction
   if(input.find("HHc1") == std::string::npos) cutflow.addCutToLastActiveCut("CutHLT",       [&](){ return abs(hh.lep1Id()) == 11 ? (hh.HLT_Ele27_WPTight_Gsf() || hh.HLT_Ele32_WPTight_Gsf() || hh.HLT_Ele32_WPTight_Gsf_L1DoubleEG()) : (hh.HLT_IsoMu24()  ||  hh.HLT_IsoMu27()  || hh.HLT_Mu50() ); },   UNITY);
 cutflow.addCutToLastActiveCut("CutLepJetPt",       [&](){ return hh.fatJet1Pt() > 300.0 && hh.lep1Pt() > 50.0 && hh.lep2Pt() <=0 ; },   UNITY);
@@ -544,7 +545,7 @@ else
       //}
 
     //before ttbar recoil correction
-      //float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()* (isTTJets ? ttbar_factor:1.0));
+      // float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()* (isTTJets ? ttbar_factor:1.0));
     
       
     if(!isData){
