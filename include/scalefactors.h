@@ -57,7 +57,7 @@ class mHH_THunc_ScaleFactors
         mHH_THunc_ScaleFactors()
         {
             file_sf = new  TFile("data/scale_factor/mHH_THunc.root");
-            mHH_THunc_SF =   (TGraphAsymmErrors*)file_sf->Get("mHH_THunc");  
+            mHH_THunc_SF =   (TGraphAsymmErrors*)file_sf->Get("Graph");  
             file_sf->Close();               
         }
         ~mHH_THunc_ScaleFactors()
@@ -68,19 +68,17 @@ class mHH_THunc_ScaleFactors
         float getmHHTHuncScaleFactors(float mHH, int variation) 
         {
             float result = 1.0;
-
+	    
             int bin_index_x = mHH_THunc_SF->GetXaxis()->FindFixBin(mHH);            
-            
             if ( bin_index_x>0){
                 if(variation==1){
-		  result = mHH_THunc_SF->GetX()[bin_index_x] + mHH_THunc_SF->GetErrorYhigh(bin_index_x);
+		  result = mHH_THunc_SF->GetY()[bin_index_x] + mHH_THunc_SF->GetErrorYhigh(bin_index_x);
                 }
                 else if (variation==-1) {
-		  result = mHH_THunc_SF->GetX()[bin_index_x] - mHH_THunc_SF->GetErrorYlow(bin_index_x);
+		  result = mHH_THunc_SF->GetY()[bin_index_x] - mHH_THunc_SF->GetErrorYlow(bin_index_x);
                 }
                 else result = mHH_THunc_SF->GetX()[bin_index_x];
             }   
- 
             return result;
         }
 };
