@@ -1,4 +1,4 @@
-executable=/storage/af/user/idutta/HH/CMSSW_9_4_2/src/V3/HHLooper/condor/run_myprog.sh
+executable=/storage/af/user/idutta/HH/CMSSW_9_4_2/src/V2/HHLooper/condor/run_myprog.sh
 universe=vanilla
 Arguments= INPUTDIR OUTFILENAME TAG ISDATA DOSYST DOSHAPESYST DOTRIGSYST DOPNETSFSYST YEAR PROC
 Input =

@@ -387,9 +387,9 @@ for dirName in ["shapes_prefit",  "shapes_fit_s"]:
                 g.GetPoint(idx, x, y)
                 h1_data.SetBinContent(idx+1, y*10)
 
-        #h1_data.GetXaxis().SetTitle("j_{2} regressed mass (GeV)")
+        h1_data.GetXaxis().SetTitle("j_{2} regressed mass (GeV)")
         #h1_data.GetXaxis().SetTitle("j_{2} soft drop mass (GeV)")
-        h1_data.GetXaxis().SetTitle("p_{T}^{j_{1}} (GeV)")
+        #h1_data.GetXaxis().SetTitle("p_{T}^{j_{1}} (GeV)")
 
         makeplot_single(
                 h1_sig=h1_sig,
