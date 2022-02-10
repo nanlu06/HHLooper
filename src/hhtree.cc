@@ -1174,8 +1174,8 @@ if(hh_mass_JESUp_HF_2018_branch) hh_mass_JESUp_HF_2018_branch->SetAddress(&hh_ma
  if(puWeightDown_branch) puWeightDown_branch->SetAddress(&puWeightDown_);//
  xsecWeight_branch = tree->GetBranch("xsecWeight");
  if(xsecWeight_branch) xsecWeight_branch->SetAddress(&xsecWeight_);//
- LHEScaleWeightNorm_branch = tree->GetBranch("LHEScaleWeightNorm");
- if(LHEScaleWeightNorm_branch) LHEScaleWeightNorm_branch->SetAddress(LHEScaleWeightNorm_);//
+ LHEScaleWeightNormNew_branch = tree->GetBranch("LHEScaleWeightNormNew");
+ if(LHEScaleWeightNormNew_branch) LHEScaleWeightNormNew_branch->SetAddress(LHEScaleWeightNormNew_);//
  LHEPdfWeightNorm_branch = tree->GetBranch("LHEPdfWeightNorm");
  if(LHEPdfWeightNorm_branch) LHEPdfWeightNorm_branch->SetAddress(LHEPdfWeightNorm_);//
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_branch = tree->GetBranch("disc_qcd_and_ttbar_Run2_enhanced_v8p2");
@@ -1877,7 +1877,7 @@ isVBFtag_JESUp_BBEC1_2018_isLoaded = false;
  puWeightUp_isLoaded = false;
  puWeightDown_isLoaded = false;
  xsecWeight_isLoaded = false;
- LHEScaleWeightNorm_isLoaded = false;
+ LHEScaleWeightNormNew_isLoaded = false;
  LHEPdfWeightNorm_isLoaded = false;
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_isLoaded = false;
  disc_qcd_and_ttbar_Run2_enhanced_v8p2_JESUp_isLoaded = false;
@@ -6979,19 +6979,19 @@ const float &hhtree::xsecWeight()
  }
  return xsecWeight_;
 }
-const float * hhtree::LHEScaleWeightNorm()
+const float * hhtree::LHEScaleWeightNormNew()
 {
- if(not LHEScaleWeightNorm_isLoaded)
+ if(not LHEScaleWeightNormNew_isLoaded)
  {
-   if(LHEScaleWeightNorm_branch != 0) LHEScaleWeightNorm_branch->GetEntry(index);
+   if(LHEScaleWeightNormNew_branch != 0) LHEScaleWeightNormNew_branch->GetEntry(index);
    else
    {
-     //printf("branch LHEScaleWeightNorm_branch does not exist!\n");
+     //printf("branch LHEScaleWeightNormNew_branch does not exist!\n");
 //exit(1);
    }
-   LHEScaleWeightNorm_isLoaded = true;
+   LHEScaleWeightNormNew_isLoaded = true;
  }
- return LHEScaleWeightNorm_;
+ return LHEScaleWeightNormNew_;
 }
 
 const float * hhtree::LHEPdfWeightNorm()

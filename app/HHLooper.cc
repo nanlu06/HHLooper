@@ -1594,15 +1594,15 @@ if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outpu
     
     //switch to this after the norm weight is fixed 
     
-    cutflow.addWgtSyst("QCDscale0",  [&](){return hh.LHEScaleWeight()[0]*hh.LHEScaleWeightNorm()[0];});
-    cutflow.addWgtSyst("QCDscale1",  [&](){return hh.LHEScaleWeight()[1]*hh.LHEScaleWeightNorm()[1];});
-    cutflow.addWgtSyst("QCDscale2",  [&](){return hh.LHEScaleWeight()[2]*hh.LHEScaleWeightNorm()[2];});
-    cutflow.addWgtSyst("QCDscale3",  [&](){return hh.LHEScaleWeight()[3]*hh.LHEScaleWeightNorm()[3];});
-    cutflow.addWgtSyst("QCDscale4",  [&](){return hh.LHEScaleWeight()[4]*hh.LHEScaleWeightNorm()[4];});
-    cutflow.addWgtSyst("QCDscale5",  [&](){return hh.LHEScaleWeight()[5]*hh.LHEScaleWeightNorm()[5];});
-    cutflow.addWgtSyst("QCDscale6",  [&](){return hh.LHEScaleWeight()[6]*hh.LHEScaleWeightNorm()[6];});
-    cutflow.addWgtSyst("QCDscale7",  [&](){return hh.LHEScaleWeight()[7]*hh.LHEScaleWeightNorm()[7];});
-    cutflow.addWgtSyst("QCDscale8",  [&](){return hh.LHEScaleWeight()[8]*hh.LHEScaleWeightNorm()[8];});
+    cutflow.addWgtSyst("QCDscale0",  [&](){return hh.LHEScaleWeight()[0]*hh.LHEScaleWeightNormNew()[0];});
+    cutflow.addWgtSyst("QCDscale1",  [&](){return hh.LHEScaleWeight()[1]*hh.LHEScaleWeightNormNew()[1];});
+    cutflow.addWgtSyst("QCDscale2",  [&](){return hh.LHEScaleWeight()[2]*hh.LHEScaleWeightNormNew()[2];});
+    cutflow.addWgtSyst("QCDscale3",  [&](){return hh.LHEScaleWeight()[3]*hh.LHEScaleWeightNormNew()[3];});
+    cutflow.addWgtSyst("QCDscale4",  [&](){return hh.LHEScaleWeight()[4]*hh.LHEScaleWeightNormNew()[4];});
+    cutflow.addWgtSyst("QCDscale5",  [&](){return hh.LHEScaleWeight()[5]*hh.LHEScaleWeightNormNew()[5];});
+    cutflow.addWgtSyst("QCDscale6",  [&](){return hh.LHEScaleWeight()[6]*hh.LHEScaleWeightNormNew()[6];});
+    cutflow.addWgtSyst("QCDscale7",  [&](){return hh.LHEScaleWeight()[7]*hh.LHEScaleWeightNormNew()[7];});
+    cutflow.addWgtSyst("QCDscale8",  [&](){return hh.LHEScaleWeight()[8]*hh.LHEScaleWeightNormNew()[8];});
     /*
     cutflow.addWgtSyst("QCDscale0",  [&](){return hh.LHEScaleWeight()[0];});
     cutflow.addWgtSyst("QCDscale1",  [&](){return hh.LHEScaleWeight()[1];});
