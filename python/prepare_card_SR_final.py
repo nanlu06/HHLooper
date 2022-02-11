@@ -252,13 +252,13 @@ if __name__ == "__main__":
 
                     if ("HH" in proc[idx]) and ("qqHH" not in proc[idx]):         
                         for ibin in range(hist_nominal.GetNbinsX()):
-                            nom_bin_content = hist_nominal.GetBinContent(ibin)
+                            nom_bin_content = hist_nominal.GetBinContent(ibin+1)
                             sq_tmp = 0;
                             for ipdf in range(103):
-                                sq_tmp = sq_tmp + pow(inFile_this.Get(region+"LHEPDFEigenv"+str(ipdf)+obs).GetBinContent(ibin)-hist_nominal.GetBinContent(ibin),2);
+                                sq_tmp = sq_tmp + pow(inFile_this.Get(region+"LHEPDFEigenv"+str(ipdf)+obs).GetBinContent(ibin+1)-hist_nominal.GetBinContent(ibin+1),2);
                                 
-                            hist_Up.SetBinContent(ibin, nom_bin_content+np.sqrt(sq_tmp));
-                            hist_Down.SetBinContent(ibin, nom_bin_content-np.sqrt(sq_tmp));                  
+                            hist_Up.SetBinContent(ibin+1, nom_bin_content+np.sqrt(sq_tmp));
+                            hist_Down.SetBinContent(ibin+1, nom_bin_content-np.sqrt(sq_tmp));                  
                 
                 elif "ggHHQCDacc" in sys:
                     print("starting to cal ggHHQCDacc unc for ", proc[idx])
@@ -271,7 +271,7 @@ if __name__ == "__main__":
                     if ("HH" in proc[idx]) and ("qqHH" not in proc[idx]): 
 
                         for ibin in range(hist_nominal.GetNbinsX()):
-                            nom_bin_content = hist_nominal.GetBinContent(ibin)
+                            nom_bin_content = hist_nominal.GetBinContent(ibin+1)
                             up_bin_content = nom_bin_content
                             down_bin_content = nom_bin_content
                             #take the envelope for weights [0,1,3,4,5,8,9]
@@ -279,13 +279,13 @@ if __name__ == "__main__":
                                 if iqcd == 2 or iqcd == 6:
                                     continue
                                 else:
-                                    tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin)
+                                    tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin+1)
                                     if tmp > up_bin_content:
                                         up_bin_content = tmp
                                     elif tmp < down_bin_content:
                                         down_bin_content = tmp
-                            hist_Up.SetBinContent(ibin, up_bin_content)
-                            hist_Down.SetBinContent(ibin, down_bin_content)
+                            hist_Up.SetBinContent(ibin+1, up_bin_content)
+                            hist_Down.SetBinContent(ibin+1, down_bin_content)
 
                 elif "othersQCD" in sys:
                     print("starting to cal othersQCD unc for ", proc[idx])
@@ -298,7 +298,7 @@ if __name__ == "__main__":
                     if ("others" in proc[idx]): 
 
                         for ibin in range(hist_nominal.GetNbinsX()):
-                            nom_bin_content = hist_nominal.GetBinContent(ibin)
+                            nom_bin_content = hist_nominal.GetBinContent(ibin+1)
                             up_bin_content = nom_bin_content
                             down_bin_content = nom_bin_content
                             #take the envelope for weights [0,1,3,4,5,8,9]
@@ -306,13 +306,13 @@ if __name__ == "__main__":
                                 if iqcd == 2 or iqcd == 6:
                                     continue
                                 else:
-                                    tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin)
+                                    tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin+1)
                                     if tmp > up_bin_content:
                                         up_bin_content = tmp
                                     elif tmp < down_bin_content:
                                         down_bin_content = tmp
-                            hist_Up.SetBinContent(ibin, up_bin_content)
-                            hist_Down.SetBinContent(ibin, down_bin_content)
+                            hist_Up.SetBinContent(ibin+1, up_bin_content)
+                            hist_Down.SetBinContent(ibin+1, down_bin_content)
                 
                 elif "pileupWeight" in sys:
                     
