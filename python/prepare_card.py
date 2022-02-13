@@ -27,7 +27,6 @@ if __name__ == "__main__":
                 region_list = ["SRv24Bin1", "SRv24Bin2",  "SRv24Bin3", "SRv24Bin4", "FailSRv24", "FitCRv24", "FailFitCRv24"]
             else:
                 region_list = ["SRv8p2Bin1", "SRv8p2Bin2",  "SRv8p2Bin3", "FailSRv8p2", "FitCRv8p2", "FailFitCRv8p2"]
-
         for region in region_list:
             inFile_this.cd()
             hist_nominal = inFile_this.Get(region+"__fatJet2MassSD")
@@ -68,6 +67,33 @@ if __name__ == "__main__":
             hist_nominal_Blind.SetBinContent(nx-1,0.0)
             hist_nominal_Blind.SetBinError(nx-1,0.0)
             hist_nominal_Blind.Write()
+            
+            hist_nominal_SR =  hist_nominal.Clone(hist_nominal.GetName().replace("histJet2Mass", "histJet2MassSR"))
+            
+            #make a separate histogram for the signal region
+            if region != "FailSRv8p2" :
+                #data other than in Fail region remove all
+                if idx==0 :
+                    for ibin in range(hist_nominal.GetNbinsX()):
+                        hist_nominal_SR.SetBinContent(ibin+1,0)
+                        hist_nominal_SR.SetBinError(ibin+1,0)
+                #only SR for signal and background
+                else:
+                    for ibin in range(hist_nominal.GetNbinsX()):
+                        if (ibin<nx-2) or (ibin>nx):
+                            hist_nominal_SR.SetBinContent(ibin+1,0)
+                            hist_nominal_SR.SetBinError(ibin+1,0)
+                        
+                #hist_nominal_SR = r.TH1F(hist_nominal.GetName().replace("histJet2Mass", "histJet2MassSR"), hist_nominal.GetName().replace("histJet2Mass", "histJet2MassSR"), 3, hist_nominal.GetBinLowEdge(nx-1), hist_nominal.GetBinLowEdge(nx+1) )
+                #hist_nominal_SR.SetBinContent(2,hist_nominal.GetBinContent(nx))
+                #hist_nominal_SR.SetBinError(2,hist_nominal.GetBinError(nx))
+                #hist_nominal_SR.SetBinContent(3,hist_nominal.GetBinContent(nx+1))
+                #hist_nominal_SR.SetBinError(3,hist_nominal.GetBinError(nx+1))
+                #hist_nominal_SR.SetBinContent(1,hist_nominal.GetBinContent(nx-1))
+                #hist_nominal_SR.SetBinError(1,hist_nominal.GetBinError(nx-1))
+                
+            hist_nominal_SR.Write() 
+            
             for  hist in hists_sys:
                 hist.Write()
 
@@ -80,6 +106,23 @@ if __name__ == "__main__":
                 hist_Blind.SetBinContent(nx-1,0.0)
                 hist_Blind.SetBinError(nx-1,0.0)
                 hist_Blind.Write()
+                
+                hist_SR =  hist.Clone(hist.GetName().replace("histJet2Mass", "histJet2MassSR"))
+                
+                if region != "FailSRv8p2" :
+                    #data other than in Fail region remove all
+                    if idx==0 :
+                        for ibin in range(hist.GetNbinsX()):
+                            hist_SR.SetBinContent(ibin+1,0)
+                            hist_SR.SetBinError(ibin+1,0)
+                    #only SR for signal and background
+                    else:
+                        for ibin in range(hist.GetNbinsX()):
+                            if (ibin<nx-2) or (ibin>nx):
+                                hist_SR.SetBinContent(ibin+1,0)
+                                hist_SR.SetBinError(ibin+1,0)
+                            
+                hist_SR.Write() 
 
         inFile_this.Close()
     outFile.Close()

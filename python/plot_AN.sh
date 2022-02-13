@@ -120,36 +120,3 @@ done
 python plot_qcd_shape_pass_fail.py
 #now change vbdt  to "v8p2" in L94 and do the above step again
 
-
-
-#### FTest plots, figure 23
-#follow the README in https://github.com/LPC-HH/combine-hh
-#to  do FTest, do:
-python runFtest.py --v1n1=0 --v1n2=1 --toys=1000 -s 1
-python runFtest.py --v1n1=1 --v1n2=2 --toys=1000 -s 1
-python runFtest.py --v1n1=2 --v1n2=3 --toys=1000 -s 1
-
-
-#### pre-fit  and post-fit plots, figure 24 and figure 25
-# first, you  need to run combine in https://github.com/LPC-HH/combine-hh
-# run shape cards (for pre-fit plots) for all bins and for v24 and v8p2 input files
-python create_shapecard_passOnly.py
-# and then run combine with  the FitDiagnostics command (see README in https://github.com/LPC-HH/combine-hh)  to save the pre-fit shapes
-# run alphabet cards (for post-fit plots) for all bins and for v24 and v8p2 input files
-python create_datacard.py
-# change the  bin name in Line 180 of create_datacard.py to run for different bins
-#  and then run  combine with FitDiagnostics command to save the post-fit shapes
-# once all done, copy all the FitDiagnostics output files, and copy it into this directory, with the following directory and file names:
-directory BDTv24:
-fitDiagnosticsBin1Pre.root  fitDiagnosticsBin2.root	fitDiagnosticsBin4Pre.root  
-fitDiagnosticsBin1.root     fitDiagnosticsBin3Pre.root	fitDiagnosticsBin4.root
-fitDiagnosticsBin2Pre.root  fitDiagnosticsBin3.root	
-directory BDTv8p2:
-fitDiagnosticsBin1Pre.root  fitDiagnosticsBin2Pre.root	fitDiagnosticsBin3Pre.root  
-fitDiagnosticsBin1.root     fitDiagnosticsBin2.root	fitDiagnosticsBin3.root    
-#where file names with "Pre" are from create_shapecard_passOnly.py, and file names without "Pre" are from create_datacard.py
-# then run the following script to produce the prefit and postfit plot (figure 24 and 25)
-python  makePostFitPlot.py
-#change Line 307 to change BDT version
-
-

@@ -4,8 +4,8 @@ void makeClass()
 {
  //TFile * file = new TFile("../data_noskim/ttJets/TTJets_TuneCP5_13TeV-amcatnloFXFX-pythia8_MC_Fall17_RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_V2_1pb_weighted_v0.root");
  //TFile * file = new TFile("../data/Jet2Xbb0p8Skim/2016/HHSM/GluGluToHHTo4B_node_SM_13TeV-madgraph_1pb_weighted_BDTs_Jet2Xbb0p8Skim.root");
- TFile * file = new TFile("../data/1LTopSkim/2016/tt1L/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8_1pb_weighted_1LTopSkim.root");
- TTree * tree = (TTree*)file->Get("tree");
+ TFile * file = new TFile("/storage/af/user/idutta/work/HH/ntuple/20210712_regression/option10/combined/Tau32TopSkim/BDT/2016/qcd/QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-combined_1pb_weighted_Tau32TopSkim_BDTs.root");
+ TTree * tree = (TTree*)file->Get("Events");
  
 
  ofstream headerf;
@@ -71,6 +71,8 @@ void makeClass()
         !branchtitle.EndsWith("/L") &&
         !branchtitle.EndsWith("/O") &&
         !branchtitle.EndsWith("/D") &&
+      !branchtitle.Contains("Trigger/flag bit (process: HLT)") &&
+      !branchtitle.Contains("generator weight") &&
         !branchtitle.BeginsWith("TString") &&
         !branchtitle.BeginsWith("TBits") &&
         !branchclass.Contains("LorentzVector") &&
@@ -92,7 +94,8 @@ void makeClass()
   if(branchtitle.EndsWith("/L")) type = "long int";
   if(branchtitle.EndsWith("/O")) type = "bool";
   if(branchtitle.EndsWith("/Double")) type = "double";
-
+  if(branchtitle.Contains("Trigger/flag bit (process: HLT)")) type = "bool";
+  if(branchtitle.Contains("generator weight")) type = "float";
   srcf<<" "<<branchname<<"_branch = tree->GetBranch(\""<<branchname<<"\");"<<endl;
 
   if(branchtitle.Contains("["))

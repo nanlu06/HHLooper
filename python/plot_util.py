@@ -7,7 +7,7 @@ import sys
 import os
 
 leftMargin   = 0.13
-rightMargin  = 0.01
+rightMargin  = 0.05
 topMargin    = 0.07
 bottomMargin = 0.12
 r.gStyle.SetOptStat(0)
@@ -192,7 +192,7 @@ def makeplot_single_2d(
     #leg.SetFillStyle(1)
     leg.SetFillColor(0)
     leg.SetBorderSize(1)
-    leg.SetTextFont(42)
+    leg.SetTextFont(32)
     for idx in range(len(h2_sig)):
         leg.AddEntry(h2_sig[idx], sig_legends_[idx], "p")
     for idx in range(len(h2_bkg)):
@@ -407,7 +407,7 @@ def makeplot_single(
         h1.Scale(sig_scale_)
         h1.SetLineWidth(2)
         h1.SetLineColor(s_color[idx])
-        #print(h1.Integral())
+        print("signal index and sum:",idx, h1.Integral())
         h1_sig.append(h1)
      
     tfs_bkg = {}
@@ -416,12 +416,14 @@ def makeplot_single(
         fn = bkg_fnames_[idx]
         n = os.path.basename(fn.replace(".root", ""))
         tfs_bkg[n] = r.TFile(fn)
+        print("fn hist_name_",fn,hist_name_)
         h1 = tfs_bkg[n].Get(hist_name_)
+        print("sum 1:",hist_name_,h1.Integral())
         h1.SetName(hist_name_+"_bkg_"+str(idx))
         h1.SetLineWidth(2)
         h1.SetLineColor(b_color[idx])
         h1.SetFillColorAlpha(b_color[idx], 1)
-        #print(h1.Integral())
+        print("sum 2:",hist_name_,h1.Integral())
         h1_bkg.append(h1)
     h1_data = None 
 
@@ -435,7 +437,7 @@ def makeplot_single(
         h1_data.SetLineWidth(2)
         h1_data.SetMarkerColor(1)
         h1_data.SetMarkerStyle(20)
-        #print(h1_data.Integral())
+        print("sum data: ",h1_data.Integral())
     if "nbins" in extraoptions:
         rebin(h1_sig, extraoptions["nbins"])   
         rebin(h1_bkg, extraoptions["nbins"])   
@@ -490,17 +492,26 @@ def makeplot_single(
     pad1.cd()
 
     stack = r.THStack("stack", "stack")
-    hist_all = h1_sig[0].Clone("hist_all")
-    hist_all.Scale(1.0/sig_scale_)
-    hist_s = h1_sig[0].Clone("hist_s")
+    #signal process exist
+    #hist_all = h1_sig[0].Clone("hist_all")
+    #hist_all.Scale(1.0/sig_scale_)
+    hist_all = h1_bkg[0].Clone("hist_all")
+    hist_all.Scale(0.0)
+
+    #no signal process
+    hist_s = hist_all.Clone("hist_s")
+    #signal process exist
+    #hist_s = h1_sig[0].Clone("hist_s")
+
     hist_b = h1_bkg[0].Clone("hist_b")
     for idx in range(len(h1_bkg)):
+        print("stack add:", h1_bkg[idx].Integral())
         stack.Add(h1_bkg[idx])
         hist_all.Add(h1_bkg[idx])
         if idx > 0:
             hist_b.Add(h1_bkg[idx])
     for idx in range(len(h1_sig)):
-        if idx > 0:
+        if idx > -1:
             hist_temp = h1_sig[idx].Clone(h1_sig[idx].GetName()+"_temp")
             hist_temp.Scale(1.0/sig_scale_)
             hist_all.Add(hist_temp)
@@ -535,12 +546,13 @@ def makeplot_single(
     #if "xaxis_range" in extraoptions:
     #    stack.GetXaxis().SetRangeUser(float(extraoptions["xaxis_range"][0]),float(extraoptions["xaxis_range"][1]))
 
-    leg = r.TLegend(0.16, 0.60, 0.97, 0.88)
-    leg.SetNColumns(3)
+    leg = r.TLegend(0.16, 0.70, 0.97, 0.88)
+    leg.SetNColumns(4)
     leg.SetFillStyle(0)
     leg.SetBorderSize(0)
     leg.SetTextFont(42)
     leg.SetTextSize(0.07)
+    
     for idx in range(len(h1_bkg)):
         leg.AddEntry(h1_bkg[idx], bkg_legends_[idx], "F")
     for idx in range(len(h1_sig)):
@@ -550,8 +562,8 @@ def makeplot_single(
             leg.AddEntry(h1_sig[idx], sig_legends_[idx], "L")
     if h1_data:
         leg.AddEntry(h1_data, "Data", "ep")
-    leg.Draw()
 
+    leg.Draw()
     pad2.cd()
     pad2.SetGridy(1)
     ratio = None
@@ -583,6 +595,8 @@ def makeplot_single(
         ratio.GetYaxis().SetRangeUser(ratio_Low, ratio_High*1.2)
         ratio.GetYaxis().SetTitle("S/#sqrt{B}")
         ratio.Draw("samehist")
+    #if "xaxis_range" in extraoptions:
+    #    ratio.GetXaxis().SetRangeUser(float(extraoptions["xaxis_range"][0]),float(extraoptions["xaxis_range"][1]))
     ratio.SetLineColor(1)
     ratio.SetLineWidth(2)
     ratio.SetMarkerStyle(20)
@@ -640,7 +654,8 @@ def makeplot_single(
         outFile = outFile + "/" + hist_name_
 
     #print("maxY = "+str(maxY))
-    stack.SetMaximum(maxY*1.45)
+    #Y maximum range
+    stack.SetMaximum(maxY*1.7)
 
     #print everything into txt file
     text_file = open(outFile+"_linY.txt", "w")
@@ -658,7 +673,7 @@ def makeplot_single(
     if h1_data:
         text_file.write("-------")
     text_file.write("\n")
-    for ibin in range(0,h1_sig[0].GetNbinsX()+1):
+    for ibin in range(0,h1_bkg[0].GetNbinsX()+1):
         text_file.write("%3d"%ibin+"   ")
         text_file.write(" | %6.3f"%ratio.GetBinCenter(ibin)+" ")
         for idx in range(len(bkg_legends_)):
@@ -719,7 +734,7 @@ def makeplot_all(
 
     hist_names = []
     for region in regions_name_:
-        tf = r.TFile(sig_fnames_[0])
+        tf = r.TFile(bkg_fnames_[0])
         for key in tf.GetListOfKeys():
             if region in key.GetName():
                 hist_names.append(key.GetName())
@@ -885,10 +900,10 @@ def makeplot_cutOptimize(
     stack.GetYaxis().SetLabelSize(0.045)
     stack.GetYaxis().CenterTitle()
 
-    leg = r.TLegend(0.45, 0.65, 0.95, 0.88)
+    leg = r.TLegend(0.15, 0.70, 0.95, 0.88)
     leg.SetFillStyle(0)
     leg.SetBorderSize(0)
-    leg.SetTextFont(42)
+    leg.SetTextFont(28)
     for idx in range(len(h1_bkg)):
         leg.AddEntry(h1_bkg[idx], bkg_legends_[idx], "F")
     for idx in range(len(h1_sig)):
