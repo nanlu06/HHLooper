@@ -274,16 +274,13 @@ if __name__ == "__main__":
                             nom_bin_content = hist_nominal.GetBinContent(ibin+1)
                             up_bin_content = nom_bin_content
                             down_bin_content = nom_bin_content
-                            #take the envelope for weights [0,1,3,4,5,8,9]
-                            for iqcd in range(9):
-                                if iqcd == 2 or iqcd == 6:
-                                    continue
-                                else:
-                                    tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin+1)
-                                    if tmp > up_bin_content:
-                                        up_bin_content = tmp
-                                    elif tmp < down_bin_content:
-                                        down_bin_content = tmp
+                            # take the envelope for weights [0, 1, 3, 4, 5, 7, 8]
+                            for iqcd in [0, 1, 3, 4, 5, 7, 8]:
+                                tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin+1)
+                                if tmp > up_bin_content:
+                                    up_bin_content = tmp
+                                elif tmp < down_bin_content:
+                                    down_bin_content = tmp
                             hist_Up.SetBinContent(ibin+1, up_bin_content)
                             hist_Down.SetBinContent(ibin+1, down_bin_content)
 
@@ -301,16 +298,13 @@ if __name__ == "__main__":
                             nom_bin_content = hist_nominal.GetBinContent(ibin+1)
                             up_bin_content = nom_bin_content
                             down_bin_content = nom_bin_content
-                            #take the envelope for weights [0,1,3,4,5,8,9]
-                            for iqcd in range(9):
-                                if iqcd == 2 or iqcd == 6:
-                                    continue
-                                else:
-                                    tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin+1)
-                                    if tmp > up_bin_content:
-                                        up_bin_content = tmp
-                                    elif tmp < down_bin_content:
-                                        down_bin_content = tmp
+                            # take the envelope for weights [0, 1, 3, 4, 5, 7, 8]
+                            for iqcd in [0, 1, 3, 4, 5, 7, 8]:
+                                tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin+1)
+                                if tmp > up_bin_content:
+                                    up_bin_content = tmp
+                                elif tmp < down_bin_content:
+                                    down_bin_content = tmp
                             hist_Up.SetBinContent(ibin+1, up_bin_content)
                             hist_Down.SetBinContent(ibin+1, down_bin_content)
                 
