@@ -272,17 +272,20 @@ if __name__ == "__main__":
 
                         for ibin in range(hist_nominal.GetNbinsX()):
                             nom_bin_content = hist_nominal.GetBinContent(ibin+1)
-                            up_bin_content = nom_bin_content
-                            down_bin_content = nom_bin_content
-                            # take the envelope for weights [0, 1, 3, 4, 5, 7, 8]
-                            for iqcd in [0, 1, 3, 4, 5, 7, 8]:
+                            scale4_content = inFile_this.Get(region+"QCDscale4"+obs).GetBinContent(ibin+1)
+                            up_bin_content = scale4_content
+                            down_bin_content = scale4_content
+                            # take the envelope for weights [0, 1, 3, 5, 7, 8] w.r.t. 4
+                            # and apply the relative shift to the nominal histogram
+                            for iqcd in [0, 1, 3, 5, 7, 8]:
                                 tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin+1)
                                 if tmp > up_bin_content:
                                     up_bin_content = tmp
                                 elif tmp < down_bin_content:
                                     down_bin_content = tmp
-                            hist_Up.SetBinContent(ibin+1, up_bin_content)
-                            hist_Down.SetBinContent(ibin+1, down_bin_content)
+                            if scale4_content > 0:
+                                hist_Up.SetBinContent(ibin+1, (up_bin_content/scale4_content)*nom_bin_content)
+                                hist_Down.SetBinContent(ibin+1, (down_bin_content/scale4_content)*nom_bin_content)
 
                 elif "othersQCD" in sys:
                     print("starting to cal othersQCD unc for ", proc[idx])
@@ -296,17 +299,20 @@ if __name__ == "__main__":
 
                         for ibin in range(hist_nominal.GetNbinsX()):
                             nom_bin_content = hist_nominal.GetBinContent(ibin+1)
-                            up_bin_content = nom_bin_content
-                            down_bin_content = nom_bin_content
-                            # take the envelope for weights [0, 1, 3, 4, 5, 7, 8]
-                            for iqcd in [0, 1, 3, 4, 5, 7, 8]:
+                            scale4_content = inFile_this.Get(region+"QCDscale4"+obs).GetBinContent(ibin+1)
+                            up_bin_content = scale4_content
+                            down_bin_content = scale4_content
+                            # take the envelope for weights [0, 1, 3, 5, 7, 8] w.r.t. 4
+                            # and apply the relative shift to the nominal histogram
+                            for iqcd in [0, 1, 3, 5, 7, 8]:
                                 tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin+1)
                                 if tmp > up_bin_content:
                                     up_bin_content = tmp
                                 elif tmp < down_bin_content:
                                     down_bin_content = tmp
-                            hist_Up.SetBinContent(ibin+1, up_bin_content)
-                            hist_Down.SetBinContent(ibin+1, down_bin_content)
+                            if scale4_content > 0:
+                                hist_Up.SetBinContent(ibin+1, (up_bin_content/scale4_content)*nom_bin_content)
+                                hist_Down.SetBinContent(ibin+1, (down_bin_content/scale4_content)*nom_bin_content)
                 
                 elif "pileupWeight" in sys:
                     
