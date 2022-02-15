@@ -6171,6 +6171,38 @@ const float &hhtree::isVBFtag_JESDown_BBEC1_2016(){
 }
 return isVBFtag_JESDown_BBEC1_2016_;
 }
+const float &hhtree::isVBFtag_JESUp_BBEC1_2017(){
+	if(not isVBFtag_JESUp_BBEC1_2017_isLoaded){
+		if(isVBFtag_JESUp_BBEC1_2017_branch != 0) isVBFtag_JESUp_BBEC1_2017_branch->GetEntry(index);
+		else {printf("branch isVBFtag_JESUp_BBEC1_2017_branch does not exist!\n");}
+		isVBFtag_JESUp_BBEC1_2017_isLoaded = true;
+}
+return isVBFtag_JESUp_BBEC1_2017_;
+}
+const float &hhtree::isVBFtag_JESDown_BBEC1_2017(){
+	if(not isVBFtag_JESDown_BBEC1_2017_isLoaded){
+		if(isVBFtag_JESDown_BBEC1_2017_branch != 0) isVBFtag_JESDown_BBEC1_2017_branch->GetEntry(index);
+		else {printf("branch isVBFtag_JESDown_BBEC1_2017_branch does not exist!\n");}
+		isVBFtag_JESDown_BBEC1_2017_isLoaded = true;
+}
+return isVBFtag_JESDown_BBEC1_2017_;
+}
+const float &hhtree::isVBFtag_JESUp_BBEC1_2018(){
+	if(not isVBFtag_JESUp_BBEC1_2018_isLoaded){
+		if(isVBFtag_JESUp_BBEC1_2018_branch != 0) isVBFtag_JESUp_BBEC1_2018_branch->GetEntry(index);
+		else {printf("branch isVBFtag_JESUp_BBEC1_2018_branch does not exist!\n");}
+		isVBFtag_JESUp_BBEC1_2018_isLoaded = true;
+}
+return isVBFtag_JESUp_BBEC1_2018_;
+}
+const float &hhtree::isVBFtag_JESDown_BBEC1_2018(){
+	if(not isVBFtag_JESDown_BBEC1_2018_isLoaded){
+		if(isVBFtag_JESDown_BBEC1_2018_branch != 0) isVBFtag_JESDown_BBEC1_2018_branch->GetEntry(index);
+		else {printf("branch isVBFtag_JESDown_BBEC1_2018_branch does not exist!\n");}
+		isVBFtag_JESDown_BBEC1_2018_isLoaded = true;
+}
+return isVBFtag_JESDown_BBEC1_2018_;
+}
 const float &hhtree::isVBFtag_JESUp_EC2(){
 	if(not isVBFtag_JESUp_EC2_isLoaded){
 		if(isVBFtag_JESUp_EC2_branch != 0) isVBFtag_JESUp_EC2_branch->GetEntry(index);
@@ -6251,6 +6283,39 @@ const float &hhtree::isVBFtag_JESDown_HF_2016(){
 }
 return isVBFtag_JESDown_HF_2016_;
 }
+const float &hhtree::isVBFtag_JESUp_HF_2017(){
+	if(not isVBFtag_JESUp_HF_2017_isLoaded){
+		if(isVBFtag_JESUp_HF_2017_branch != 0) isVBFtag_JESUp_HF_2017_branch->GetEntry(index);
+		else {printf("branch isVBFtag_JESUp_HF_2017_branch does not exist!\n");}
+		isVBFtag_JESUp_HF_2017_isLoaded = true;
+}
+return isVBFtag_JESUp_HF_2017_;
+}
+const float &hhtree::isVBFtag_JESDown_HF_2017(){
+	if(not isVBFtag_JESDown_HF_2017_isLoaded){
+		if(isVBFtag_JESDown_HF_2017_branch != 0) isVBFtag_JESDown_HF_2017_branch->GetEntry(index);
+		else {printf("branch isVBFtag_JESDown_HF_2017_branch does not exist!\n");}
+		isVBFtag_JESDown_HF_2017_isLoaded = true;
+}
+return isVBFtag_JESDown_HF_2017_;
+}
+const float &hhtree::isVBFtag_JESUp_HF_2018(){
+	if(not isVBFtag_JESUp_HF_2018_isLoaded){
+		if(isVBFtag_JESUp_HF_2018_branch != 0) isVBFtag_JESUp_HF_2018_branch->GetEntry(index);
+		else {printf("branch isVBFtag_JESUp_HF_2018_branch does not exist!\n");}
+		isVBFtag_JESUp_HF_2018_isLoaded = true;
+}
+return isVBFtag_JESUp_HF_2018_;
+}
+const float &hhtree::isVBFtag_JESDown_HF_2018(){
+	if(not isVBFtag_JESDown_HF_2018_isLoaded){
+		if(isVBFtag_JESDown_HF_2018_branch != 0) isVBFtag_JESDown_HF_2018_branch->GetEntry(index);
+		else {printf("branch isVBFtag_JESDown_HF_2018_branch does not exist!\n");}
+		isVBFtag_JESDown_HF_2018_isLoaded = true;
+}
+return isVBFtag_JESDown_HF_2018_;
+}
+
 const float &hhtree::isVBFtag_JESUp_RelBal(){
 	if(not isVBFtag_JESUp_RelBal_isLoaded){
 		if(isVBFtag_JESUp_RelBal_branch != 0) isVBFtag_JESUp_RelBal_branch->GetEntry(index);
