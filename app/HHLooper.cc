@@ -537,7 +537,6 @@ else
       float ttbar_factor = input.find("option5") == std::string::npos ? 1.0 : 2.0;
      
       float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets ? ttbar_factor*ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
-
       //If applying correction from VBF analysis
       //float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight());
       //if(isTTJets){
@@ -594,7 +593,7 @@ else
     else if(syst_name == "JESDown_Abs_2017" && year_=="2017") { total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JESDown_Abs_2017(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JESDown_Abs_2017(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0, hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"nom");} 
     else if(syst_name == "JESDown_Abs_2018" && year_=="2018") { total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JESDown_Abs_2018(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JESDown_Abs_2018(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0, hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"nom");} 
     else if(syst_name == "JESDown_BBEC1") { total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JESDown_BBEC1(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JESDown_BBEC1(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0, hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"nom");}
-    else if(syst_name == "JESDown_BBEC1_2016" && year_=="2016") { total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JESDown_BBEC1_2016(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JESDown_BBEC1_2016(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0, hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"nom");} 
+    else if(syst_name == "JESDown_BBEC1_2016" && year_=="2016") { total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JESDown_BBEC1_2016(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JESDown_BBEC1_2016(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0, hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"nom"); } 
     else if(syst_name == "JESDown_BBEC1_2017" && year_=="2017") { total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JESDown_BBEC1_2017(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JESDown_BBEC1_2017(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0, hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"nom");} 
     else if(syst_name == "JESDown_BBEC1_2018" && year_=="2018") { total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JESDown_BBEC1_2018(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JESDown_BBEC1_2018(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0, hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"nom");} 
     else if(syst_name == "JESDown_EC2") { total_weight = total_weight * trig_sf.getTrigEffEvt(hh.fatJet1Pt_JESDown_EC2(), hh.fatJet1MassSD(), hh.fatJet1PNetXbb(), hh.fatJet2Pt_JESDown_EC2(), hh.fatJet2MassSD(), hh.fatJet2PNetXbb(), 0, 0, hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(), year_, isHH,"nom");}
@@ -1468,8 +1467,8 @@ else{
 if(doSystematics && (outputFileName.find("qcd") == std::string::npos ) && (outputFileName.find("data") == std::string::npos ) && (syst_name.find("nominal") != std::string::npos) )
 {   
 
-  cutflow.addWgtSyst("mHHTHuncUp",  [&](){ return isHH ? mhh_thunc_sf.getmHHTHuncScaleFactors(hh.hh_mass(),1):1.0;});
-  cutflow.addWgtSyst("mHHTHuncDown",  [&](){ return isHH ? mhh_thunc_sf.getmHHTHuncScaleFactors(hh.hh_mass(),-1):1.0;});
+  cutflow.addWgtSyst("mHHTHuncUp",  [&](){ return (isHH && (outputFileName.find("VBF")== std::string::npos))? mhh_thunc_sf.getmHHTHuncScaleFactors(hh.hh_mass(),1):1.0;});
+  cutflow.addWgtSyst("mHHTHuncDown",  [&](){ return (isHH && (outputFileName.find("VBF")== std::string::npos))? mhh_thunc_sf.getmHHTHuncScaleFactors(hh.hh_mass(),-1):1.0;});
   //pdf uncertainty for the HH signal acceptance
   if(isHH && (outputFileName.find("VBF") == std::string::npos)){
         
