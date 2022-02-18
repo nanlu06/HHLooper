@@ -48,10 +48,10 @@ if __name__ == "__main__":
     #ttbar yield: scale PNet9 yield to the actual yield with PNet>0.98
     inFile_this_ttbar_loose = r.TFile(histdir+tag+"_nominal/combine/ttbar.root",  "READ")
     ttbar_bin1_yield = inFile_this_ttbar_loose.Get("SRv8p2Bin1"+obs).Integral(2,18)
-    print("ttbar yields nominal", ttbar_bin1_yield)
-    print("ttbar yields loose nominal", inFile_this_ttbar_loose.Get("SRv8p2Bin1"+ttbar_bin1+obs).Integral(2,18))
+    #print("ttbar yields nominal", ttbar_bin1_yield)
+    #print("ttbar yields loose nominal", inFile_this_ttbar_loose.Get("SRv8p2Bin1"+ttbar_bin1+obs).Integral(2,18))
     ratio_yield_ttbar = ttbar_bin1_yield/inFile_this_ttbar_loose.Get("SRv8p2Bin1"+ttbar_bin1+obs).Integral(2,18)
-    print("ratio for ttbar yield", ratio_yield_ttbar)
+    #print("ratio for ttbar yield", ratio_yield_ttbar)
                 
     for idx in range(len(proc)):
         #if proc[idx]=="Data" or proc[idx]=="QCD":
@@ -272,20 +272,20 @@ if __name__ == "__main__":
 
                         for ibin in range(hist_nominal.GetNbinsX()):
                             nom_bin_content = hist_nominal.GetBinContent(ibin+1)
-                            up_bin_content = nom_bin_content
-                            down_bin_content = nom_bin_content
-                            #take the envelope for weights [0,1,3,4,5,8,9]
-                            for iqcd in range(9):
-                                if iqcd == 2 or iqcd == 6:
-                                    continue
-                                else:
-                                    tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin+1)
-                                    if tmp > up_bin_content:
-                                        up_bin_content = tmp
-                                    elif tmp < down_bin_content:
-                                        down_bin_content = tmp
-                            hist_Up.SetBinContent(ibin+1, up_bin_content)
-                            hist_Down.SetBinContent(ibin+1, down_bin_content)
+                            scale4_content = inFile_this.Get(region+"QCDscale4"+obs).GetBinContent(ibin+1)
+                            up_bin_content = scale4_content
+                            down_bin_content = scale4_content
+                            # take the envelope for weights [0, 1, 3, 5, 7, 8] w.r.t. 4
+                            # and apply the relative shift to the nominal histogram
+                            for iqcd in [0, 1, 3, 5, 7, 8]:
+                                tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin+1)
+                                if tmp > up_bin_content:
+                                    up_bin_content = tmp
+                                elif tmp < down_bin_content:
+                                    down_bin_content = tmp
+                            if scale4_content > 0:
+                                hist_Up.SetBinContent(ibin+1, (up_bin_content/scale4_content)*nom_bin_content)
+                                hist_Down.SetBinContent(ibin+1, (down_bin_content/scale4_content)*nom_bin_content)
 
                 elif "othersQCD" in sys:
                     print("starting to cal othersQCD unc for ", proc[idx])
@@ -299,20 +299,20 @@ if __name__ == "__main__":
 
                         for ibin in range(hist_nominal.GetNbinsX()):
                             nom_bin_content = hist_nominal.GetBinContent(ibin+1)
-                            up_bin_content = nom_bin_content
-                            down_bin_content = nom_bin_content
-                            #take the envelope for weights [0,1,3,4,5,8,9]
-                            for iqcd in range(9):
-                                if iqcd == 2 or iqcd == 6:
-                                    continue
-                                else:
-                                    tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin+1)
-                                    if tmp > up_bin_content:
-                                        up_bin_content = tmp
-                                    elif tmp < down_bin_content:
-                                        down_bin_content = tmp
-                            hist_Up.SetBinContent(ibin+1, up_bin_content)
-                            hist_Down.SetBinContent(ibin+1, down_bin_content)
+                            scale4_content = inFile_this.Get(region+"QCDscale4"+obs).GetBinContent(ibin+1)
+                            up_bin_content = scale4_content
+                            down_bin_content = scale4_content
+                            # take the envelope for weights [0, 1, 3, 5, 7, 8] w.r.t. 4
+                            # and apply the relative shift to the nominal histogram
+                            for iqcd in [0, 1, 3, 5, 7, 8]:
+                                tmp = inFile_this.Get(region+"QCDscale"+str(iqcd)+obs).GetBinContent(ibin+1)
+                                if tmp > up_bin_content:
+                                    up_bin_content = tmp
+                                elif tmp < down_bin_content:
+                                    down_bin_content = tmp
+                            if scale4_content > 0:
+                                hist_Up.SetBinContent(ibin+1, (up_bin_content/scale4_content)*nom_bin_content)
+                                hist_Down.SetBinContent(ibin+1, (down_bin_content/scale4_content)*nom_bin_content)
                 
                 elif "pileupWeight" in sys:
                     
@@ -409,7 +409,7 @@ if __name__ == "__main__":
                 
                 #ttbar bin 1 PNet cut uncertainty for the ttbar Jet 2 mass shape
                 if (proc[idx]=='TTJets') and ('Bin1' in region) and systs_shape[isysts_shape] == "ttbarBin1Jet2PNetCut": 
-                    print("debug ttbarBin1Jet2PNetCut")
+                    #print("debug ttbarBin1Jet2PNetCut")
                     hist_Up =  inFile_systs_shape[isysts_shape*2].Get(iregion+ttbar_bin1_up+obs)
                     hist_Down =  inFile_systs_shape[isysts_shape*2+1].Get(iregion+ttbar_bin1_down+obs)     
                 else:
@@ -419,7 +419,7 @@ if __name__ == "__main__":
                     #split JMS, JMR into three years
                     if systs_shape[isysts_shape] == "JMR" or systs_shape[isysts_shape] == "JMS" or systs_shape[isysts_shape] == "JER":
 
-                        print("splitted: ",systs_shape[isysts_shape])
+                        #print("splitted: ",systs_shape[isysts_shape])
                         
                         hist_JERUp_2016 = hist_nominal.Clone("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+systs_shape[isysts_shape]+"2016Up")
                         hist_JERUp_2016.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+systs_shape[isysts_shape]+"2016Up")
@@ -458,10 +458,10 @@ if __name__ == "__main__":
                         hist_Down_y2018 =  inFile2018_systs_shape[isysts_shape*2+1].Get(region+obs) 
                         hist_Down_y2018.SetName("hist_Down_y2018")
      
-                        print("full run 2: ", hist_nominal.Integral())
-                        print("2016: ", hist_y2016.Integral(), " ", hist_Up_y2016.Integral(), " ", hist_Down_y2016.Integral())
-                        print("2017: ", hist_y2017.Integral(), " ", hist_Up_y2017.Integral(), " ", hist_Down_y2017.Integral())
-                        print("2018: ", hist_y2018.Integral(), " ", hist_Up_y2018.Integral(), " ", hist_Down_y2018.Integral())
+                        #print("full run 2: ", hist_nominal.Integral())
+                        #print("2016: ", hist_y2016.Integral(), " ", hist_Up_y2016.Integral(), " ", hist_Down_y2016.Integral())
+                        #print("2017: ", hist_y2017.Integral(), " ", hist_Up_y2017.Integral(), " ", hist_Down_y2017.Integral())
+                        #print("2018: ", hist_y2018.Integral(), " ", hist_Up_y2018.Integral(), " ", hist_Down_y2018.Integral())
 
                         for ibin in range(hist_nominal.GetNbinsX()): 
                             #print("hist_Up_2016.GetBinContent(ibin+1) bin",ibin,hist_Up_y2016.GetBinContent(ibin+1))
@@ -492,10 +492,10 @@ if __name__ == "__main__":
                             hist_down_total = hist_JERDown_2018.Integral(2,18)
                             hist_JERDown_2018.Scale(ttbar_bin1_yield/hist_down_total)
                     
-                        print("splitted shape sys integral 2016 2017 2018")
-                        print(hist_JERUp_2016.Integral(), hist_JERDown_2016.Integral())
-                        print(hist_JERUp_2017.Integral(), hist_JERDown_2017.Integral())
-                        print(hist_JERUp_2018.Integral(), hist_JERDown_2018.Integral())
+                        #print("splitted shape sys integral 2016 2017 2018")
+                        #print(hist_JERUp_2016.Integral(), hist_JERDown_2016.Integral())
+                        #print(hist_JERUp_2017.Integral(), hist_JERDown_2017.Integral())
+                        #print(hist_JERUp_2018.Integral(), hist_JERDown_2018.Integral())
                     
                         hists_sys.append(hist_JERUp_2016)
                         hists_sys.append(hist_JERDown_2016)
@@ -507,7 +507,6 @@ if __name__ == "__main__":
                         #end of JMS JMR pileupWeight if condition
                     #end of else condition
                 #end of shape syst loop
-                
                 hist_Up.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+systs_shape[isysts_shape]+"Up")
                 hist_Down.SetName("histJet2Mass_"+outBinName+"_"+proc[idx]+"_"+systs_shape[isysts_shape]+"Down")
                 
@@ -517,11 +516,11 @@ if __name__ == "__main__":
                     
                     hist_up_total = hist_Up.Integral(2,18);#[50-220 GeV]
                     hist_Up.Scale(ttbar_bin1_yield/hist_up_total)
-                    print("ttbar hist up integral ",hist_Up.Integral(2,18))
+                    #print("ttbar hist up integral ",hist_Up.Integral(2,18))
                     
                     hist_down_total = hist_Down.Integral(2,18)
                     hist_Down.Scale(ttbar_bin1_yield/hist_down_total)
-                    print("ttbar hist down integral ",hist_Down.Integral(2,18))
+                    #print("ttbar hist down integral ",hist_Down.Integral(2,18))
                 
                     hist_nominal_total = hist_nominal.Integral(2,18)
                     hist_nominal.Scale(ttbar_bin1_yield/hist_nominal_total)
