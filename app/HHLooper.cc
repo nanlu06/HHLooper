@@ -536,7 +536,7 @@ else
       //after ttbar recoil correction
       float ttbar_factor = input.find("option5") == std::string::npos ? 1.0 : 2.0;
      
-      float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets ? ttbar_factor*ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0);
+      float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets ? ttbar_factor*ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0)*((isHH && (outputFileName.find("VBF")== std::string::npos))? mhh_thunc_sf.getmHHTHuncScaleFactors(hh.hh_mass(),0):1.0);
       //If applying correction from VBF analysis
       //float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight());
       //if(isTTJets){

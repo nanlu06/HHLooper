@@ -77,7 +77,7 @@ class mHH_THunc_ScaleFactors
                 else if (variation==-1) {
 		  result = mHH_THunc_SF->GetY()[bin_index_x] - mHH_THunc_SF->GetErrorYlow(bin_index_x);
                 }
-                else result = mHH_THunc_SF->GetX()[bin_index_x];
+                else result = mHH_THunc_SF->GetY()[bin_index_x];
             }   
             return result;
         }
