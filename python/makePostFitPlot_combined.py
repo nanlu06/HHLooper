@@ -390,7 +390,7 @@ def makeplot_single(
     tex2.SetLineWidth(2)
     tex2.Draw()
 
-    lumi_value = 137
+    lumi_value = 138
     if "lumi_value" in extraoptions:
         lumi_value = extraoptions["lumi_value"]
     tex3 = r.TLatex(0.72,0.912,"%d"%lumi_value+" fb^{-1} (13 TeV)")
