@@ -21,6 +21,90 @@ r.gStyle.SetStatW(0.2)
 r.gStyle.SetStatH(0.15)
 r.gROOT.SetBatch(1)
 
+def get_tgraph(data, subtract=None, denom=None):
+    alpha = 1-0.6827
+    TGraph_data = TGraphAsymmErrors(data)
+    for i in range(TGraph_data.GetN()):
+        idenom = 1
+        isubtract = 0
+        if denom: 
+            idenom = denom.GetBinContent(i+1)
+        if subtract:
+            isubtract = subtract.GetBinContent(i+1)
+        N = TGraph_data.GetY()[i]
+        if N>0:
+            L = Math.gamma_quantile(alpha/2,N,1.)
+        U = Math.gamma_quantile_c(alpha/2,N+1,1)
+        TGraph_data.SetPointEYlow(i, (N-L)/idenom)
+        TGraph_data.SetPointEYhigh(i, (U-N)/idenom)
+        TGraph_data.SetPoint(i, TGraph_data.GetX()[i], (N-isubtract)/idenom)
+        TGraph_data.SetPointEXlow(i, 0)
+        TGraph_data.SetPointEXhigh(i, 0)
+    return TGraph_data
+
+def get_sig_bkg_data(vbdt, dirName, bdtbin, pnames_sig, pnames_bkg, region, debug=False):
+    dirNameSig = "shapes_fit_s"
+    fin = r.TFile("combine-hh/combined_cards_"+vbdt+"/fitDiagnostics"+region+".root", "READ")
+    fin_sig = r.TFile("combine-hh/combined_cards_"+vbdt+"/fitDiagnostics"+region+".root", "READ")
+    h1_sig = []
+    h1_bkg = []
+    h1_data = None
+
+    if debug:
+        print("debug: dirName", dirName)
+    dirpre = fin.GetDirectory(dirName)
+    dirthis = dirpre.GetDirectory(bdtbin)
+
+    for idx_bkg in range(len(pnames_bkg)):
+        if debug:
+            print("debug pnames_bkg", pnames_bkg[idx_bkg], bdtbin)
+        if dirthis.GetListOfKeys().Contains(pnames_bkg[idx_bkg]):
+            h = fin.Get(dirName+"/"+bdtbin+"/"+pnames_bkg[idx_bkg])
+            h.SetDirectory(0)
+            h.Scale(10.0)
+            h1_bkg.append(h)
+            h1_data = h.Clone("h1_data")
+            h1_data.SetDirectory(0)
+        else:
+            h = h1_bkg[0].Clone("h1_"+pnames_bkg[idx_bkg])
+            h.SetDirectory(0)
+            h.Scale(0.0)
+            h1_bkg.append(h)
+    for idx_sig in range(len(pnames_sig)):
+        if debug:
+            print("debug v1 pnames_sig[idx_sig]",pnames_sig[idx_sig])
+        if dirthis.GetListOfKeys().Contains(pnames_sig[idx_sig]):
+            if debug:
+                print("debug: get histogram ",dirNameSig),
+                print(bdtbin)
+                print(pnames_sig[idx_sig])
+            h = fin_sig.Get(dirNameSig+"/"+bdtbin+"/"+pnames_sig[idx_sig])
+            h.SetDirectory(0)
+            if debug:
+                print("debug signal from fin_sig ",h.Integral()) 
+            h.Scale(10.0)
+            h1_sig.append(h)
+        else:
+            print("debug signal does not exist")
+            h = h1_bkg[0].Clone("h1_"+pnames_sig[idx_sig])
+            h.SetDirectory(0)
+            h.Scale(0.0)
+            h1_sig.append(h)
+        
+    nBins =  h1_data.GetNbinsX()
+                    
+    bdtbin_data = bdtbin
+
+    dirthis_data = dirpre.GetDirectory(bdtbin_data)
+    if dirthis_data.GetListOfKeys().Contains("data"):
+    
+        g = fin.Get(dirName+"/"+bdtbin_data+"/data")
+        for idx in range(nBins):
+            y = g.GetY()[idx]
+            h1_data.SetBinContent(idx+1, y*10)
+    h1_data.GetXaxis().SetTitle("j_{2} regressed mass (GeV)")
+
+    return h1_sig, h1_bkg, h1_data
 
 def makeplot_single(
     h1_sig=None,
@@ -79,10 +163,10 @@ def makeplot_single(
 
     pad1.cd()
 
-    for idx in range(len(h1_sig)):
-        print("before signal scaling",h1_sig[idx].Integral())
-        h1_sig[idx].Scale(sig_scale_)
-        print("after signal scaling",h1_sig[idx].Integral())
+    #for idx in range(len(h1_sig)):
+    #    print("before signal scaling",h1_sig[idx].Integral())
+    #    h1_sig[idx].Scale(1.0)
+    #    print("after signal scaling",h1_sig[idx].Integral())
         
     stack = r.THStack("stack", "stack")
     nS = np.zeros(h1_bkg[0].GetNbinsX())
@@ -210,8 +294,9 @@ def makeplot_single(
             imc = Double(hist_all.GetBinContent(i+1))
             #data point
             var_x, var_y = Double(0.), Double(0.)
-            if not ("SR" in h1_data.GetTitle() and (i>5 and i<9)):
-            	ratio.GetPoint(i,var_x,var_y)    
+            #if not ("SR" in h1_data.GetTitle() and (i>5 and i<9)):
+            #if not ("SR" in h1_data.GetTitle()):
+            ratio.GetPoint(i,var_x,var_y)    
             if var_y == 0.:
                 ratio.SetPoint(i,var_x,-1.0)
                 ratio.SetPointEYlow(i,-1)
@@ -408,12 +493,12 @@ def main(vbdt, HH_limit):
     
     dirNameSig = "shapes_fit_s"
     
-    debug = False;
+    debug = True;
 
-    for dirName in ["shapes_prefit",  "shapes_fit_s",  "shapes_fit_b"]:
+    for dirName in ["shapes_fit_s",  "shapes_fit_b"]:
     
-        pnames_sig = ["ggHH_kl_1_kt_1_boost4b", "qqHH_CV_1_C2V_1_kl_1_boost4b"]
-        pnames_bkg = ["ttH", "VH", "others", "TTJets", "qcd"]
+        pnames_sig = ["ggHH_kl_1_kt_1_hbbhbb", "qqHH_CV_1_C2V_1_kl_1_hbbhbb"]
+        pnames_bkg = ["ttH_hbb", "VH_hbb", "bbbb_boosted_ggf_others", "ttbar", "bbbb_boosted_ggf_qcd_datadriven"]
         bkg_legends = ["t#bar{t}H", "VH", "V+jets,VV", "t#bar{t}+jets", "QCD+ggH+VBFH"]
         sig_legends = ["ggHH", "VBFHH"]
         pname_data = "data"
@@ -426,76 +511,10 @@ def main(vbdt, HH_limit):
 
         region = "SBplusfail"
         #the first three are the sideband region, the next three is the full AK8 jet 2 mass region, the last one is the common fail region
-        bdtbins = ["passBin1", "passBin2", "passBin3","SRBin1", "SRBin2", "SRBin3","fitfail"]
+        bdtbins = ["SRBin1", "SRBin2", "SRBin3","fitfail"]
         for bdtbin in bdtbins:
-            print("looking at file: ","combine-hh/cards/"+vbdt+"/combined_cards_"+vbdt+"/fitDiagnostics"+region+".root")
-            fin = r.TFile("combine-hh/cards/"+vbdt+"/combined_cards_"+vbdt+"/fitDiagnostics"+region+".root", "READ")
-            fin_sig = r.TFile("combine-hh/cards/"+vbdt+"/combined_cards_"+vbdt+"/fitDiagnostics"+region+"Sfit.root", "READ")
-            h1_sig = []
-            h1_bkg = []
-            h1_data = None
 
-            if debug:
-                print("debug: dirName", dirName)
-            dirpre = fin.GetDirectory(dirName)
-            dirthis = dirpre.GetDirectory(bdtbin)
-
-            for idx_bkg in range(len(pnames_bkg)):
-                if debug:
-                    print("debug pnames_bkg", pnames_bkg[idx_bkg], bdtbin)
-                if dirthis.GetListOfKeys().Contains(pnames_bkg[idx_bkg]):
-                    h = fin.Get(dirName+"/"+bdtbin+"/"+pnames_bkg[idx_bkg])
-                    h.Scale(10.0)
-                    h1_bkg.append(h)
-                    h1_data = h.Clone("h1_data")
-                else:
-                    h = h1_bkg[0].Clone("h1_"+pnames_bkg[idx_bkg])
-                    h.Scale(0.0)
-                    h1_bkg.append(h)
-            for idx_sig in range(len(pnames_sig)):
-                if debug:
-                    print("debug v1 pnames_sig[idx_sig]",pnames_sig[idx_sig])
-                if dirthis.GetListOfKeys().Contains(pnames_sig[idx_sig]):
-                    if debug:
-                        print("debug: get histogram ",dirNameSig),
-                        print(bdtbin)
-                        print(pnames_sig[idx_sig])
-                    h = fin_sig.Get(dirNameSig+"/"+bdtbin+"/"+pnames_sig[idx_sig])
-                    if debug:
-                        print("debug signal from fin_sig ",h.Integral()) 
-                    if not "SR" in h.GetTitle():
-                        h = fin.Get(dirName+"/"+bdtbin+"/"+pnames_sig[idx_sig])
-                    h.Scale(10.0)
-                    h1_sig.append(h)
-                else:
-                    print("debug signal does not exist")
-                    h = h1_bkg[0].Clone("h1_"+pnames_sig[idx_sig])
-                    h.Scale(0.0)
-                    h1_sig.append(h)
-                
-            nBins =  h1_data.GetNbinsX()
-                            
-            bdtbin_data = bdtbin
-            if "SR_BDT1_pass" in bdtbin:
-                bdtbin_data = "SB_BDT1_pass"
-            elif "SR_BDT2_pass" in bdtbin:
-                bdtbin_data = "SB_BDT2_pass"
-            elif "SR_BDT3_pass" in bdtbin:
-                bdtbin_data = "SB_BDT3_pass"
-        
-            dirthis_data = dirpre.GetDirectory(bdtbin_data)
-            if dirthis_data.GetListOfKeys().Contains("data"):
-            
-                g = fin.Get(dirName+"/"+bdtbin_data+"/data")
-                x,y = r.Double(0), r.Double(0)
-                for idx in range(nBins):
-                    g.GetPoint(idx, x, y)
-                    h1_data.SetBinContent(idx+1, y*10)
-            if "SR" in h1_data.GetTitle():
-                h1_data.SetBinContent(7,0)
-                h1_data.SetBinContent(8,0)
-                h1_data.SetBinContent(9,0)
-            h1_data.GetXaxis().SetTitle("j_{2} regressed mass (GeV)")
+            h1_sig, h1_bkg, h1_data = get_sig_bkg_data(vbdt, dirName, bdtbin, pnames_sig, pnames_bkg, region, debug=debug)
 
             makeplot_single(
                 h1_sig=h1_sig,
@@ -512,8 +531,8 @@ def main(vbdt, HH_limit):
                 )
 
 if __name__ == "__main__":
-    vbdt = "v8p2yield_AN_sr_sys_0830_fix2017trigSF0913v1"
+    vbdt = "v8p2yield_AN_sr_sys_230222v1"
     #"v8p2yield_AN_sr_sys_0830_fix2017trigSF0908_SDv1"
     #"v8p2yield_AN_sr_sys_0830_fix2017trigSF0908"
-    HH_limit = 5.2;
+    HH_limit = 3.8;
     main(vbdt,HH_limit)
