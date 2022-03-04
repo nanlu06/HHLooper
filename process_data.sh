@@ -5,7 +5,7 @@ rm -rf hists/${TAG}/*
 
 inputBase=/storage/af/user/nlu/work/HH/ntuples/20210712_regression_v2/option5/combined/BDT/
 
-./HHLooper ${inputBase}/2016/data/JetHT_2016B-ver2_BDTs.root.root data_2016B.root ${TAG} 1 0 0 0 0 >&1
+./HHLooper ${inputBase}/2016/data/JetHT_2016B-ver2_BDTs.root data_2016B.root ${TAG} 1 0 0 0 0 >&1
 ./HHLooper ${inputBase}/2016/data/JetHT_2016C_BDTs.root data_2016C.root ${TAG} 1 0 0 0 0 >&1
 ./HHLooper ${inputBase}/2016/data/JetHT_2016D_BDTs.root data_2016D.root ${TAG} 1 0 0 0 0 >&1
 ./HHLooper ${inputBase}/2016/data/JetHT_2016E_BDTs.root data_2016E.root ${TAG} 1 0 0 0 0 >&1
