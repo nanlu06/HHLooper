@@ -4,7 +4,9 @@ TAG=$1
 mkdir -p hists/${TAG}/
 rm -rf hists/${TAG}/*
 
-inputBase=/storage/af/user/nlu/work/HH/ntuples/20210712_regression_v2/option5/combined/BDT/
+inputBase=/storage/af/user/idutta/work/HH/ntuple/20211209_regression/option5/combined/BDT/
+
+#/storage/af/user/idutta/work/HH/ntuple/20220217/option5/combined/BDT/
 #from Si's ntuple /eos/cms/store/group/phys_susy/razor/Run2Analysis/HH/HHTo4BNtupler/20210712_regression/option5/combined/BDT/
 
 #inputBase=/storage/af/user/nlu/work/HH/ntuples/20210510_regression/option5/combined/BDT/
