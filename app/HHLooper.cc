@@ -19,6 +19,7 @@
 #include "anautil.h"
 #include "bbbb_vs_bkg.h"
 #include "scalefactors.h"
+//#include "reweight_HH.h"
 
 using namespace std;
 
@@ -285,6 +286,27 @@ if(doSystematics)
     if(input.find("Tau32TopSkim") != std::string::npos){
         histograms.addHistogram("fatJet1Pt",          "; p_{T}^{j1} (GeV); Events",           200,   300.,   2300.,  [&]() { return  hh.fatJet1Pt(); });
         histograms.addHistogram("fatJet2Pt",          "; p_{T}^{j2} (GeV); Events",           200,   300.,   2300.,  [&]() { return  hh.fatJet2Pt(); });
+	histograms.addHistogram("hh_pt",               "; p_{T}^{jj} (GeV); Events",           {0.,50., 100., 150., 200., 250., 300., 400., 500., 600., 800., 1000.},  [&]() { return hh.hh_pt(); } );
+//histograms.addHistogram("hh_pt",               "; p_{T}^{jj} (GeV); Events",           {0.,50., 100., 150., 300., 1000.},  [&]() { return hh.hh_pt(); } );
+	histograms.addHistogram("hh_eta",               "; #eta^{jj}; Events",                 200,   -5.0,  5.0,  [&]() { return hh.hh_eta(); } );
+	histograms.addHistogram("hh_phi",               "; #Phi^{jj}; Events",                 200,   -3.2,  3.2,  [&]() { return hh.hh_phi(); } );
+	histograms.addHistogram("hh_mass",             "; m_{jj} (GeV); Events",               200,   0.,  1500.,  [&]() { return hh.hh_mass(); } );
+	histograms.addHistogram("hh_mass_lr",             "; m_{jj} (GeV); Events",               200,   0.,  3000.,  [&]() { return hh.hh_mass(); } );
+	histograms.addHistogram("MET",           "; p_{T}^{miss} (GeV); Events",         200,   0.,   500.,  [&]() { return hh.met(); } );
+	histograms.addHistogram("MET_phi ",           "; p_{T}^{miss} #phi; Events",         200,   -3.2,   3.2,  [&]() { return hh.metphi(); } );
+	histograms.addHistogram("fatJet1Tau3OverTau2",   "; j_{1} Tau3/2; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet1Tau3OverTau2(); } );
+	histograms.addHistogram("fatJet2Tau3OverTau2",   "; j_{2} Tau3/2; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet2Tau3OverTau2(); } );
+	histograms.addHistogram("fatJet1MassSDLR",   "; j_{1} soft drop mass (GeV); Events", 300,   0.,   300.,  [&]() { return  hh.fatJet1MassSD(); } );
+	histograms.addHistogram("fatJet1PNetXbb",   "; j_{1} PNet Xbb tagger; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet1PNetXbb(); } );
+	histograms.addHistogram("fatJet1PNetXbb_Bin1",   "; j_{1} PNet Xbb tagger; Events",    {0.90, 0.95,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet1PNetXbb(); } );
+	histograms.addHistogram("fatJet1PNetXbb_Bin2",   "; j_{1} PNet Xbb tagger; Events",    {0.90, 0.945, 0.955,  0.975, 0.985,  1.00} ,   [&]() { return  hh.fatJet1PNetXbb(); } );
+	histograms.addHistogram("fatJet1Eta",          "; #eta^{j1}; Events",                 200,   -2.5,  2.5,  [&]() { return  hh.fatJet1Eta(); } );
+	histograms.addHistogram("ptj1_over_mhh",       "; p_{T}^{j1}/m_{HH}; Events",         200,   0.,   1.,    [&]() { return  hh.fatJet1PtOverMHH(); } );
+	histograms.addHistogram("ptj2_over_mhh",       "; p_{T}^{j2}/m_{HH}; Events",         200,   0.,   1.,    [&]() { return  hh.fatJet2PtOverMHH(); } );
+	histograms.addHistogram("ptj2_over_ptj1",      "; p_{T}^{j2}/p_{T}^{j1}; Events",     200,   0.5,  1.,    [&]() { return  hh.fatJet2Pt() / hh.fatJet1Pt(); } );
+	histograms.addHistogram("fatJet1PNetQCDb",   "; j_{1} PNet QCDb tagger; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet1PNetQCDb(); } );
+	histograms.addHistogram("fatJet1PNetQCDbb",   "; j_{1} PNet QCDbb tagger; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet1PNetQCDbb(); } );
+	histograms.addHistogram("fatJet1PNetQCDothers",   "; j_{1} PNet QCDothers tagger; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet1PNetQCDothers(); } );
     }   
     
     //histograms.addHistogram("EventBDTv8p2",   "; Event BDT; Events",           200, 0.0, 1.0,   [&]() { return  hh.disc_qcd_and_ttbar_Run2_enhanced_v8p2(); } );
@@ -430,7 +452,9 @@ histograms.addHistogram("fatJet2Pt",          "; p_{T}^{j2} (GeV); Events",     
     else if(syst_name == "JESDown_RelSample_2018" && year_=="2018") return hh.fatJet2Pt_JESDown_RelSample_2018(); 
     else return  hh.fatJet2Pt(); 
 });
-
+ histograms.addHistogram("fatJet1PNetQCDb",   "; j_{1} PNet QCDb tagger; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet1PNetQCDb(); } );
+ histograms.addHistogram("fatJet1PNetQCDbb",   "; j_{1} PNet QCDbb tagger; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet1PNetQCDbb(); } );
+ histograms.addHistogram("fatJet1PNetQCDothers",   "; j_{1} PNet QCDothers tagger; Events",           200,   0.0,  1.0,   [&]() { return  hh.fatJet1PNetQCDothers(); } );
 //other variables does not have correct JMS/JMR variations    
 histograms.add2DHistogram("fat Jet2 MassSD vs pT", "mj2", 30,   50.,   200., "ptj2",  25,   250.,   750.,  [&]() { return  hh.fatJet2MassSD(); }, [&]() { return hh.fatJet2Pt();} );
 histograms.add2DHistogram("fat Jet1 MassSD vs pT", "mj1", 30,   50.,   200., "ptj1",  25,   250.,   750.,  [&]() { return  hh.fatJet1MassSD(); }, [&]() { return hh.fatJet1Pt();} );
@@ -535,7 +559,6 @@ else
   cutflow.addCut("CutWeight", [&](){ return 1; },  [&](){
       //after ttbar recoil correction
       float ttbar_factor = input.find("option5") == std::string::npos ? 1.0 : 2.0;
-     
       float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()) * (isTTJets ? ttbar_factor*ttjets_sf.getScaleFactorsFit(year_, hh.hh_pt(), 0) : 1.0)*((isHH && (outputFileName.find("VBF")== std::string::npos))? mhh_thunc_sf.getmHHTHuncScaleFactors(hh.hh_mass(),0):1.0);
       //If applying correction from VBF analysis
       //float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight());
@@ -545,7 +568,7 @@ else
       //}
 
     //before ttbar recoil correction
-      // float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight()* (isTTJets ? ttbar_factor:1.0));
+      //float total_weight = isData ?  lumi :lumi * hh.l1PreFiringWeight() * hh.puWeight() * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight())* (isTTJets ? ttbar_factor:1.0);
     
       
     if(!isData){
@@ -3831,8 +3854,19 @@ float hh_pt;
 float hh_eta;
 float hh_phi;
 float hh_mass;
+//float xsLumi_weight;
 float gen_hh_mass;
-
+TLorentzVector ghh;
+float CosThetaStar_CS;
+ float mHH_xbins[] =  { 250.,   270.,  290.,  310.,  330.,
+   350.,   370.,  390.,  410.,  430.,
+   450.,   470.,  490.,  510.,  530.,
+   550.,   570.,  590.,  610.,  630.,
+   650.,   670.,  700.,  750.,  800.,
+   850.,   900.,  950., 1000., 1100.,
+			1200., 1300., 1400., 1500., 1750., 2000., 5000.};
+ float costh_HH_ybins[] = { 0.0, 0.4, 0.6, 0.8, 1.0 };
+ TH2D* h_Nev=new TH2D("Nev", "Nev;mHH;costh_CS_HH",36, mHH_xbins, 4, costh_HH_ybins);
 if(saveSkim)
 { 
     tree_out = new TTree("hh", "output skim tree");
@@ -3885,7 +3919,7 @@ for(int idx = 0; idx < list_chain.size(); idx++)
 	hh.GetEntry(iEntry_this);
         if(saveSkim) outfile->cd();
 	cutflow.fill();
-	if(saveSkim && (cutflow.getCut("SRv8p2Bin1").pass || cutflow.getCut("SRv8p2Bin2").pass || cutflow.getCut("SRv8p2Bin3").pass))
+	if(saveSkim)// && (cutflow.getCut("SRv8p2Bin1").pass || cutflow.getCut("SRv8p2Bin2").pass || cutflow.getCut("SRv8p2Bin3").pass))
 	{
 	  outfile_skim->cd();	
 	  BDTcat_index = -1;
@@ -3925,6 +3959,11 @@ for(int idx = 0; idx < list_chain.size(); idx++)
 	  gh1.SetPtEtaPhiM(hh.genHiggs1Pt(), hh.genHiggs1Eta(),hh.genHiggs1Phi(),125.0);
 	  gh2.SetPtEtaPhiM(hh.genHiggs2Pt(), hh.genHiggs2Eta(),hh.genHiggs2Phi(),125.0);
 	  gen_hh_mass = (gh1+gh2).M();
+	  //xsLumi_weight = lumi * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight());
+	  ghh = gh1+gh2;
+	  gh1.Boost(-ghh.BoostVector());  
+	  CosThetaStar_CS = fabs(gh1.CosTheta());// absolute value as chose of higgs irrelevant (both decay to bb); cos (pi -t) = -cos(t)
+	  h_Nev->Fill(gen_hh_mass,CosThetaStar_CS);//, xsLumi_weight);
 	  run = hh.run();
 	  luminosityBlock = hh.luminosityBlock();
 	  event = hh.event();
@@ -3945,6 +3984,7 @@ if(saveSkim)
 {
  outfile_skim->cd();
  tree_out->Write();
+ //h_Nev->Write();
  outfile_skim->Close();
 }
 cout<<"[INFO]: all  files successfully processed... "<<endl;
