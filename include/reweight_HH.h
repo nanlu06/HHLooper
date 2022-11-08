@@ -117,10 +117,9 @@ class ReweightMandrik {
  public:
   vector< vector<double>> A_values_lo, A_values_nlo;
 
-  ReweightMandrik(string error_set="", string input_lo="pm_pw_LO-Ais-13TeV_V2.txt", string input_nlo="pm_pw_NLO_Ais_13TeV_V2.txt"){
-    error_set = "\""+error_set+"\"";
-    LoadData( error_set, input_lo, A_values_lo );
-    LoadData( error_set, input_nlo, A_values_nlo );
+  ReweightMandrik(string input_lo="pm_pw_LO-Ais-13TeV_V2.txt", string input_nlo="pm_pw_NLO_Ais_13TeV_V2.txt"){
+    LoadData( input_lo, A_values_lo );
+    LoadData( input_nlo, A_values_nlo );
   }
 
   vector<double> GetEFTBenchmark(string name, string year="2016", bool cms_fake = false){
@@ -128,29 +127,20 @@ class ReweightMandrik {
     return couplings;
   }
 
-  void LoadData( string error_set, string input_name, vector< vector<double>> & answer ){
+  void LoadData( string input_name, vector< vector<double>> & answer ){
     std::string line;
     std::ifstream infile( input_name );
+    if(!infile)cout<<"Reweight coefficient input file not found!\n";
     while (std::getline(infile, line)) {
       std::istringstream iss(line);
-      string value;
-
-      if( error_set != "\"V0\""){
-	std::getline(iss, value, ',');
-        if(value != error_set) continue;
-      }
-
       answer.push_back( vector<double>() );
+      string value;
       while (std::getline(iss, value, ',')) {
         answer[ answer.size()-1 ].push_back( atof(value.c_str()) );
       }
-      if( error_set == "\"V0\""){
-        for(int i = 0, N = answer[ answer.size()-1 ].size() + 1; i < N; i++) answer[ answer.size()-1 ].push_back( 0 );
-      }
     }
-    cout << answer.size() << endl;
   }
-
+  
   vector< pair<double, double> > GetBinCenters(string order="nlo"){
     vector< vector<double> > * A_map = & A_values_nlo;
     if(order=="lo") A_map            = & A_values_lo;
@@ -173,7 +163,7 @@ class ReweightMandrik {
       if(m_hh > mass_bin_end or cos_theta > cos_bin_end) continue;
       double dXsec = 0;
       for( int j = 0; j < couplings.size(); j++ ){
-        dXsec += values.at(j+4) * couplings.at(j);
+	dXsec += values.at(j+4) * couplings.at(j);
       }
       return dXsec;
     }
@@ -206,7 +196,6 @@ class ReweightMandrik {
     
     vector< vector<double> > * A_map = & A_values_lo;
     if(order=="nlo")           A_map = & A_values_nlo;
-
     return GetDiffXsection(m_hh, cos_theta, couplings, A_map);
   }
 
@@ -225,4 +214,34 @@ class ReweightMandrik {
   }
 
 };
+
+double make_reweight_prediction(string BMpoint, double event_mHH=0., double event_costhetaHH=0.){
+  // Define the reweighter object                                                 
+                                                     
+  ReweightMandrik rm_pw_NLO = ReweightMandrik("data/scale_factor/HHEFT_reweight_histo/pm_pw_LO-Ais-13TeV_V2.txt", "data/scale_factor/HHEFT_reweight_histo/pm_pw_NLO_Ais_13TeV_V2.txt");
+
+  // Load the 2D distribution of the input events                                                                   
+                                                       
+  TFile* inputfile =  new TFile("data/scale_factor/HHEFT_reweight_histo/2016/HHEFT_2016_skim.root");
+  TH2F* histo_Nev = (TH2F*) inputfile->Get("Nev");
+  double Nevtot = histo_Nev->Integral();
+
+  // The target benchmark is for example the number 10                                                              
+                                                       
+  vector<double> couplings = rm_pw_NLO.GetEFTBenchmark(BMpoint);
+  double XStot = get_eft_xsec_13TeV(BMpoint,"nlo");
+                                                        
+  // Compute the reweight
+  double Nev = histo_Nev->GetBinContent( histo_Nev->FindBin(event_mHH, event_costhetaHH) );
+  double XS = rm_pw_NLO.GetDiffXsection(event_mHH, event_costhetaHH, couplings, "nlo") / 1000.;//diff XS in [fb]
+  
+  // before using the differential XS, scale it by the bin area to properly compare it with histo_Nev conten
+                                                     
+  int ibinmhh = histo_Nev->GetXaxis()->FindBin(event_mHH);
+  int ibincosthetaHH = histo_Nev->GetYaxis()->FindBin(event_costhetaHH);
+  double Noutputev = XS * histo_Nev->GetXaxis()->GetBinWidth(ibinmhh) * histo_Nev->GetYaxis()->GetBinWidth(ibincosthetaHH);
+  double reweight = Noutputev/Nev * Nevtot/XStot;
+  //cout<<Noutputev<<" "<<Nev<<" "<<Nevtot<<" "<<XS<<" "<<XStot<<" "<<reweight<<endl;
+  return reweight;
+}
 #endif
