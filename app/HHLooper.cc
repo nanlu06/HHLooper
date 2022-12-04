@@ -19,7 +19,7 @@
 #include "anautil.h"
 #include "bbbb_vs_bkg.h"
 #include "scalefactors.h"
-//#include "reweight_HH.h"
+#include "reweight_HH.h"
 
 using namespace std;
 
@@ -130,7 +130,7 @@ std::string input = argv[1];
 std::string outputFileName = argv[2];
 std::string label = argv[3];
 std::string isData_ = argv[4];
-bool saveSkim = false;
+bool saveSkim =true;
 bool doSystematics = false;
 bool dotrigsys = false;
 bool doPNetSFsys = false;
@@ -185,6 +185,8 @@ MuTrigScaleFactors muTrig_sf(year_);
 EleTrigScaleFactors elTrig_sf(year_);
 MuIDScaleFactors muID_sf(year_);
 EleIDScaleFactors elID_sf(year_);
+ReweightMandrik rm_pw_NLO = ReweightMandrik(year_);
+
 vector<TString> trig_unc_names_up;
 vector<TString> trig_unc_names_dn;
 vector<int> trig_index;
@@ -3854,8 +3856,11 @@ float hh_pt;
 float hh_eta;
 float hh_phi;
 float hh_mass;
-//float xsLumi_weight;
+float xsLumi_weight;
 float gen_hh_mass;
+ float gen_hh_pt;
+ float gen_h1_pt;
+ float gen_h2_pt;
 TLorentzVector ghh;
 float CosThetaStar_CS;
  float mHH_xbins[] =  { 250.,   270.,  290.,  310.,  330.,
@@ -3867,9 +3872,15 @@ float CosThetaStar_CS;
 			1200., 1300., 1400., 1500., 1750., 2000., 5000.};
  float costh_HH_ybins[] = { 0.0, 0.4, 0.6, 0.8, 1.0 };
  TH2D* h_Nev=new TH2D("Nev", "Nev;mHH;costh_CS_HH",36, mHH_xbins, 4, costh_HH_ybins);
+ TH1D *h_gen_hh_mass = new TH1D("gen_hh_mass","gen_hh_mass",190, 250.,5000.);
+ TH1D *h_gen_hh_pt = new TH1D("gen_hh_pt", "gen_hh_pt",200,0.,2000.);
+ TH1D *h_gen_h1_pt = new TH1D("gen_h1_pt","gen_h1_pt",200,0.,2000.);
+ TH1D *h_gen_h2_pt = new TH1D("gen_h2_pt","gen_h2_pt",200,0.,2000.);
+ TH1D *h_diffxs_mhh = new TH1D("diffXSvsmHH","diffXSvsmHH",36,mHH_xbins);
+ 
 if(saveSkim)
 { 
-    tree_out = new TTree("hh", "output skim tree");
+  /*    tree_out = new TTree("hh", "output skim tree");
     tree_out->Branch("BDTcat_index", &BDTcat_index, "BDTcat_index/I");
     tree_out->Branch("run", &run, "run/I");
     tree_out->Branch("luminosityBlock", &luminosityBlock, "luminosityBlock/I");
@@ -3903,7 +3914,7 @@ if(saveSkim)
     tree_out->Branch("hh_eta", &hh_eta, "hh_eta/F");
     tree_out->Branch("hh_phi", &hh_phi, "hh_phi/F");
     tree_out->Branch("hh_mass", &hh_mass, "hh_mass/F");
-    tree_out->Branch("gen_hh_mass", &gen_hh_mass, "gen_hh_mass/F");
+    tree_out->Branch("gen_hh_mass", &gen_hh_mass, "gen_hh_mass/F");*/
 }
 
 for(int idx = 0; idx < list_chain.size(); idx++)
@@ -3923,6 +3934,8 @@ for(int idx = 0; idx < list_chain.size(); idx++)
 	{
 	  outfile_skim->cd();	
 	  BDTcat_index = -1;
+	  //make_reweight_prediction();
+	  
 	  if(cutflow.getCut("SRv8p2Bin1").pass) BDTcat_index = 1;
 	  else if(cutflow.getCut("SRv8p2Bin2").pass) BDTcat_index = 2;
 	  else if(cutflow.getCut("SRv8p2Bin3").pass) BDTcat_index = 3;
@@ -3959,15 +3972,24 @@ for(int idx = 0; idx < list_chain.size(); idx++)
 	  gh1.SetPtEtaPhiM(hh.genHiggs1Pt(), hh.genHiggs1Eta(),hh.genHiggs1Phi(),125.0);
 	  gh2.SetPtEtaPhiM(hh.genHiggs2Pt(), hh.genHiggs2Eta(),hh.genHiggs2Phi(),125.0);
 	  gen_hh_mass = (gh1+gh2).M();
-	  //xsLumi_weight = lumi * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight());
+	  gen_hh_pt = (gh1+gh2).Pt();
+	  gen_h1_pt = gh1.Pt();
+	  gen_h2_pt = gh2.Pt();
+	  xsLumi_weight = lumi * hh.xsecWeight() * (isHH? hh.weight() : hh.genWeight());
 	  ghh = gh1+gh2;
 	  gh1.Boost(-ghh.BoostVector());  
 	  CosThetaStar_CS = fabs(gh1.CosTheta());// absolute value as chose of higgs irrelevant (both decay to bb); cos (pi -t) = -cos(t)
-	  h_Nev->Fill(gen_hh_mass,CosThetaStar_CS);//, xsLumi_weight);
+	  //h_Nev->Fill(gen_hh_mass,CosThetaStar_CS, xsLumi_weight);
+	  double reweight_f = xsLumi_weight*rm_pw_NLO.make_reweight_prediction("sm",gen_hh_mass,CosThetaStar_CS);
+	  //if(reweight_f<0.)cout<<gen_hh_mass<<", "<<gen_h1_pt<<", "<<reweight_f;
+	  h_gen_hh_mass->Fill(gen_hh_mass,reweight_f);
+	  h_gen_hh_pt->Fill(gen_hh_pt,reweight_f);
+	  h_gen_h1_pt->Fill(gen_h1_pt,reweight_f);
+	  h_gen_h2_pt->Fill(gen_h2_pt,reweight_f);
 	  run = hh.run();
 	  luminosityBlock = hh.luminosityBlock();
 	  event = hh.event();
-	  tree_out->Fill();
+	  //tree_out->Fill();
 	}
 	if(iEntry%100000 == 0) cout<<"[INFO] processing event "<<iEntry<<" / "<<nEntries<<endl;
 	iEntry ++;
@@ -3975,18 +3997,31 @@ for(int idx = 0; idx < list_chain.size(); idx++)
   delete tree_this;
   file_this->Close();
   delete file_this;
-}
+ }
 
 //save histograms
 cutflow.saveOutput();
 outfile->Close();
 if(saveSkim) 
 {
+  for(int binmhh = 0; binmhh < 36; binmhh++){
+  
+    double mass_bin_upper_edge = mHH_xbins[ binmhh+1 ];
+    double mass_bin_lower_edge = mHH_xbins[ binmhh ];
+    double mass_bin_center     = (mass_bin_upper_edge + mass_bin_lower_edge) * 0.5;
+    double dXS=rm_pw_NLO.getDifferentialXSmHH(mass_bin_center, "sm");
+    h_diffxs_mhh->SetBinContent(binmhh+1, dXS );
+  }
  outfile_skim->cd();
- tree_out->Write();
+ //tree_out->Write();
  //h_Nev->Write();
+ h_diffxs_mhh->Write();
+ h_gen_hh_mass->Write();
+ h_gen_hh_pt->Write();
+ h_gen_h1_pt->Write();
+ h_gen_h2_pt->Write();
  outfile_skim->Close();
-}
+ }
 cout<<"[INFO]: all  files successfully processed... "<<endl;
 
 return 0;

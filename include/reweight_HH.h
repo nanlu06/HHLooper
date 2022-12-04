@@ -116,12 +116,23 @@ double get_eft_xsec_13TeV(string mark, string order, string year = "2016", bool 
 class ReweightMandrik {
  public:
   vector< vector<double>> A_values_lo, A_values_nlo;
-
-  ReweightMandrik(string input_lo="pm_pw_LO-Ais-13TeV_V2.txt", string input_nlo="pm_pw_NLO_Ais_13TeV_V2.txt"){
+  TH2F* histo_Nev;
+  TFile* inputfile;
+  ReweightMandrik(string year){
+    string input_lo="data/scale_factor/HHEFT_reweight_histo/pm_pw_LO-Ais-13TeV_V2.txt";
+    string input_nlo="data/scale_factor/HHEFT_reweight_histo/pm_pw_NLO_Ais_13TeV_V2.txt";
     LoadData( input_lo, A_values_lo );
     LoadData( input_nlo, A_values_nlo );
+    inputfile =  new TFile("data/scale_factor/HHEFT_reweight_histo/2016/HHEFT_2016_skim_Genwt.root");
+    histo_Nev = (TH2F*) inputfile->Get("Nev");
+    histo_Nev->SetDirectory(0);           
+    inputfile->Close(); 
   }
 
+  ~ReweightMandrik()
+    {
+      delete histo_Nev;
+    }
   vector<double> GetEFTBenchmark(string name, string year="2016", bool cms_fake = false){
     vector<double> couplings = get_CMS_EFT_benchmarks( name, year, cms_fake );
     return couplings;
@@ -213,27 +224,38 @@ class ReweightMandrik {
     return 0;
   }
 
-};
+  double getDifferentialXSmHH(double mhh, string BMpoint){
+    // Integrate the 2D differental XS over costheta
+    vector<double> couplings = GetEFTBenchmark(BMpoint);
 
-double make_reweight_prediction(string BMpoint, double event_mHH=0., double event_costhetaHH=0.){
+    double dXS=0.;
+    int NcosthBin = 4;
+    double cos_theta_bins[] = { 0.,  0.4,  0.6,  0.8,  1. };
+    for(int bincost = 0; bincost < NcosthBin; bincost++){
+      double costhetamin = cos_theta_bins[bincost] ;
+      double costhetamax = cos_theta_bins[bincost+1];
+      double dcostheta = costhetamax - costhetamin;
+      double costheta = 0.5*(costhetamax+costhetamin);
+      dXS += (GetDiffXsection(mhh,costheta,couplings, "nlo")/1000.) * dcostheta;
+	}
+    return dXS;
+  }
+  double make_reweight_prediction(string BMpoint, double event_mHH=0., double event_costhetaHH=0.){
   // Define the reweighter object                                                 
                                                      
-  ReweightMandrik rm_pw_NLO = ReweightMandrik("data/scale_factor/HHEFT_reweight_histo/pm_pw_LO-Ais-13TeV_V2.txt", "data/scale_factor/HHEFT_reweight_histo/pm_pw_NLO_Ais_13TeV_V2.txt");
-
+  
   // Load the 2D distribution of the input events                                                                   
                                                        
-  TFile* inputfile =  new TFile("data/scale_factor/HHEFT_reweight_histo/2016/HHEFT_2016_skim.root");
-  TH2F* histo_Nev = (TH2F*) inputfile->Get("Nev");
   double Nevtot = histo_Nev->Integral();
 
   // The target benchmark is for example the number 10                                                              
                                                        
-  vector<double> couplings = rm_pw_NLO.GetEFTBenchmark(BMpoint);
+  vector<double> couplings = GetEFTBenchmark(BMpoint);
   double XStot = get_eft_xsec_13TeV(BMpoint,"nlo");
                                                         
   // Compute the reweight
   double Nev = histo_Nev->GetBinContent( histo_Nev->FindBin(event_mHH, event_costhetaHH) );
-  double XS = rm_pw_NLO.GetDiffXsection(event_mHH, event_costhetaHH, couplings, "nlo") / 1000.;//diff XS in [fb]
+  double XS = GetDiffXsection(event_mHH, event_costhetaHH, couplings, "nlo") / 1000.;//diff XS in [fb]
   
   // before using the differential XS, scale it by the bin area to properly compare it with histo_Nev conten
                                                      
@@ -244,4 +266,7 @@ double make_reweight_prediction(string BMpoint, double event_mHH=0., double even
   //cout<<Noutputev<<" "<<Nev<<" "<<Nevtot<<" "<<XS<<" "<<XStot<<" "<<reweight<<endl;
   return reweight;
 }
+
+};
+
 #endif
