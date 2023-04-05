@@ -4,15 +4,7 @@ TAG=$1
 #mkdir -p hists/${TAG}/
 #rm -rf hists/${TAG}/*
 
-#inputBase=/storage/af/user/nlu/work/HH/ntuples/20210310/option10/combined/Tau3Over20p54Skim/BDT/
-#inputBase=/storage/af/user/idutta/work/HH/ntuple/20210510_regression/option10/combined/Tau32TopSkim/BDT/
-inputBase=/home/nlu/ntuples/B2G22003/20210712_regression/option10/combined/Tau32TopSkim/BDT/
-#inputBase=/storage/af/user/idutta/work/HH/ntuple/20210712_regression/option10/combined/Tau32TopSkim/BDT/
-#/eos/cms/store/group/phys_susy/razor/Run2Analysis/HHBoost/Tau3Over20p54Skim/
-#inputBase=/eos/cms/store/group/phys_susy/razor/Run2Analysis/HHBoost/HHTo4BNtupler_20200902_option5_combined_BDT_Jet2Xbb0p8Skim/ 
-#inputBase=data/Jet2Xbb0p8Skim/
-#inputBase=data/Option5NonSkim/
-#inputBase=data/Tau3Over20p54Skim/
+inputBase=/eos/user/n/nlu/HH4b/20210712_regression/option10/combined/Tau32TopSkim/BDT/
 
 doSyst=no
 if [ "$#" -gt 1 ]; then

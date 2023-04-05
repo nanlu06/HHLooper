@@ -4,21 +4,7 @@ TAG=$1
 mkdir -p hists/${TAG}/
 rm -rf hists/${TAG}/*
 
-inputBase=/home/nlu/ntuples/B2G22003/option5/combined/BDT/
-
-#from Si's ntuple /eos/cms/store/group/phys_susy/razor/Run2Analysis/HH/HHTo4BNtupler/20210712_regression/option5/combined/BDT/
-
-#inputBase=/storage/af/user/nlu/work/HH/ntuples/20210510_regression/option5/combined/BDT/
-#from Si's ntuple /eos/cms/store/group/phys_susy/razor/Run2Analysis/HH/HHTo4BNtupler/20210510_regression/option5/combined/BDT/
-#from Si's ntuple /storage/user/sixie/data/HH/HHTo4BNtupler/20210310/option5/combined/BDT/
-#inputBase=/storage/af/user/nlu/work/HH/ntuples/20210403/option5/combined/BDT/
-#inputBase=/storage/user/nlu/work/HH/ntuples/20210318/option5/combined/BDT/
-#inputBase=/storage/user/nlu/work/HH/ntuples/20210211/option5/combined/
-#inputBase=/eos/cms/store/group/phys_susy/razor/Run2Analysis/HHBoost/Option5NonSkim/
-#inputBase=/eos/cms/store/group/phys_susy/razor/Run2Analysis/HHBoost/HHTo4BNtupler_20200902_option5_combined_BDT_Jet2Xbb0p8Skim/ 
-#inputBase=data/Jet2Xbb0p8Skim/
-#inputBase=data/Option5NonSkim/
-#inputBase=data/Tau3Over20p54Skim/
+inputBase=/eos/user/n/nlu/HH4b/
 
 doSyst=no
 if [ "$#" -gt 1 ]; then
