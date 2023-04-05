@@ -8,3 +8,6 @@ python prepare_card_SR_final.py yield_AN_sr_sys_0830 yield_AN_sr_sys_0830_trig v
 
 #new trig correction and uncertainty, new ttbar recoil correction
 python prepare_card_SR_final.py yield_AN_sr_sys_0830 yield_AN_sr_sys_0830_trig v8p2 /storage/af/user/nlu/hh/looper_output/hists/result1105/ PNetp9 no
+
+#032023 quick test
+python prepare_card_SR_final.py yield_AN_sr_sys_0830 yield_AN_sr_sys_0830_trig v8p2 ../hists/ PNetp9 yes

@@ -3,7 +3,7 @@ TAG=$1
 mkdir -p hists/${TAG}/
 rm -rf hists/${TAG}/*
 
-inputBase=/storage/af/user/nlu/work/HH/ntuples/20210712_regression_v2/option5/combined/BDT/
+inputBase=/home/nlu/ntuples/B2G22003/option5/combined/BDT/
 
 ./HHLooper ${inputBase}/2016/data/JetHT_2016B-ver2_BDTs.root data_2016B.root ${TAG} 1 0 0 0 0 >&1
 ./HHLooper ${inputBase}/2016/data/JetHT_2016C_BDTs.root data_2016C.root ${TAG} 1 0 0 0 0 >&1
@@ -27,4 +27,5 @@ inputBase=/storage/af/user/nlu/work/HH/ntuples/20210712_regression_v2/option5/co
 hadd -k -f hists/${TAG}/2016/data.root hists/${TAG}/2016/data_*.root 
 hadd -k -f hists/${TAG}/2017/data.root hists/${TAG}/2017/data_*.root 
 hadd -k -f hists/${TAG}/2018/data.root hists/${TAG}/2018/data_*.root
+mkdir hists/${TAG}/combine/
 hadd -k -f hists/${TAG}/combine/data.root hists/${TAG}/2016/data.root hists/${TAG}/2017/data.root hists/${TAG}/2018/data.root

@@ -36,10 +36,11 @@ if __name__ == "__main__":
                   "qqHH_CV_1_C2V_1_kl_2_boost4b", "qqHH_CV_1_C2V_2_kl_1_boost4b", "qqHH_CV_1_C2V_0_kl_1_boost4b"]
 
     #source of weight systematics name here should match that in the histogram name
-    systs_weight = ["trigCorrHH2016", "trigCorrHH2017", "trigCorrHH2018", "pileupWeight","PNetShape","ttJetsCorr","BDT"+vbdt+"Shape", "triggerEffSF","PNetHbbScaleFactors","FSRPartonShower","ISRPartonShower","FSRPartonShower_Vjets","ISRPartonShower_Vjets","ggHHPDFacc","ggHHQCDacc","othersQCD","mHHTHunc"]
-        
+    #systs_weight = ["trigCorrHH2016", "trigCorrHH2017", "trigCorrHH2018", "pileupWeight","PNetShape","ttJetsCorr","BDT"+vbdt+"Shape", "triggerEffSF","PNetHbbScaleFactors","FSRPartonShower","ISRPartonShower","FSRPartonShower_Vjets","ISRPartonShower_Vjets","ggHHPDFacc","ggHHQCDacc","othersQCD","mHHTHunc"]
+    systs_weight = ["trigCorrHH2016", "trigCorrHH2017", "trigCorrHH2018", "pileupWeight","PNetShape","ttJetsCorr","BDT"+vbdt+"Shape","PNetHbbScaleFactors","FSRPartonShower","ISRPartonShower","FSRPartonShower_Vjets","ISRPartonShower_Vjets","ggHHPDFacc","ggHHQCDacc","othersQCD","mHHTHunc"]
+    
     #source of shape systematics 
-    systs_shape = ["JER","JES_Abs","JES_Abs_2016","JES_Abs_2017","JES_Abs_2018","JES_BBEC1","JES_BBEC1_2016","JES_BBEC1_2017","JES_BBEC1_2018","JES_EC2","JES_EC2_2016","JES_EC2_2017","JES_EC2_2018","JES_FlavQCD","JES_HF","JES_HF_2016","JES_HF_2017","JES_HF_2018","JES_RelBal","JES_RelSample_2016","JES_RelSample_2017","JES_RelSample_2018","JMS","JMR","ttbarBin1Jet2PNetCut"] 
+    systs_shape = ["JER","JES","JMS","JMR"]
     
     outName = "HHTo4BPlots_Run2_BDT"+vbdt+tag+".root"
     
@@ -71,8 +72,8 @@ if __name__ == "__main__":
         for isysts_shape in systs_shape:
             if isysts_shape != "ttbarBin1Jet2PNetCut":
                 if 'JES' in isysts_shape:
-                    syst_name_up = isysts_shape[:3]+'Up'+isysts_shape[3:] 
-                    syst_name_down =isysts_shape[:3]+'Down'+isysts_shape[3:]
+                    syst_name_up = isysts_shape[:3]+'_Up'+isysts_shape[3:] 
+                    syst_name_down =isysts_shape[:3]+'_Down'+isysts_shape[3:]
                     #print(syst_name_up)
                     inFile_systs_shape.append(r.TFile(histdir+tag+"_"+syst_name_up+"/combine/"+proc_file[idx]+".root",  "READ"))
                     inFile_systs_shape.append(r.TFile(histdir+tag+"_"+syst_name_down+"/combine/"+proc_file[idx]+".root",  "READ"))

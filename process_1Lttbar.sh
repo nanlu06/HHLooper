@@ -5,7 +5,7 @@ mkdir -p hists/${TAG}/
 rm -rf hists/${TAG}/*
 
 #inputBase=/storage/af/user/nlu/work/HH/ntuples/20210310/option10/combined/1LTopSkim/
-inputBase=/storage/af/user/idutta/work/HH/ntuple/20210712_regression/option10/combined/1LTopSkim/
+inputBase=/home/nlu/ntuples/B2G22003/20210712_regression/option10/combined/1LTopSkim/
 #/eos/cms/store/group/phys_susy/razor/Run2Analysis/HHBoost/1LTopSkim/
 #inputBase=/eos/cms/store/group/phys_susy/razor/Run2Analysis/HHBoost/HHTo4BNtupler_20200902_option5_combined_BDT_Jet2Xbb0p8Skim/ 
 #inputBase=data/Jet2Xbb0p8Skim/
