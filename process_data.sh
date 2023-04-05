@@ -3,7 +3,7 @@ TAG=$1
 mkdir -p hists/${TAG}/
 rm -rf hists/${TAG}/*
 
-inputBase=/eos/user/n/nlu/HH4b/
+inputBase=/eos/cms/store/user/nlu/HH4b/
 
 ./HHLooper ${inputBase}/2016/data/JetHT_2016B-ver2_BDTs.root data_2016B.root ${TAG} 1 0 0 0 0 >&1
 ./HHLooper ${inputBase}/2016/data/JetHT_2016C_BDTs.root data_2016C.root ${TAG} 1 0 0 0 0 >&1

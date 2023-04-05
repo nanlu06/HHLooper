@@ -4,7 +4,7 @@ TAG=$1
 #mkdir -p hists/${TAG}/
 #rm -rf hists/${TAG}/*
 
-inputBase=/eos/user/n/nlu/HH4b/20210712_regression/option10/combined/Tau32TopSkim/BDT/
+inputBase=/eos/cms/store/user/nlu/HH4b/20210712_regression/option10/combined/Tau32TopSkim/BDT/
 
 doSyst=no
 if [ "$#" -gt 1 ]; then
