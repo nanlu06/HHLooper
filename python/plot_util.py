@@ -7,7 +7,7 @@ import sys
 import os
 
 leftMargin   = 0.13
-rightMargin  = 0.01
+rightMargin  = 0.05
 topMargin    = 0.07
 bottomMargin = 0.12
 r.gStyle.SetOptStat(0)
@@ -543,8 +543,11 @@ def makeplot_single(
     stack.GetYaxis().SetTitleSize(0.08)
     stack.GetYaxis().SetLabelSize(0.045)
     stack.GetYaxis().CenterTitle()
-    #if "xaxis_range" in extraoptions:
-    #    stack.GetXaxis().SetRangeUser(float(extraoptions["xaxis_range"][0]),float(extraoptions["xaxis_range"][1]))
+    if "xaxis_range" in extraoptions:
+        print("xaxis_range")
+        print(extraoptions["xaxis_range"][0])
+        print(extraoptions["xaxis_range"][1])
+        stack.GetXaxis().SetRangeUser(float(extraoptions["xaxis_range"][0]),float(extraoptions["xaxis_range"][1]))
 
     leg = r.TLegend(0.16, 0.70, 0.97, 0.88)
     leg.SetNColumns(4)
@@ -595,8 +598,8 @@ def makeplot_single(
         ratio.GetYaxis().SetRangeUser(ratio_Low, ratio_High*1.2)
         ratio.GetYaxis().SetTitle("S/#sqrt{B}")
         ratio.Draw("samehist")
-    #if "xaxis_range" in extraoptions:
-    #    ratio.GetXaxis().SetRangeUser(float(extraoptions["xaxis_range"][0]),float(extraoptions["xaxis_range"][1]))
+    if "xaxis_range" in extraoptions:
+        ratio.GetXaxis().SetRangeUser(float(extraoptions["xaxis_range"][0]),float(extraoptions["xaxis_range"][1]))
     ratio.SetLineColor(1)
     ratio.SetLineWidth(2)
     ratio.SetMarkerStyle(20)
@@ -611,8 +614,8 @@ def makeplot_single(
     ratio.GetYaxis().SetLabelSize(0.13)
     ratio.GetYaxis().SetTickLength(0.01)
     ratio.GetYaxis().SetNdivisions(505)
-    #if "xaxis_range" in extraoptions:
-    #    ratio.GetXaxis().SetRangeUser(float(extraoptions["xaxis_range"][0]),float(extraoptions["xaxis_range"][1]))
+    if "xaxis_range" in extraoptions:
+        ratio.GetXaxis().SetRangeUser(float(extraoptions["xaxis_range"][0]),float(extraoptions["xaxis_range"][1]))
 
     if "cutflow" in hist_name_:
         ratio.GetXaxis().SetTitle("")

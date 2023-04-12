@@ -46,6 +46,10 @@ The first argument is a tag for the folder name of the output histograms, and th
 
 ./run_syst_test.sh 
 
+cd python
+
+./prepare_histogram_forcard.sh
+
 ## Command to run for the ttbar one lepton CR
 
 ./process_1Lttbar.sh  yield_AN_1Lttbar
@@ -54,7 +58,7 @@ The first argument is a tag for the folder name of the output histograms, and th
 
 ./run_syst_ttbar_test.sh (including the recoil correction)
 
-To remove the recoil correction, now comment Line 382, and uncomment Line  384 in ../app/HHLooper.cc to remove recoil correction;  
+To remove the recoil correction, now comment Line 437, and uncomment Line  447 in ../app/HHLooper.cc to remove recoil correction;  
 
 make clean; make
 
@@ -72,5 +76,41 @@ The argument of the python script is the tag name you provided in the previous s
 
 ```
 cd python
+
+```
+
+## make prefit and postfit plots plots
+
+make a soft link to the combine-hh directory where the fit fitDiagnostics files are located.
+
+e.g. 
+
+```
+ln -s /storage/af/user/nlu/work/HH/CMSSW_10_2_13/src/combine-hh .
+
+```
+
+Two things to changes:
+
+1. Line 508: version number (e.g.  vbdt = "v8p2_0830_newntuple_newrecoilcorr_PNetp9_Regressed"), the code will look for the output in 
+
+```
+combine-hh/cards/"+vbdt+"/combined_cards_"+vbdt
+
+```
+
+2. upper limit of HH
+
+Line 510:
+
+```
+HH_limit = 5.0;
+    
+```
+
+Now ready to make the plots:
+
+```
+python makePostFitPlot_combined.py
 
 ```

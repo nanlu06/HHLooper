@@ -2,10 +2,9 @@
 
 void makeClass()
 {
- //TFile * file = new TFile("../data_noskim/ttJets/TTJets_TuneCP5_13TeV-amcatnloFXFX-pythia8_MC_Fall17_RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_V2_1pb_weighted_v0.root");
- //TFile * file = new TFile("../data/Jet2Xbb0p8Skim/2016/HHSM/GluGluToHHTo4B_node_SM_13TeV-madgraph_1pb_weighted_BDTs_Jet2Xbb0p8Skim.root");
- TFile * file = new TFile("/storage/af/user/idutta/work/HH/ntuple/20210712_regression/option10/combined/Tau32TopSkim/BDT/2016/qcd/QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-combined_1pb_weighted_Tau32TopSkim_BDTs.root");
- TTree * tree = (TTree*)file->Get("Events");
+ TFile * file = new TFile("/eos/cms/store/group/phys_susy/razor/Run3Analysis/HH/HHTo4BNtupler/option5/nano/run3/combined/2022/ggHH_cHHH_1_TSG.root");
+
+ TTree * tree = (TTree*)file->Get("tree");
  
 
  ofstream headerf;
