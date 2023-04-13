@@ -10,6 +10,7 @@ class PNetHbbScaleFactors
         
         PNetHbbScaleFactors(string year)
         {
+            if(year=="2022") year = "2016";
             file_sf = new  TFile("data/scale_factor/PNetXBB_SF_v2.root");
             PNetXBBSF =   (TH2D*)file_sf->Get(("PNetXBBSF_"+year).data());  
             PNetXBBSF->SetDirectory(0);           
@@ -116,6 +117,7 @@ class TrigEffScaleFactors
             if(year == "2016") file_sf = new TFile("data/scale_factor/trigger/JetHTTriggerEfficiency_2016.root");
             else if(year == "2017") file_sf = new TFile("data/scale_factor/trigger/JetHTTriggerEfficiency_2017.root");
             else if(year == "2018") file_sf = new TFile("data/scale_factor/trigger/JetHTTriggerEfficiency_2018.root");
+            else file_sf = new TFile("data/scale_factor/trigger/JetHTTriggerEfficiency_2016.root");
 
             hist_sf_Xbb0p0To0p9 = (TH2F*)file_sf->Get("efficiency_ptmass_Xbb0p0To0p9");
             hist_sf_Xbb0p9To0p95 = (TH2F*)file_sf->Get("efficiency_ptmass_Xbb0p9To0p95");
@@ -655,6 +657,7 @@ class miniIsoEleScaleFactors
 
         miniIsoEleScaleFactors(string year)
         {
+          if(year=="2022") year = "2016";
 	  TString fname = "data/scale_factor/ElectronScaleFactors_Run"+year+".root";
 	  file_sf = new  TFile(fname);
 	  TString hname;
@@ -860,6 +863,7 @@ class EleTrigScaleFactors
 
         EleTrigScaleFactors(string year)
         {
+          if(year=="2022") year = "2016";
 	  TString fname = "data/scale_factor/sf_ele_"+year+"_trig_v5.root";
 	  file_sf = new  TFile(fname);
 	  TString hname = "EGamma_SF2D";
@@ -903,6 +907,7 @@ class EleIDScaleFactors
 
         EleIDScaleFactors(string year)
         {
+          if(year=="2022") year = "2016";
 	  TString fname;
 	  if(year =="2016")
 	    {fname = "data/scale_factor/"+year+"LegacyReReco_ElectronTight_Fall17V2.root";}
@@ -985,9 +990,11 @@ class MuIDScaleFactors
         ~MuIDScaleFactors()
         {
 	  delete SF1;
-	  delete SF2;
 	  file_sf1->Close();
-	  if(fname2!="") file_sf2->Close();
+	  if(fname2!=""){
+             delete SF2;
+             file_sf2->Close();
+          }
         }
 	float getBinValue(TH2F *h2f, float pt, float eta){
 	  
